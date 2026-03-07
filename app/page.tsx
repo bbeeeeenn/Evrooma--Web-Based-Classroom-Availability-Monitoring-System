@@ -1,5 +1,11 @@
 "use client";
-import { ArrowDown } from "lucide-react";
+import {
+    ArrowDown,
+    BookOpenText,
+    BookText,
+    GraduationCap,
+    ShieldUser,
+} from "lucide-react";
 import Image from "next/image";
 
 export default function Home() {
@@ -20,7 +26,7 @@ export default function Home() {
                     Continue <ArrowDown size={20} />
                 </button>
             </section>
-            <section id="roles" className="bg-black-400 relative h-svh">
+            <section id="roles" className="bg-black-400 relative h-svh pt-20">
                 <Image
                     src={"/wave.svg"}
                     alt={""}
@@ -29,6 +35,26 @@ export default function Home() {
                     loading="eager"
                     className="pointer-events-none absolute bottom-full w-full sm:translate-y-1/12 md:translate-y-1/8 lg:translate-y-1/7"
                 />
+                <div className="font-inter text-black-100 absolute inset-0 m-auto flex w-[80%] max-w-sm flex-col justify-center">
+                    <h1 className="text-center text-3xl font-bold tracking-wide">
+                        Continue as
+                    </h1>
+                    <button className="bg-black-100 font-inria-sans mt-8 flex items-center justify-center gap-2 rounded-full py-2 text-xl text-black">
+                        <ShieldUser /> Administrator
+                    </button>
+                    <button className="bg-black-100 font-inria-sans mt-5 flex items-center justify-center gap-2 rounded-full py-2 text-xl text-black">
+                        <BookText /> Instructor
+                    </button>
+                    <div className="relative my-5 flex h-10 items-center justify-center">
+                        <div className="bg-black-100 absolute inset-0 m-auto h-0.5"></div>
+                        <p className="text-black-100 bg-black-400 absolute w-fit px-2 text-center tracking-widest">
+                            OR
+                        </p>
+                    </div>
+                    <button className="bg-black-100 font-inria-sans flex items-center justify-center gap-2 rounded-full py-2 text-xl text-black">
+                        <GraduationCap /> Student
+                    </button>
+                </div>
             </section>
         </>
     );

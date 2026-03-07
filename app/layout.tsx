@@ -56,6 +56,9 @@ export default function RootLayout({
                 )}
             >
                 {children}
+                <p className="font-inter bg-black-400 border-t py-1 text-center text-xs text-gray-400">
+                    © 2026 EVROOMA. All rights reserved.
+                </p>
             </body>
         </html>
     );
