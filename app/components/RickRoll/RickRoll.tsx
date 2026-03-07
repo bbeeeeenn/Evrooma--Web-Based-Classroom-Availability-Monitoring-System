@@ -8,7 +8,7 @@ export default function RickRoll({
     children: React.ReactNode;
     className?: string;
 }): React.ReactNode {
-    const [show, setShow] = useState(true);
+    const [show, setShow] = useState(false);
     return (
         <>
             <div onClick={() => setShow(true)} className={className}>
@@ -19,6 +19,7 @@ export default function RickRoll({
                     alt=""
                     src={"/rickroll-rick.gif"}
                     unoptimized
+                    loading="eager"
                     width={200}
                     height={200}
                     onClick={() => setShow(false)}
