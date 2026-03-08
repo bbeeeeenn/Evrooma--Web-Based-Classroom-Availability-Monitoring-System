@@ -52,7 +52,7 @@ export default function RootLayout({
                 className={clsx(
                     inter.variable,
                     inriaSans.variable,
-                    "antialiased select-none",
+                    "min-h-svh antialiased select-none",
                 )}
             >
                 {children}
