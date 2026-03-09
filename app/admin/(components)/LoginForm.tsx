@@ -35,7 +35,7 @@ export default function AdminLoginForm({
                     />
                     <label
                         htmlFor="username"
-                        className="peer-placeholder-shown: pointer-events-none absolute -top-5 left-0 text-sm text-gray-400 transition-all peer-placeholder-shown:top-0 peer-placeholder-shown:text-lg peer-placeholder-shown:text-gray-400 peer-focus:-top-5 peer-focus:text-sm peer-focus:text-gray-600"
+                        className="pointer-events-none absolute -top-5 left-0 text-sm text-gray-400 transition-all duration-200 peer-placeholder-shown:top-0 peer-placeholder-shown:text-lg peer-placeholder-shown:text-gray-400 peer-focus:-top-5 peer-focus:text-sm peer-focus:text-gray-600"
                     >
                         Username
                     </label>
@@ -60,7 +60,7 @@ export default function AdminLoginForm({
                     />
                     <label
                         htmlFor="password"
-                        className="peer-placeholder-shown: pointer-events-none absolute -top-5 left-0 text-sm text-gray-400 transition-all peer-placeholder-shown:top-0 peer-placeholder-shown:text-lg peer-placeholder-shown:text-gray-400 peer-focus:-top-5 peer-focus:text-sm peer-focus:text-gray-600"
+                        className="pointer-events-none absolute -top-5 left-0 text-sm text-gray-400 transition-all duration-200 peer-placeholder-shown:top-0 peer-placeholder-shown:text-lg peer-placeholder-shown:text-gray-400 peer-focus:-top-5 peer-focus:text-sm peer-focus:text-gray-600"
                     >
                         Password
                     </label>
