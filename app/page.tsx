@@ -39,7 +39,7 @@ export default function Home() {
                         Continue as
                     </h1>
                     <Link
-                        href={"/admin"}
+                        href={"/admin/login"}
                         className="bg-black-100 font-inria-sans mt-8 flex cursor-pointer items-center justify-center gap-2 rounded-full py-2 text-lg text-black sm:text-xl"
                     >
                         <ShieldUser /> Administrator

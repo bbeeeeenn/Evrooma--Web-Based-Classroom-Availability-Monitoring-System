@@ -19,9 +19,9 @@ export default function AdminLoginForm({
     return (
         <form
             action={formAction}
-            className="text-md font-poppins w-full max-w-md space-y-10 rounded-xl p-8 py-10 outline-2 outline-gray-300 sm:shadow-lg"
+            className="text-md font-poppins w-full max-w-md space-y-10 rounded-xl p-8 py-10 sm:shadow-lg"
         >
-            <h1 className="mb-12 text-center text-2xl font-bold tracking-widest">
+            <h1 className="text-black-400 mb-15 text-center text-2xl font-bold tracking-widest">
                 Administrator
             </h1>
             <div className="flex items-center gap-3">
@@ -90,13 +90,13 @@ export default function AdminLoginForm({
                         {showPassword ? (
                             <Flashlight className="-rotate-90 text-gray-600 transition-all duration-200 peer-placeholder-shown:text-gray-400 peer-focus:text-gray-600" />
                         ) : (
-                            <FlashlightOff className="text-gray-600 transition-all duration-200 peer-placeholder-shown:text-gray-400 peer-focus:text-gray-600" />
+                            <FlashlightOff className="-rotate-90 text-gray-600 transition-all duration-200 peer-placeholder-shown:text-gray-400 peer-focus:text-gray-600" />
                         )}
                     </label>
                 </div>
             </div>
             {!isPending && prevFormData?.status === "error" && (
-                <p className="mb-3 text-center text-sm text-red-600">
+                <p className="mb-3 text-center text-sm text-red-600 select-text">
                     {prevFormData?.message}
                 </p>
             )}
