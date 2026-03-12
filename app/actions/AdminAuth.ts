@@ -21,7 +21,7 @@ export async function AdminAuth(
 
     return {
         status: "error",
-        message: `Hi ${username.toUpperCase()}, this is an error message`,
+        message: `Hi ${username}, this is an error message`,
         formData,
     };
 }

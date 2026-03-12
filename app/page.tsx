@@ -2,8 +2,10 @@
 import { ArrowDown, BookText, GraduationCap, ShieldUser } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRef } from "react";
 
 export default function Home() {
+    const roleRef = useRef<HTMLElement>(null);
     return (
         <>
             <section className="font-inter relative flex h-svh min-h-142.5 flex-col items-center justify-center overflow-hidden">
@@ -19,7 +21,9 @@ export default function Home() {
                     <strong>Instantly</strong>
                 </p>
                 <button
-                    onClick={() => (window.location.href = "#roles")}
+                    onClick={() =>
+                        roleRef.current?.scrollIntoView({ behavior: "smooth" })
+                    }
                     className="outline-black-100 bottom-0 mt-20 flex cursor-pointer items-center gap-3 rounded-full bg-black px-14 py-3 text-sm font-bold tracking-wider text-white outline-2 sm:px-20"
                 >
                     Continue <ArrowDown size={20} />
@@ -33,7 +37,10 @@ export default function Home() {
                     className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 min-w-3xl translate-y-1/3 object-cover object-center"
                 />
             </section>
-            <section id="roles" className="bg-black-400 relative h-svh pt-20">
+            <section
+                ref={roleRef}
+                className="bg-black-400 relative h-svh pt-20"
+            >
                 <div className="font-inter text-black-100 absolute inset-0 m-auto flex w-[80%] max-w-sm flex-col justify-center">
                     <h1 className="text-center text-2xl font-bold tracking-wide sm:text-3xl">
                         Continue as
