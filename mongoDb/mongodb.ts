@@ -31,7 +31,7 @@ export async function connectDB(): Promise<Connection> {
     if (!cached.promise) {
         cached.promise = mongoose
             .connect(MONGODB_URI, {
-                dbName: process.env.DB_NAME || "test",
+                dbName: process.env.DB_NAME!,
                 bufferCommands: false,
             })
             .then((m) => m.connection);

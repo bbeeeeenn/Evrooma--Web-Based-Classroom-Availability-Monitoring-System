@@ -1,21 +1,21 @@
 "use client";
 
-import { AdminAuthAction } from "@/app/actions/AdminAuth";
+import { InstructorAuthAction } from "@/actions/InstructorAuth";
 import clsx from "clsx";
 import {
+    BookText,
     Flashlight,
     FlashlightOff,
     Lock,
-    Shield,
-    ShieldUser,
     SquareArrowRightEnter,
+    User,
 } from "lucide-react";
 import { ChangeEvent, useActionState, useState } from "react";
 
-export default function AdminLoginForm({
+export default function InstructorLoginForm({
     action,
 }: {
-    action: AdminAuthAction;
+    action: InstructorAuthAction;
 }) {
     const [prevFormData, formAction, isPending] = useActionState(action, null);
 
@@ -30,15 +30,16 @@ export default function AdminLoginForm({
     return (
         <>
             <h1 className="text-black-400 font-poppins mb-7 flex items-center gap-2 text-center text-2xl font-bold tracking-widest">
-                <Shield /> Administrator
+                <BookText />
+                Instructor
             </h1>
             <form
                 action={formAction}
-                className="text-md font-poppins w-full max-w-md space-y-10 rounded-xl bg-white px-[7vw] py-12 sm:px-12 sm:shadow-lg"
+                className="text-md font-poppins w-full max-w-md space-y-10 rounded-xl bg-white px-[7vw] pt-14 pb-12 sm:px-12 sm:shadow-lg"
             >
                 <div className="flex items-center gap-3">
                     <label htmlFor="username">
-                        <ShieldUser />
+                        <User />
                     </label>
                     <div className="relative w-full">
                         <input

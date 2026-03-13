@@ -1,4 +1,5 @@
 "use client";
+import { adminLoginPage, instructorLoginPage } from "@/constants";
 import { ArrowDown, BookText, GraduationCap, ShieldUser } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -46,13 +47,13 @@ export default function Home() {
                         Continue as
                     </h1>
                     <Link
-                        href={"/admin/login"}
+                        href={adminLoginPage}
                         className="bg-black-100 font-inria-sans mt-8 flex cursor-pointer items-center justify-center gap-2 rounded-full py-2 text-lg text-black sm:text-xl"
                     >
                         <ShieldUser /> Administrator
                     </Link>
                     <Link
-                        href={"/instructor/login"}
+                        href={instructorLoginPage}
                         className="bg-black-100 font-inria-sans mt-5 flex cursor-pointer items-center justify-center gap-2 rounded-full py-2 text-lg text-black sm:text-xl"
                     >
                         <BookText /> Instructor
