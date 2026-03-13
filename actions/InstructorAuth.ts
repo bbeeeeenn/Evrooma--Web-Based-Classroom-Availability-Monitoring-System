@@ -62,9 +62,10 @@ export async function InstructorAuth(
             formData: new FormData(),
         };
     } catch (e) {
+        console.error("[InstructorAuth]", e);
         return {
             status: "error",
-            message: e instanceof Error ? e.message : "Unknown Error",
+            message: "Something went wrong. Please try again later.",
             formData,
         };
     }
