@@ -3,11 +3,9 @@ import { adminLoginPage } from "@/constants";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-const SuspendedComponent = async ({
+const Authenticate = async ({
     children,
-}: {
-    children: React.ReactNode;
-}) => {
+}: Readonly<{ children: React.ReactNode }>) => {
     if (!(await AuthenticateAdmin())) redirect(adminLoginPage);
     return <>{children}</>;
 };
@@ -17,7 +15,7 @@ export default async function AdminLayout({
 }: Readonly<{ children: React.ReactNode }>) {
     return (
         <Suspense fallback={"Loading..."}>
-            <SuspendedComponent>{children}</SuspendedComponent>
+            <Authenticate>{children}</Authenticate>
         </Suspense>
     );
 }

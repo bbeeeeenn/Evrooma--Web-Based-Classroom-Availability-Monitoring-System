@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { adminDashboardPage } from "@/constants";
 import LoginForm from "@/components/LoginForm";
 
-const Suspended = async () => {
+const Authenticate = async () => {
     if (await AuthenticateAdmin()) {
         redirect(adminDashboardPage);
     }
@@ -19,7 +19,7 @@ const Suspended = async () => {
 export default function AdminLoginPage() {
     return (
         <Suspense fallback={"Loading..."}>
-            <Suspended />
+            <Authenticate />
         </Suspense>
     );
 }

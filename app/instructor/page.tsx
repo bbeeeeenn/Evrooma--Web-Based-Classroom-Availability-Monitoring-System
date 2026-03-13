@@ -7,7 +7,7 @@ import { instructorDashboardPage } from "@/constants";
 import { Suspense } from "react";
 import LoginForm from "@/components/LoginForm";
 
-const Suspended = async () => {
+const Authenticate = async () => {
     if (await AuthenticateInstructor()) redirect(instructorDashboardPage);
 
     return (
@@ -20,7 +20,7 @@ const Suspended = async () => {
 export default function InstructorLoginPage() {
     return (
         <Suspense fallback={"Loading..."}>
-            <Suspended />
+            <Authenticate />
         </Suspense>
     );
 }
