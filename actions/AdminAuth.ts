@@ -30,23 +30,8 @@ export async function AdminAuth(
     formData: FormData,
 ): Promise<FormActionResponse> {
     "use server";
-    await new Promise((res) => setTimeout(res, 1000));
     const username = (formData.get("username") as string).trim();
     const password = (formData.get("password") as string).trim();
-
-    console.log(formData);
-    // await connectDB();
-    // await User.create({
-    //     username: "evrooma",
-    //     password: await encrypt("123123"),
-    //     firstName: "Evrooma",
-    //     lastName: "Admin",
-    // });
-    // return {
-    //     formData,
-    //     status: "success",
-    //     message: "",
-    // };
 
     try {
         await connectDB();

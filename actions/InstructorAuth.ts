@@ -3,7 +3,7 @@ import { FormActionResponse, ServerActionResponse } from "./_";
 import { connectDB } from "@/mongoDb/mongodb";
 import { PlainUserDocument, User } from "@/mongoDb/models/user";
 import { cookies } from "next/headers";
-import { compare, encrypt } from "@/lib/bcrypt";
+import { compare } from "@/lib/bcrypt";
 
 export type InstructorAuthAction = (
     _: unknown,
@@ -30,24 +30,8 @@ export async function InstructorAuth(
     formData: FormData,
 ): Promise<FormActionResponse> {
     "use server";
-    await new Promise((res) => setTimeout(res, 1000));
     const username = (formData.get("username") as string).trim();
     const password = (formData.get("password") as string).trim();
-
-    console.log(formData);
-    // await connectDB();
-    // await User.create({
-    //     username: "instructor",
-    //     password: await encrypt("123123"),
-    //     firstName: "Evrooma",
-    //     lastName: "Instructor",
-    //     role: "instructor",
-    // });
-    // return {
-    //     formData,
-    //     status: "success",
-    //     message: "",
-    // };
 
     try {
         await connectDB();
