@@ -3,6 +3,7 @@ import AdminLoginForm from "./LoginForm";
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { adminDashboardPage } from "@/constants";
+import LoginForm from "@/components/LoginForm";
 
 const Suspended = async () => {
     if (await AuthenticateAdmin()) {
@@ -11,7 +12,7 @@ const Suspended = async () => {
 
     return (
         <section className="flex h-svh flex-col items-center justify-center bg-white sm:bg-transparent">
-            <AdminLoginForm action={AdminAuth} />
+            <LoginForm type="admin" action={AdminAuth} />
         </section>
     );
 };

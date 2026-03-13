@@ -1,37 +1,61 @@
 "use client";
 
-import { InstructorAuthAction } from "@/actions/InstructorAuth";
+import { FormActionResponse } from "@/actions/_";
+import { instructorDashboardPage } from "@/constants";
 import clsx from "clsx";
 import {
     BookText,
     Flashlight,
     FlashlightOff,
     Lock,
+    ShieldUser,
     SquareArrowRightEnter,
     User,
 } from "lucide-react";
-import { ChangeEvent, useActionState, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useActionState, useState } from "react";
 
-export default function InstructorLoginForm({
+export default function LoginForm({
+    type,
     action,
 }: {
-    action: InstructorAuthAction;
+    type: "admin" | "instructor";
+    action: (formData: FormData) => Promise<FormActionResponse>;
 }) {
-    const [prevFormData, formAction, isPending] = useActionState(action, null);
+    const router = useRouter();
 
-    const [showPassword, setShowPassword] = useState(false);
-    const [remember, setRemember] = useState(true);
-    const onShowPassword = () => {
-        setShowPassword((prev) => !prev);
+    const onAction = async (
+        _: unknown,
+        formData: FormData,
+    ): Promise<FormActionResponse> => {
+        const res = await action(formData);
+        if (res.status === "success") {
+            router.replace(instructorDashboardPage);
+        }
+        return res;
     };
-    const onRemember = (e: ChangeEvent<HTMLInputElement>) => {
-        setRemember(e.target.checked);
-    };
+
+    const [state, formAction, isPending] = useActionState(onAction, {
+        formData: new FormData(),
+        status: "initial",
+        message: "",
+    });
+
+    const [formState, setFormState] = useState({
+        showPassword: false,
+        remember: true,
+    });
+    const onShowPassword = () =>
+        setFormState((prev) => ({ ...prev, showPassword: !prev.showPassword }));
+
+    const onRemember = () =>
+        setFormState((prev) => ({ ...prev, remember: !prev.remember }));
+
     return (
         <>
             <h1 className="text-black-400 font-poppins mb-7 flex items-center gap-2 text-center text-2xl font-bold tracking-widest">
-                <BookText />
-                Instructor
+                {type === "instructor" ? <BookText /> : <ShieldUser />}{" "}
+                {type === "instructor" ? "Instructor" : "Administrator"}
             </h1>
             <form
                 action={formAction}
@@ -39,7 +63,7 @@ export default function InstructorLoginForm({
             >
                 <div className="flex items-center gap-3">
                     <label htmlFor="username">
-                        <User />
+                        {type === "admin" ? <ShieldUser /> : <User />}
                     </label>
                     <div className="relative w-full">
                         <input
@@ -48,12 +72,10 @@ export default function InstructorLoginForm({
                             id="username"
                             placeholder="Username"
                             required
-                            autoComplete="off"
                             defaultValue={
-                                (prevFormData?.formData.get(
-                                    "username",
-                                ) as string) ?? ""
+                                state.formData.get("username") as string
                             }
+                            autoComplete="off"
                             spellCheck={false}
                             className="peer block w-full border-b-2 border-gray-300 py-1 placeholder-transparent focus:border-gray-600 focus:outline-0"
                         />
@@ -71,15 +93,13 @@ export default function InstructorLoginForm({
                     </label>
                     <div className="relative flex min-w-0 grow items-center gap-2">
                         <input
-                            type={showPassword ? "text" : "password"}
+                            type={formState.showPassword ? "text" : "password"}
                             name="password"
                             id="password"
                             placeholder="Password"
                             required
                             defaultValue={
-                                (prevFormData?.formData.get(
-                                    "password",
-                                ) as string) ?? ""
+                                state.formData.get("password") as string
                             }
                             autoComplete="off"
                             className="peer min-w-0 grow border-b-2 border-gray-300 py-1 placeholder-transparent focus-within:border-gray-600 focus:outline-0"
@@ -96,7 +116,7 @@ export default function InstructorLoginForm({
                             onClick={onShowPassword}
                             type="button"
                         >
-                            {showPassword ? (
+                            {formState.showPassword ? (
                                 <Flashlight className="-rotate-90 text-gray-600 transition-all duration-200 peer-placeholder-shown:text-gray-400 peer-focus:text-gray-600" />
                             ) : (
                                 <FlashlightOff className="-rotate-90 text-gray-600 transition-all duration-200 peer-placeholder-shown:text-gray-400 peer-focus:text-gray-600" />
@@ -112,15 +132,15 @@ export default function InstructorLoginForm({
                         type="checkbox"
                         id="rememberme"
                         name="remember"
-                        defaultChecked={remember}
+                        defaultChecked={formState.remember}
                         onChange={onRemember}
                         className="accent-black-400 size-4 cursor-pointer"
                     />
                     Remember me?
                 </label>
-                {!isPending && prevFormData?.status === "error" && (
+                {state.status === "error" && (
                     <p className="mb-3 text-center text-sm text-red-600 select-text">
-                        {prevFormData?.message}
+                        {state.message}
                     </p>
                 )}
                 <button

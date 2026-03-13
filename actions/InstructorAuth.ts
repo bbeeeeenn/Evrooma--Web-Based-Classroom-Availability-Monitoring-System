@@ -1,9 +1,9 @@
 import { getIronSession, SessionOptions } from "iron-session";
-import { ServerActionResponse } from "./_";
+import { FormActionResponse, ServerActionResponse } from "./_";
 import { connectDB } from "@/mongoDb/mongodb";
 import { PlainUserDocument, User } from "@/mongoDb/models/user";
 import { cookies } from "next/headers";
-import { compare } from "@/lib/bcrypt";
+import { compare, encrypt } from "@/lib/bcrypt";
 
 export type InstructorAuthAction = (
     _: unknown,
@@ -28,7 +28,7 @@ interface InstructorSessionData {
 
 export async function InstructorAuth(
     formData: FormData,
-): Promise<ServerActionResponse> {
+): Promise<FormActionResponse> {
     "use server";
     await new Promise((res) => setTimeout(res, 1000));
     const username = (formData.get("username") as string).trim();
@@ -37,10 +37,11 @@ export async function InstructorAuth(
     console.log(formData);
     // await connectDB();
     // await User.create({
-    //     username: "evrooma",
+    //     username: "instructor",
     //     password: await encrypt("123123"),
     //     firstName: "Evrooma",
     //     lastName: "Instructor",
+    //     role: "instructor",
     // });
     // return {
     //     formData,
@@ -53,12 +54,14 @@ export async function InstructorAuth(
 
         const user = await User.findOne({
             username: username,
+            role: "instructor",
         }).lean<PlainUserDocument>();
 
         if (!user || !(await compare(password, user.password))) {
             return {
                 status: "error",
                 message: "Invalid username and password",
+                formData,
             };
         }
 
@@ -71,11 +74,13 @@ export async function InstructorAuth(
         return {
             status: "success",
             message: "",
+            formData: new FormData(),
         };
     } catch (e) {
         return {
             status: "error",
             message: e instanceof Error ? e.message : "Unknown Error",
+            formData,
         };
     }
 }

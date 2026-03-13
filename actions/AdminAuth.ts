@@ -1,5 +1,5 @@
 import { getIronSession, SessionOptions } from "iron-session";
-import { ServerActionResponse } from "./_";
+import { FormActionResponse, ServerActionResponse } from "./_";
 import { connectDB } from "@/mongoDb/mongodb";
 import { PlainUserDocument, User } from "@/mongoDb/models/user";
 import { cookies } from "next/headers";
@@ -28,7 +28,7 @@ interface AdminSessionData {
 
 export async function AdminAuth(
     formData: FormData,
-): Promise<ServerActionResponse> {
+): Promise<FormActionResponse> {
     "use server";
     await new Promise((res) => setTimeout(res, 1000));
     const username = (formData.get("username") as string).trim();
@@ -53,12 +53,14 @@ export async function AdminAuth(
 
         const user = await User.findOne({
             username: username,
+            role: "admin",
         }).lean<PlainUserDocument>();
 
         if (!user || !(await compare(password, user.password))) {
             return {
                 status: "error",
                 message: "Invalid username and password",
+                formData,
             };
         }
 
@@ -71,11 +73,13 @@ export async function AdminAuth(
         return {
             status: "success",
             message: "",
+            formData: new FormData(),
         };
     } catch (e) {
         return {
             status: "error",
             message: e instanceof Error ? e.message : "Unknown Error",
+            formData,
         };
     }
 }

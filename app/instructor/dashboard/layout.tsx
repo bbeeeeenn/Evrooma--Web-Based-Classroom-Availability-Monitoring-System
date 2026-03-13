@@ -1,5 +1,5 @@
-import { AuthenticateAdmin } from "@/actions/AdminAuth";
-import { adminLoginPage } from "@/constants";
+import { AuthenticateInstructor } from "@/actions/InstructorAuth";
+import { instructorLoginPage } from "@/constants";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
@@ -8,7 +8,7 @@ const SuspendedComponent = async ({
 }: {
     children: React.ReactNode;
 }) => {
-    if (!(await AuthenticateAdmin())) redirect(adminLoginPage);
+    if (!(await AuthenticateInstructor())) redirect(instructorLoginPage);
     return <>{children}</>;
 };
 
