@@ -1,4 +1,4 @@
-import { AuthenticateAdmin } from "@/app/actions/AdminAuth";
+import { AuthenticateAdmin } from "@/app/actions/AdminActions";
 import { AuthProvider } from "@/app/contexts/AuthProvider";
 
 export default function AdminLayout({

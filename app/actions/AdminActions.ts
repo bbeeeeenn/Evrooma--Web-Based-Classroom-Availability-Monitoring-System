@@ -82,3 +82,8 @@ export async function AuthenticateAdmin(): Promise<string | null> {
 
     return session.data?.userId ?? null;
 }
+
+export async function LogoutAdmin() {
+    const session = await getIronSession(await cookies(), adminSessionOptions);
+    session.destroy();
+}

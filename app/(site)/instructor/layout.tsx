@@ -1,4 +1,4 @@
-import { AuthenticateInstructor } from "@/app/actions/InstructorAuth";
+import { AuthenticateInstructor } from "@/app/actions/InstructorActions";
 import { AuthProvider } from "@/app/contexts/AuthProvider";
 
 export default function Layout({

@@ -1,5 +1,11 @@
 "use client";
 
+import {
+    adminAccountsPage,
+    adminChartsPage,
+    adminLogoutPage,
+    adminRoomsPage,
+} from "@/constants";
 import clsx from "clsx";
 import {
     ChartNoAxesColumn,
@@ -15,6 +21,7 @@ export function AdminNavBar({
     children,
 }: Readonly<{ children: React.ReactNode }>) {
     const [shown, setShown] = useState(true);
+
     return (
         <>
             <nav
@@ -34,7 +41,7 @@ export function AdminNavBar({
                 </button>
                 <div className="flex grow">
                     <Link
-                        href={""}
+                        href={adminRoomsPage}
                         className="m-auto flex cursor-pointer flex-col items-center gap-2 text-xs hover:underline sm:flex-row sm:gap-3 sm:text-base"
                     >
                         <DoorClosed /> Rooms
@@ -42,7 +49,7 @@ export function AdminNavBar({
                 </div>
                 <div className="flex grow">
                     <Link
-                        href={""}
+                        href={adminAccountsPage}
                         className="m-auto flex cursor-pointer flex-col items-center gap-2 text-xs hover:underline sm:flex-row sm:gap-3 sm:text-base"
                     >
                         <UsersRound /> Accounts
@@ -50,17 +57,19 @@ export function AdminNavBar({
                 </div>
                 <div className="flex grow">
                     <Link
-                        href={""}
+                        href={adminChartsPage}
                         className="m-auto flex cursor-pointer flex-col items-center gap-2 text-xs hover:underline sm:flex-row sm:gap-3 sm:text-base"
                     >
-                        {" "}
                         <ChartNoAxesColumn /> Charts
                     </Link>
                 </div>
                 <div className="flex grow">
-                    <button className="m-auto flex cursor-pointer flex-col items-center gap-2 text-xs hover:underline sm:flex-row sm:gap-3 sm:text-base">
+                    <Link
+                        href={adminLogoutPage}
+                        className="m-auto flex cursor-pointer flex-col items-center gap-2 text-xs hover:underline sm:flex-row sm:gap-3 sm:text-base"
+                    >
                         <SquareArrowRightExit /> Logout
-                    </button>
+                    </Link>
                 </div>
             </nav>
             <div className={clsx("mt-10 transition-all", shown && "mt-28")}>

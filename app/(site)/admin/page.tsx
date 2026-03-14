@@ -1,4 +1,4 @@
-import { AdminAuth } from "@/app/actions/AdminAuth";
+import { AdminAuth } from "@/app/actions/AdminActions";
 import LoginForm from "@/app/components/LoginForm";
 
 export default function AdminLoginPage() {

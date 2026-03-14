@@ -1,4 +1,4 @@
-import { InstructorAuth } from "@/app/actions/InstructorAuth";
+import { InstructorAuth } from "@/app/actions/InstructorActions";
 import LoginForm from "@/app/components/LoginForm";
 
 export default function InstructorLoginPage() {

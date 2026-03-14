@@ -1,6 +1,6 @@
 import CheckAuthentication from "@/app/components/CheckAuthentication";
 import { adminLoginPage } from "@/constants";
-import { AdminNavBar } from "./(components)/AdminNavBar";
+import { AdminNavBar } from "./AdminNavBar";
 
 export default async function AdminLayout({
     children,
