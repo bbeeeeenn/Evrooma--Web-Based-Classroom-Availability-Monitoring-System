@@ -25,6 +25,11 @@ export default function LoginForm({
     action: (formData: FormData) => Promise<LoginFormActionResponse>;
 }) {
     const router = useRouter();
+    const [formState, setFormState] = useState({
+        showPassword: false,
+        remember: true,
+    });
+
     const updateAuth = useAuthUpdate();
     const user = useAuth();
 
@@ -50,6 +55,10 @@ export default function LoginForm({
                     ? adminDashboardPage
                     : instructorDashboardPage,
             );
+            setFormState({
+                showPassword: false,
+                remember: true,
+            });
         }
         return res;
     };
@@ -61,10 +70,6 @@ export default function LoginForm({
         user: null,
     });
 
-    const [formState, setFormState] = useState({
-        showPassword: false,
-        remember: true,
-    });
     const onShowPassword = () =>
         setFormState((prev) => ({ ...prev, showPassword: !prev.showPassword }));
 
@@ -100,7 +105,9 @@ export default function LoginForm({
                             placeholder="Username"
                             required
                             defaultValue={
-                                state.formData.get("username") as string
+                                formType == "admin"
+                                    ? "admin"
+                                    : (state.formData.get("username") as string)
                             }
                             autoComplete="off"
                             spellCheck={false}
@@ -126,7 +133,9 @@ export default function LoginForm({
                             placeholder="Password"
                             required
                             defaultValue={
-                                state.formData.get("password") as string
+                                formType === "admin"
+                                    ? "123123"
+                                    : (state.formData.get("password") as string)
                             }
                             autoComplete="off"
                             className="peer min-w-0 grow border-b-2 border-gray-300 py-1 placeholder-transparent focus-within:border-gray-600 focus:outline-0"
@@ -158,7 +167,6 @@ export default function LoginForm({
                     <input
                         type="checkbox"
                         id="rememberme"
-                        name="remember"
                         defaultChecked={formState.remember}
                         onChange={onRemember}
                         className="accent-black-400 size-4 cursor-pointer"

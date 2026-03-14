@@ -3,6 +3,7 @@
 import { useAuth } from "@/app/contexts/AuthProvider";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import Loading from "../(site)/loading";
 
 export default function CheckAuthentication({
     children,
@@ -16,5 +17,6 @@ export default function CheckAuthentication({
             router.replace(fallbackRoute);
         }
     }, [router, user, fallbackRoute]);
-    return <>{children}</>;
+
+    return user ? children : <Loading />;
 }
