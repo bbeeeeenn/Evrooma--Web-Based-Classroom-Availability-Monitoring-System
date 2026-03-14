@@ -1,18 +1,19 @@
+"use server";
 import { getIronSession, SessionOptions } from "iron-session";
-import { FormActionResponse, ServerActionResponse } from "./_";
-import { connectDB } from "@/mongoDb/mongodb";
-import { PlainUserDocument, User } from "@/mongoDb/models/user";
+import { LoginFormActionResponse, ServerActionResponse } from "./_";
+import { connectDB } from "@/app/mongoDb/mongodb";
+import { PlainUserDocument, User } from "@/app/mongoDb/models/user";
 import { cookies } from "next/headers";
-import { compare } from "@/lib/bcrypt";
+import { compare } from "@/app/lib/bcrypt";
 
-export type InstructorAuthAction = (
+export type AdminAuthAction = (
     _: unknown,
     formData: FormData,
 ) => Promise<ServerActionResponse>;
 
-const instructorSessionOptions: SessionOptions = {
-    cookieName: "instructorSession",
-    password: process.env.INSTRUCTOR_SESSION_SECRET!,
+const adminSessionOptions: SessionOptions = {
+    cookieName: "adminSession",
+    password: process.env.ADMIN_SESSION_SECRET!,
     cookieOptions: {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
@@ -21,16 +22,15 @@ const instructorSessionOptions: SessionOptions = {
     ttl: 60 * 60 * 24 * 7,
 };
 
-interface InstructorSessionData {
+interface AdminSessionData {
     data?: {
         userId: string;
     };
 }
 
-export async function InstructorAuth(
+export async function AdminAuth(
     formData: FormData,
-): Promise<FormActionResponse> {
-    "use server";
+): Promise<LoginFormActionResponse> {
     const username = (formData.get("username") as string).trim();
     const password = (formData.get("password") as string).trim();
 
@@ -39,20 +39,21 @@ export async function InstructorAuth(
 
         const user = await User.findOne({
             username: username,
-            role: "instructor",
+            role: "admin",
         }).lean<PlainUserDocument>();
 
         if (!user || !(await compare(password, user.password))) {
             return {
                 status: "error",
                 message: "Invalid username and password",
+                user: null,
                 formData,
             };
         }
 
-        const session = await getIronSession<InstructorSessionData>(
+        const session = await getIronSession<AdminSessionData>(
             await cookies(),
-            instructorSessionOptions,
+            adminSessionOptions,
         );
         session.data = { userId: user._id };
         await session.save();
@@ -60,22 +61,24 @@ export async function InstructorAuth(
             status: "success",
             message: "",
             formData: new FormData(),
+            user: user._id.toString(),
         };
     } catch (e) {
-        console.error("[InstructorAuth]", e);
+        console.error("[AdminAuth]", e);
         return {
             status: "error",
             message: "Something went wrong. Please try again later.",
+            user: null,
             formData,
         };
     }
 }
 
-export async function AuthenticateInstructor(): Promise<boolean> {
-    const session = await getIronSession<InstructorSessionData>(
+export async function AuthenticateAdmin(): Promise<string | null> {
+    const session = await getIronSession<AdminSessionData>(
         await cookies(),
-        instructorSessionOptions,
+        adminSessionOptions,
     );
 
-    return !!session.data;
+    return session.data?.userId ?? null;
 }

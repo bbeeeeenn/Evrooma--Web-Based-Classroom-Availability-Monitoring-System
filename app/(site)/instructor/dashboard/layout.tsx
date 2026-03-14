@@ -1,4 +1,5 @@
-import { AuthenticateInstructor } from "@/actions/InstructorAuth";
+import { AuthenticateInstructor } from "@/app/actions/InstructorAuth";
+import CheckAuthentication from "@/app/components/CheckAuthentication";
 import { instructorLoginPage } from "@/constants";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
@@ -16,8 +17,8 @@ export default async function AdminLayout({
     children,
 }: Readonly<{ children: React.ReactNode }>) {
     return (
-        <Suspense fallback={"Loading..."}>
-            <Authenticate>{children}</Authenticate>
-        </Suspense>
+        <CheckAuthentication fallbackRoute={instructorLoginPage}>
+            {children}
+        </CheckAuthentication>
     );
 }

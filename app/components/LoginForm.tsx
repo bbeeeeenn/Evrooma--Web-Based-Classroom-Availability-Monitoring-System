@@ -1,7 +1,8 @@
 "use client";
 
-import { FormActionResponse } from "@/actions/_";
+import { LoginFormActionResponse } from "@/app/actions/_";
 import { adminDashboardPage, instructorDashboardPage } from "@/constants";
+import { useAuth, useAuthUpdate } from "@/app/context_providers/AuthProvider";
 import clsx from "clsx";
 import {
     BookText,
@@ -13,23 +14,36 @@ import {
     User,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 
 export default function LoginForm({
     formType,
     action,
 }: {
     formType: "admin" | "instructor";
-    action: (formData: FormData) => Promise<FormActionResponse>;
+    action: (formData: FormData) => Promise<LoginFormActionResponse>;
 }) {
     const router = useRouter();
+    const updateAuth = useAuthUpdate();
+    const user = useAuth();
+
+    useEffect(() => {
+        if (user) {
+            router.replace(
+                formType === "admin"
+                    ? adminDashboardPage
+                    : instructorDashboardPage,
+            );
+        }
+    }, [router, user, formType]);
 
     const onAction = async (
         _: unknown,
         formData: FormData,
-    ): Promise<FormActionResponse> => {
+    ): Promise<LoginFormActionResponse> => {
         const res = await action(formData);
         if (res.status === "success") {
+            updateAuth(res.user);
             router.replace(
                 formType === "admin"
                     ? adminDashboardPage
@@ -43,6 +57,7 @@ export default function LoginForm({
         formData: new FormData(),
         status: "initial",
         message: "",
+        user: null,
     });
 
     const [formState, setFormState] = useState({
@@ -55,7 +70,7 @@ export default function LoginForm({
     const onRemember = () =>
         setFormState((prev) => ({ ...prev, remember: !prev.remember }));
 
-    return (
+    return !user ? (
         <>
             <h1 className="text-black-400 font-poppins mb-7 flex items-center gap-2 text-center text-2xl font-bold tracking-widest">
                 {formType === "instructor" ? (
@@ -169,5 +184,7 @@ export default function LoginForm({
                 </p>
             </form>
         </>
+    ) : (
+        <></>
     );
 }

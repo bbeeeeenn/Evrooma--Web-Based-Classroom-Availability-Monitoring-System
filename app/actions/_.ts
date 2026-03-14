@@ -3,6 +3,7 @@ export interface ServerActionResponse {
     message: string;
 }
 
-export interface FormActionResponse extends ServerActionResponse {
+export interface LoginFormActionResponse extends ServerActionResponse {
     formData: FormData;
+    user: string | null;
 }
