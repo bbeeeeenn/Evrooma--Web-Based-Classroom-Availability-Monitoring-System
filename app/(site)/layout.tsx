@@ -1,7 +1,7 @@
 import { Inter, Inria_Sans, Poppins } from "next/font/google";
 import "./globals.css";
 import clsx from "clsx";
-import BackgroundAudio from "../components/Ambient";
+import Test from "../components/Test";
 
 export async function generateMetadata() {
     return {
@@ -64,7 +64,7 @@ export default function RootLayout({
                     "antialiased select-none",
                 )}
             >
-                <BackgroundAudio />
+                <Test />
                 {children}
             </body>
         </html>
