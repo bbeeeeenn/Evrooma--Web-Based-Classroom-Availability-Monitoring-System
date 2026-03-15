@@ -1,22 +1,30 @@
 "use client";
 
 import { LoginFormActionResponse } from "@/app/actions/_";
-import { adminDashboardPage, instructorDashboardPage } from "@/constants";
+import {
+    adminDashboardPage,
+    homePage,
+    instructorDashboardPage,
+} from "@/constants";
 import { useAuth, useAuthUpdate } from "@/app/contexts/AuthProvider";
 import clsx from "clsx";
 import {
     BookText,
+    ChevronLeft,
     Flashlight,
     FlashlightOff,
     LoaderCircle,
     Lock,
     ShieldUser,
     SquareArrowRightEnter,
+    Undo,
+    Undo2,
     User,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
 import Loading from "../(site)/loading";
+import Link from "next/link";
 
 export default function LoginForm({
     formType,
@@ -98,7 +106,7 @@ export default function LoginForm({
             </h1>
             <form
                 action={formAction}
-                className="text-md font-poppins w-full max-w-md space-y-10 rounded-xl bg-white px-[7vw] pt-14 pb-12 sm:px-12 sm:shadow-lg"
+                className="text-md font-poppins relative w-full max-w-md space-y-10 rounded-xl bg-white px-[7vw] pt-14 pb-12 sm:px-12 sm:shadow-lg"
             >
                 <div className="flex items-center gap-3">
                     <label htmlFor="username">
@@ -206,6 +214,13 @@ export default function LoginForm({
                 <p className="m-auto w-fit cursor-pointer text-center text-sm underline">
                     Forgot Username or Password?
                 </p>
+                <Link
+                    href={homePage}
+                    type="button"
+                    className="absolute inset-x-0 top-full m-auto size-fit translate-y-1/2 cursor-pointer rounded-full bg-white p-2 shadow-md hover:scale-105 focus-visible:scale-105"
+                >
+                    <Undo2 />
+                </Link>
             </form>
         </>
     ) : (
