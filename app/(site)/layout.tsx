@@ -1,7 +1,7 @@
 import { Inter, Inria_Sans, Poppins } from "next/font/google";
 import "./globals.css";
 import clsx from "clsx";
-import Test from "../components/Test";
+import VineSounds from "../components/VineSounds";
 
 export async function generateMetadata() {
     return {
@@ -64,7 +64,7 @@ export default function RootLayout({
                     "antialiased select-none",
                 )}
             >
-                <Test />
+                <VineSounds />
                 {children}
             </body>
         </html>

@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 
 const audios = ["/vine-boom.mp3", "/huh-cat-meme.mp3"];
 
-export default function Test() {
+export default function VineSounds() {
     const count = useRef(0);
     const onClick = () => {
         if (count.current > 3) return;

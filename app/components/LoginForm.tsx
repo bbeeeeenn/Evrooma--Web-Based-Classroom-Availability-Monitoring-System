@@ -79,6 +79,10 @@ export default function LoginForm({
     const onRemember = () =>
         setFormState((prev) => ({ ...prev, remember: !prev.remember }));
 
+    const onType = () => {
+        new Audio("/typewriter.mp3").play();
+    };
+
     return !user ? (
         <>
             <h1 className="text-black-400 font-poppins mb-7 flex items-center gap-2 text-center text-2xl font-bold tracking-widest">
@@ -112,6 +116,7 @@ export default function LoginForm({
                                     ? "admin"
                                     : (state.formData.get("username") as string)
                             }
+                            onChange={onType}
                             autoComplete="off"
                             spellCheck={false}
                             className="peer block w-full border-b-2 border-gray-300 py-1 placeholder-transparent focus:border-gray-600 focus:outline-0"
@@ -140,6 +145,7 @@ export default function LoginForm({
                                     ? "123123"
                                     : (state.formData.get("password") as string)
                             }
+                            onChange={onType}
                             autoComplete="off"
                             className="peer min-w-0 grow border-b-2 border-gray-300 py-1 placeholder-transparent focus-within:border-gray-600 focus:outline-0"
                         />
