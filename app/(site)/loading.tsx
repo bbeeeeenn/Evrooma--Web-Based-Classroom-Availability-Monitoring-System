@@ -7,7 +7,7 @@ export default function Loading() {
                 draggable={false}
                 src="/favicon_light.svg"
                 width={150}
-                height={100}
+                height={150}
                 alt="logo"
                 className="animate-bounce dark:hidden"
             />
@@ -15,7 +15,7 @@ export default function Loading() {
                 draggable={false}
                 src="/favicon_dark.svg"
                 width={150}
-                height={100}
+                height={150}
                 alt="logo"
                 className="hidden animate-bounce dark:block"
             />

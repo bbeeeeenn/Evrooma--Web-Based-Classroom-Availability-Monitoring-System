@@ -13,9 +13,7 @@ export default function CheckAuthentication({
     const user = useAuth();
 
     useEffect(() => {
-        if (!user) {
-            router.replace(fallbackRoute);
-        }
+        if (!user) router.replace(fallbackRoute);
     }, [fallbackRoute, router, user]);
 
     return user ? <>{children}</> : <Loading />;
