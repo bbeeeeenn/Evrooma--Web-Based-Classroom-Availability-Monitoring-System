@@ -21,7 +21,7 @@ export default function Loading({
                 alt="logo"
                 className="hidden animate-bounce dark:block"
             />
-            {text}
+            <p className="truncate">{text}</p>
         </div>
     );
 }
