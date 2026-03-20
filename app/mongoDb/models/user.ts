@@ -1,4 +1,5 @@
 import { model, models, Schema } from "mongoose";
+import mongooseLeanVirtuals from "mongoose-lean-virtuals";
 
 export interface PlainUserDocument {
     _id: string;
@@ -6,6 +7,7 @@ export interface PlainUserDocument {
     lastName: string;
     username: string;
     password: string;
+    fullName: string;
 }
 
 const instructorSchema = new Schema({
@@ -21,6 +23,12 @@ const adminSchema = new Schema({
     username: { type: String, required: true },
     password: { type: String, required: true },
 });
+
+adminSchema.virtual("fullName").get(function () {
+    return `${this.firstName} ${this.lastName}`;
+});
+adminSchema.plugin(mongooseLeanVirtuals);
+instructorSchema.plugin(mongooseLeanVirtuals);
 
 export const Instructor =
     models.Instructor || model("Instructor", instructorSchema);

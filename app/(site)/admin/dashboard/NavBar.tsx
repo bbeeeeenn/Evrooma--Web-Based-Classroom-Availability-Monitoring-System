@@ -1,12 +1,15 @@
 "use client";
 
+import clsx from "clsx";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 import {
     adminAccountsPage,
     adminChartsPage,
     adminLogoutPage,
     adminRoomsPage,
 } from "@/constants";
-import clsx from "clsx";
 import {
     ChartNoAxesColumn,
     ChevronUp,
@@ -14,9 +17,6 @@ import {
     SquareArrowRightExit,
     UsersRound,
 } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
 
 export function AdminNavBar() {
     const [shown, setShown] = useState(true);

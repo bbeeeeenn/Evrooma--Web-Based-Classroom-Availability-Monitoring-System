@@ -1,6 +1,9 @@
-"use server";
 import { getIronSession, SessionOptions } from "iron-session";
-import { LoginFormActionResponse, ServerActionResponse } from "./_";
+import {
+    AuthSessionData,
+    LoginFormActionResponse,
+    ServerActionResponse,
+} from "./_";
 import { connectDB } from "@/app/mongoDb/mongodb";
 import { Instructor, PlainUserDocument } from "@/app/mongoDb/models/user";
 import { cookies } from "next/headers";
@@ -22,15 +25,10 @@ const instructorSessionOptions: SessionOptions = {
     ttl: 60 * 60 * 24 * 7,
 };
 
-interface InstructorSessionData {
-    data?: {
-        userId: string;
-    };
-}
-
 export async function InstructorAuth(
     formData: FormData,
 ): Promise<LoginFormActionResponse> {
+    "use server";
     const username = (formData.get("username") as string).trim();
     const password = (formData.get("password") as string).trim();
 
@@ -50,7 +48,7 @@ export async function InstructorAuth(
             };
         }
 
-        const session = await getIronSession<InstructorSessionData>(
+        const session = await getIronSession<AuthSessionData>(
             await cookies(),
             instructorSessionOptions,
         );
@@ -74,7 +72,8 @@ export async function InstructorAuth(
 }
 
 export async function AuthenticateInstructor(): Promise<string | null> {
-    const session = await getIronSession<InstructorSessionData>(
+    "use server";
+    const session = await getIronSession<AuthSessionData>(
         await cookies(),
         instructorSessionOptions,
     );
@@ -83,6 +82,7 @@ export async function AuthenticateInstructor(): Promise<string | null> {
 }
 
 export async function LogoutInstructor(): Promise<void> {
+    "use server";
     const session = await getIronSession(
         await cookies(),
         instructorSessionOptions,

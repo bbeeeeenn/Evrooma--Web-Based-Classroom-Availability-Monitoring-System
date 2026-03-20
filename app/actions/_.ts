@@ -7,3 +7,7 @@ export interface LoginFormActionResponse extends ServerActionResponse {
     formData: FormData;
     user: string | null;
 }
+
+export interface AuthSessionData {
+    data?: { userId: string };
+}

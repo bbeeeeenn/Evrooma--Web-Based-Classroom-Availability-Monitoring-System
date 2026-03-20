@@ -1,6 +1,9 @@
-"use server";
 import { getIronSession, SessionOptions } from "iron-session";
-import { LoginFormActionResponse, ServerActionResponse } from "./_";
+import {
+    AuthSessionData,
+    LoginFormActionResponse,
+    ServerActionResponse,
+} from "./_";
 import { connectDB } from "@/app/mongoDb/mongodb";
 import { Admin, PlainUserDocument } from "@/app/mongoDb/models/user";
 import { cookies } from "next/headers";
@@ -11,7 +14,7 @@ export type AdminAuthAction = (
     formData: FormData,
 ) => Promise<ServerActionResponse>;
 
-const adminSessionOptions: SessionOptions = {
+export const adminSessionOptions: SessionOptions = {
     cookieName: "adminSession",
     password: process.env.ADMIN_SESSION_SECRET!,
     cookieOptions: {
@@ -22,15 +25,10 @@ const adminSessionOptions: SessionOptions = {
     ttl: 60 * 60 * 24 * 7,
 };
 
-interface AdminSessionData {
-    data?: {
-        userId: string;
-    };
-}
-
 export async function AdminAuth(
     formData: FormData,
 ): Promise<LoginFormActionResponse> {
+    "use server";
     const username = (formData.get("username") as string).trim();
     const password = (formData.get("password") as string).trim();
 
@@ -49,7 +47,7 @@ export async function AdminAuth(
             };
         }
 
-        const session = await getIronSession<AdminSessionData>(
+        const session = await getIronSession<AuthSessionData>(
             await cookies(),
             adminSessionOptions,
         );
@@ -73,7 +71,8 @@ export async function AdminAuth(
 }
 
 export async function AuthenticateAdmin(): Promise<string | null> {
-    const session = await getIronSession<AdminSessionData>(
+    "use server";
+    const session = await getIronSession<AuthSessionData>(
         await cookies(),
         adminSessionOptions,
     );
@@ -82,6 +81,24 @@ export async function AuthenticateAdmin(): Promise<string | null> {
 }
 
 export async function LogoutAdmin(): Promise<void> {
+    "use server";
     const session = await getIronSession(await cookies(), adminSessionOptions);
     session.destroy();
+}
+
+export async function GetAdminInfo(): Promise<PlainUserDocument | null> {
+    try {
+        const session = await getIronSession<AuthSessionData>(
+            await cookies(),
+            adminSessionOptions,
+        );
+        await connectDB();
+        const admin = await Admin.findById(
+            session.data?.userId,
+        ).lean<PlainUserDocument>({ virtuals: true });
+        return admin;
+    } catch (e) {
+        console.error(e);
+        return null;
+    }
 }
