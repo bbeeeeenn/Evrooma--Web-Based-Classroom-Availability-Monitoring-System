@@ -2,6 +2,8 @@ import { AuthenticateInstructor } from "@/app/actions/InstructorAuthActions";
 import LoginForm from "@/app/components/LoginForm";
 import { instructorDashboardPage } from "@/constants";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
+import Loading from "../loading";
 
 async function Login() {
     const instructor = await AuthenticateInstructor();
@@ -17,5 +19,9 @@ async function Login() {
 }
 
 export default async function InstructorLoginPage() {
-    return <Login />;
+    return (
+        <Suspense fallback={<Loading />}>
+            <Login />
+        </Suspense>
+    );
 }
