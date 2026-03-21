@@ -4,6 +4,7 @@ import clsx from "clsx";
 import VineSounds from "../components/VineSounds";
 import { connection } from "next/server";
 import { Suspense } from "react";
+import { Bounce, ToastContainer } from "react-toastify";
 
 export async function generateMetadata() {
     return {
@@ -79,6 +80,20 @@ export default async function RootLayout({
                 <Suspense>
                     <VineSFX />
                 </Suspense>
+                <ToastContainer
+                    position="bottom-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick={false}
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable={false}
+                    pauseOnHover={false}
+                    theme="light"
+                    transition={Bounce}
+                    className="font-semibold"
+                />
                 {children}
             </body>
         </html>

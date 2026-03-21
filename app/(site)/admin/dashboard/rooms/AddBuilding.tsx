@@ -4,6 +4,7 @@ import { ServerActionResponse } from "@/app/actions/_";
 import clsx from "clsx";
 import { Building, LoaderCircle, Plus, X } from "lucide-react";
 import { useActionState, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function AddBuilding() {
     const [showModal, setShowModal] = useState(false);
@@ -18,6 +19,9 @@ export default function AddBuilding() {
         if (result.status === "success") {
             setName("");
             setShowModal(false);
+            toast.success(result.message);
+        } else if (result.status === "error") {
+            toast.error(result.message);
         }
 
         return result;
