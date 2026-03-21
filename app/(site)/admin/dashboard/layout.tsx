@@ -3,7 +3,6 @@ import { adminLoginPage } from "@/constants";
 import { redirect } from "next/navigation";
 import { AdminNavBar } from "./SmallComponents";
 import { Suspense } from "react";
-import Loading from "../../loading";
 
 async function Authenticate({
     children,

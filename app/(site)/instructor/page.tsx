@@ -20,7 +20,7 @@ async function Login() {
 
 export default async function InstructorLoginPage() {
     return (
-        <Suspense fallback={<Loading />}>
+        <Suspense>
             <Login />
         </Suspense>
     );
