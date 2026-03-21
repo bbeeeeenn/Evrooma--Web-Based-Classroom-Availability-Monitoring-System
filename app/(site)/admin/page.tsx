@@ -2,7 +2,6 @@ import { AuthenticateAdmin } from "@/app/actions/AdminAuthActions";
 import LoginForm from "@/app/components/LoginForm";
 import { adminDashboardPage } from "@/constants";
 import { redirect } from "next/navigation";
-import { Suspense } from "react";
 
 async function Login() {
     const user = await AuthenticateAdmin();
@@ -18,9 +17,5 @@ async function Login() {
 }
 
 export default function AdminLoginPage() {
-    return (
-        <Suspense>
-            <Login />
-        </Suspense>
-    );
+    return <Login />;
 }
