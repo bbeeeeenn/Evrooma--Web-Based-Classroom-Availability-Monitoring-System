@@ -1,11 +1,12 @@
 import clsx from "clsx";
 import { Plus } from "lucide-react";
 import { BackButton } from "../SmallComponents";
+import { adminDashboardPage } from "@/constants";
 
 export default function AccountsPage() {
     return (
         <>
-            <BackButton />
+            <BackButton dest={adminDashboardPage} />
             <h1 className="flex items-center gap-2 text-4xl font-bold">
                 Accounts
             </h1>

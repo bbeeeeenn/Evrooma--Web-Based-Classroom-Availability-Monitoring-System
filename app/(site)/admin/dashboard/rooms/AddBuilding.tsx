@@ -42,7 +42,7 @@ export default function AddBuilding() {
                     "my-4 flex cursor-pointer items-center gap-1 rounded-md bg-white p-2 font-semibold shadow-md",
                     "hover:bg-black-400 hover:text-black-100 transition-colors active:scale-105",
                 )}
-                onClick={() => setShowModal((prev) => !prev)}
+                onClick={() => setShowModal(true)}
             >
                 <Plus /> Add Building
             </button>

@@ -2,7 +2,7 @@
 
 import clsx from "clsx";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import {
     adminAccountsPage,
@@ -35,7 +35,7 @@ export function AdminNavBar() {
             >
                 <button
                     className={clsx(
-                        "from-black-100 absolute bottom-full mb-1 cursor-pointer rounded-full border-0 bg-radial to-transparent p-1 transition-transform",
+                        "absolute bottom-full mb-1 cursor-pointer rounded-full border-0 p-1 backdrop-blur-xs transition-transform",
                         shown ? "rotate-180" : "animate-bounce",
                     )}
                     onClick={() => setShown((prev) => !prev)}
@@ -95,13 +95,25 @@ export function AdminNavBar() {
     );
 }
 
-export function BackButton() {
+export function BackButton({ dest }: Readonly<{ dest?: string }>) {
+    const router = useRouter();
     return (
-        <Link
-            href={adminDashboardPage}
-            className="hover:bg-black-400 hover:text-black-100 mt-2 mb-7 flex w-fit cursor-pointer items-center gap-1 rounded-md bg-white px-3 py-1 text-sm font-semibold shadow-md transition-colors active:scale-105"
-        >
-            <ArrowLeft size={15} /> Back
-        </Link>
+        <>
+            {dest ? (
+                <Link
+                    href={dest}
+                    className="hover:bg-black-400 hover:text-black-100 mt-2 mb-7 flex w-fit cursor-pointer items-center gap-1 rounded-md bg-white px-3 py-1 text-sm font-semibold shadow-md transition-colors active:scale-105"
+                >
+                    <ArrowLeft size={15} /> Back
+                </Link>
+            ) : (
+                <button
+                    onClick={() => router.back()}
+                    className="hover:bg-black-400 hover:text-black-100 mt-2 mb-7 flex w-fit cursor-pointer items-center gap-1 rounded-md bg-white px-3 py-1 text-sm font-semibold shadow-md transition-colors active:scale-105"
+                >
+                    <ArrowLeft size={15} /> Back
+                </button>
+            )}
+        </>
     );
 }
