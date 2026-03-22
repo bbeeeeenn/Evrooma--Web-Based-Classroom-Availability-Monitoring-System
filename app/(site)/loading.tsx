@@ -4,7 +4,7 @@ export default function Loading({
     text = "EVROOMA",
 }: Readonly<{ text?: string }>) {
     return (
-        <div className="bg-black-100 dark:bg-black-400 dark:text-black-100 font-inter fixed inset-0 m-auto flex flex-col items-center justify-center gap-3 text-3xl font-semibold tracking-widest">
+        <div className="bg-black-100 dark:bg-black-400 dark:text-black-100 font-inter fixed inset-0 z-50 m-auto flex flex-col items-center justify-center gap-3 text-3xl font-semibold tracking-widest">
             <Image
                 draggable={false}
                 src="/favicon_light.svg"

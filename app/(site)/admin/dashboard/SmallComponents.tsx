@@ -7,7 +7,6 @@ import { useState } from "react";
 import {
     adminAccountsPage,
     adminChartsPage,
-    adminDashboardPage,
     adminLogoutPage,
     adminRoomsPage,
 } from "@/constants";
@@ -28,7 +27,7 @@ export function AdminNavBar() {
         <>
             <nav
                 className={clsx(
-                    "bg-black-400 text-black-100 divide-black-100 fixed inset-x-0 bottom-0 z-50 m-auto flex justify-evenly divide-x pt-3 pb-2 font-bold tracking-wide transition-transform sm:inset-x-1/12 sm:bottom-4 sm:max-w-2xl sm:rounded-full sm:py-4",
+                    "bg-black-400 text-black-100 divide-black-100 fixed inset-x-0 bottom-0 z-40 m-auto flex justify-evenly divide-x pt-3 pb-2 font-bold tracking-wide transition-transform sm:inset-x-1/12 sm:bottom-4 sm:max-w-2xl sm:rounded-full sm:py-4",
                     !shown &&
                         "translate-y-full sm:translate-y-[calc(100%+1rem)]",
                 )}
