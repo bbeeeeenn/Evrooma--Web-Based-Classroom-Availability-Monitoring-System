@@ -49,6 +49,7 @@ function BuildingListSkeleton() {
 }
 
 async function BuildingsList() {
+    "use cache";
     // await new Promise((res) => setTimeout(res, 3000));
     let buildings: PlainBuildingDocument[] = [];
     try {
