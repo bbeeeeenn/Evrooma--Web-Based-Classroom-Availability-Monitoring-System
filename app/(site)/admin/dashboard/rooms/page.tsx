@@ -7,6 +7,7 @@ import { Suspense } from "react";
 import { Room } from "@/app/mongoDb/models/room";
 import Link from "next/link";
 import { adminDashboardPage, adminRoomsPage } from "@/constants";
+import { BuildingIcon } from "lucide-react";
 
 async function ClassroomCount({
     buildingId,
@@ -70,7 +71,10 @@ async function BuildingsList() {
                         href={adminRoomsPage + "/" + b._id}
                         className="block cursor-pointer p-5"
                     >
-                        <p className="truncate">{b.name}</p>
+                        <p className="flex items-center gap-1 truncate">
+                            <BuildingIcon />
+                            {b.name}
+                        </p>
                         <ClassroomCount buildingId={b._id} />
                     </Link>
                 </li>
