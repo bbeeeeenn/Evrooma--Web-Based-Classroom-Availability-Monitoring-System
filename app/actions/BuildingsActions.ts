@@ -99,6 +99,7 @@ export async function RenameBuilding(
         await building.save();
 
         revalidatePath(`${adminRoomsPage}`);
+        revalidatePath(`${adminRoomsPage}/${buildingId}`);
         return {
             status: "success",
             message: "Renamed successfully",

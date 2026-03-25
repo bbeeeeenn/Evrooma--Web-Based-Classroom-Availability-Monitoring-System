@@ -6,6 +6,7 @@ import { isValidObjectId } from "mongoose";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { BuildingNameProvider } from "@/app/contexts/BuildingNameProvider";
+import { connection } from "next/server";
 
 async function Suspended({
     children,
@@ -34,7 +35,7 @@ async function Suspended({
     }
 
     return (
-        <BuildingNameProvider name={building.name}>
+        <BuildingNameProvider key={building.name} name={building.name}>
             {children}
         </BuildingNameProvider>
     );
