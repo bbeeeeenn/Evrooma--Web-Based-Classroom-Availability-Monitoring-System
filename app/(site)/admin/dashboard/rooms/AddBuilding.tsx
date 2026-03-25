@@ -26,7 +26,10 @@ export default function AddBuilding() {
     const [_, formAction, isPending] = useActionState(onAction, null);
 
     useEffect(() => {
-        if (showModal) inputRef.current?.focus();
+        if (showModal) {
+            inputRef.current?.focus();
+            setName(""); // Refresh input
+        }
         const func = (e: KeyboardEvent) => {
             if (showModal && e.key === "Escape") setShowModal(false);
         };

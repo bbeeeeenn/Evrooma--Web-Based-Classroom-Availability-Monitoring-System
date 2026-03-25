@@ -3,9 +3,11 @@
 import { isValidObjectId } from "mongoose";
 import { ServerActionResponse } from "./_";
 import { AuthenticateAdmin } from "./AdminAuthActions";
-import { Building } from "../mongoDb/models/building";
-import { Room } from "../mongoDb/models/room";
-import { connectDB } from "../mongoDb/mongodb";
+import { Building } from "@/app/mongoDb/models/building";
+import { Room } from "@/app/mongoDb/models/room";
+import { connectDB } from "@/app/mongoDb/mongodb";
+import { revalidatePath } from "next/cache";
+import { adminRoomsPage } from "@/constants";
 
 function escapeRegex(value: string): string {
     return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -28,7 +30,7 @@ export async function AddClassroom(
         };
     }
 
-    const sanitizedClassRoomCode = classroomCode.trim();
+    const sanitizedClassRoomCode = classroomCode.trim().toUpperCase();
     if (!sanitizedClassRoomCode) {
         return {
             status: "error",
@@ -67,6 +69,7 @@ export async function AddClassroom(
             building: building._id,
         });
 
+        revalidatePath(`${adminRoomsPage}/${buildingId}`);
         return {
             status: "success",
             message: "Classroom created.",

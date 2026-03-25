@@ -1,5 +1,16 @@
 import { model } from "mongoose";
 import { models, Schema, SchemaTypes } from "mongoose";
+import type { PlainBuildingDocument } from "./building";
+
+export type PlainRoomDocument = {
+    _id: string;
+    code: string;
+    building: string;
+};
+
+export type PopulatedPlainRoomDocument = Omit<PlainRoomDocument, "building"> & {
+    building: PlainBuildingDocument;
+};
 
 const roomSchema = new Schema({
     code: {
@@ -13,11 +24,11 @@ const roomSchema = new Schema({
     },
 });
 
-roomSchema.virtual("schedules", {
-    ref: "Schedule",
-    foreignField: "room",
-    localField: "_id",
-});
+// roomSchema.virtual("schedules", {
+//     ref: "Schedule",
+//     foreignField: "room",
+//     localField: "_id",
+// });
 
 roomSchema.index(
     { building: 1, code: 1 },

@@ -9,10 +9,15 @@ const buildingSchema = new Schema({
     name: { type: String, required: true },
 });
 
-buildingSchema.virtual("rooms", {
-    ref: "Room",
-    foreignField: "building",
-    localField: "_id",
-});
+buildingSchema.index(
+    { name: 1 },
+    { unique: true, collation: { locale: "en", strength: 2 } },
+);
+
+// buildingSchema.virtual("rooms", {
+//     ref: "Room",
+//     foreignField: "building",
+//     localField: "_id",
+// });
 
 export const Building = models.Building || model("Building", buildingSchema);

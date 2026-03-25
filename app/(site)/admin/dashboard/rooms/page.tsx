@@ -83,7 +83,6 @@ async function BuildingsList() {
 }
 
 export default function AdminRoomsPage() {
-    // TODO FOR DESIGN: PREVENT FOCUS-VISIBLE WHEN ADDBUILDING MODAL IS SHOWN
     return (
         <>
             <BackButton dest={adminDashboardPage} />

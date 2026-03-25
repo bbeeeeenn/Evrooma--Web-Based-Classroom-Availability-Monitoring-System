@@ -1,6 +1,18 @@
 import { adminRoomsPage } from "@/constants";
 import { BackButton } from "../../ClientComponents";
-import { BuildingNameHeader, BuildingSettings } from "./ClientComponents";
+import {
+    AddClassroomComponent,
+    BuildingNameHeader,
+    BuildingSettings,
+} from "./ClientComponents";
+import { Suspense } from "react";
+import Link from "next/link";
+import {
+    PlainRoomDocument,
+    PopulatedPlainRoomDocument,
+    Room,
+} from "@/app/mongoDb/models/room";
+import { connectDB } from "@/app/mongoDb/mongodb";
 
 function Divider({ text }: { text: string }) {
     return (
@@ -10,6 +22,31 @@ function Divider({ text }: { text: string }) {
                 {text}
             </p>
         </div>
+    );
+}
+
+async function Classrooms({ buildingId }: { buildingId: string }) {
+    let classrooms: PopulatedPlainRoomDocument[] = [];
+    await connectDB();
+    classrooms = await Room.find({ building: buildingId })
+        .populate("building")
+        .lean();
+
+    return (
+        <>
+            {classrooms.map((classroom) => (
+                <Link
+                    key={classroom._id}
+                    href={""}
+                    className="mb-4 block border-r-4 bg-white px-5 py-3 shadow-md"
+                >
+                    <p className="truncate text-4xl font-bold">
+                        {classroom.code}
+                    </p>
+                    <p className="font-semibold">{classroom.building.name}</p>
+                </Link>
+            ))}
+        </>
     );
 }
 
@@ -24,6 +61,10 @@ export default async function BuildingPage({
             <Divider text="Settings" />
             <BuildingSettings buildingId={buildingId} />
             <Divider text="Classrooms" />
+            <AddClassroomComponent buildingId={buildingId} />
+            <Suspense fallback={"Loading Classrooms..."}>
+                <Classrooms buildingId={buildingId} />
+            </Suspense>
         </>
     );
 }
