@@ -42,7 +42,7 @@ export async function AdminAuth(
             await cookies(),
             adminSessionOptions,
         );
-        session.data = { userId: user._id };
+        session.data = { userId: user._id.toString() };
         await session.save();
         return {
             status: "success",

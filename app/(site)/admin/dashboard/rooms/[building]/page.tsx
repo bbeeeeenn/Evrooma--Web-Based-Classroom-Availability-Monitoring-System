@@ -8,11 +8,7 @@ import {
 } from "./ClientComponents";
 import { Suspense } from "react";
 import Link from "next/link";
-import {
-    PlainRoomDocument,
-    PopulatedPlainRoomDocument,
-    Room,
-} from "@/app/mongoDb/models/room";
+import { PopulatedPlainRoomDocument, Room } from "@/app/mongoDb/models/room";
 import { connectDB } from "@/app/mongoDb/mongodb";
 
 async function Classrooms({ buildingId }: { buildingId: string }) {

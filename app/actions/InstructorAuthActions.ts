@@ -43,7 +43,7 @@ export async function InstructorAuth(
             await cookies(),
             instructorSessionOptions,
         );
-        session.data = { userId: user._id };
+        session.data = { userId: user._id.toString() };
         await session.save();
         return {
             status: "success",

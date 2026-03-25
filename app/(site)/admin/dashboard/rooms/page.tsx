@@ -63,7 +63,7 @@ async function BuildingsList() {
         <ul className="flex flex-wrap gap-x-6 gap-y-4">
             {buildings.map((b) => (
                 <li
-                    key={b._id}
+                    key={b._id.toString()}
                     className="font-poppins min-w-3xs grow rounded-lg border-b-4 bg-white text-3xl font-semibold shadow-md transition-transform hover:-translate-y-0.5 sm:max-w-sm"
                 >
                     <Link
@@ -74,7 +74,7 @@ async function BuildingsList() {
                             <BuildingIcon />
                             {b.name}
                         </p>
-                        <ClassroomCount buildingId={b._id} />
+                        <ClassroomCount buildingId={b._id.toString()} />
                     </Link>
                 </li>
             ))}
