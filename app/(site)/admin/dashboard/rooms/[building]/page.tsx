@@ -4,8 +4,8 @@ import {
     AddClassroomComponent,
     BuildingNameHeader,
     BuildingSettings,
-    Divider,
 } from "./ClientComponents";
+import { Divider } from "../ClientComponents";
 import { Suspense } from "react";
 import Link from "next/link";
 import { PopulatedPlainRoomDocument, Room } from "@/app/mongoDb/models/room";

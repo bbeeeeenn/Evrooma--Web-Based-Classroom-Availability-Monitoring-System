@@ -1,8 +1,7 @@
 "use client";
 import { AddBuilding as addBuildingAction } from "@/app/actions/BuildingsActions";
-import { ServerActionResponse } from "@/app/actions/_";
 import clsx from "clsx";
-import { Building, LoaderCircle, Plus, X } from "lucide-react";
+import { Building2, LoaderCircle, Plus, X } from "lucide-react";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -52,7 +51,7 @@ export default function AddBuilding() {
                 className={clsx(
                     "fixed inset-0 z-40 flex flex-col items-center justify-center blur-none transition-all",
                     !showModal && "pointer-events-none bg-transparent",
-                    showModal && "bg-black/20 backdrop-blur-xs",
+                    showModal && "bg-black/30",
                 )}
                 onClick={() => setShowModal(false)}
             >
@@ -62,16 +61,13 @@ export default function AddBuilding() {
                         if (name.length === 0) e.preventDefault();
                     }}
                     className={clsx(
-                        "relative w-full max-w-md rounded-xl border-b-4 bg-white px-6 pt-10 pb-7 shadow-md transition-all",
-                        !showModal && "scale-x-0 opacity-0",
+                        "w-full max-w-md rounded-xl bg-white px-6 pt-10 pb-7 shadow-md transition-all",
+                        !showModal && "opacity-0",
                     )}
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <h1 className="absolute inset-x-0 bottom-full m-auto flex w-fit -translate-y-1/2 items-center gap-1.5 text-xl font-bold tracking-wide">
-                        <Building /> New Building
-                    </h1>
                     <div className="flex items-center gap-2">
-                        <Building />
+                        <Building2 />
                         <div className="relative grow">
                             <input
                                 ref={inputRef}
@@ -132,5 +128,15 @@ export default function AddBuilding() {
                 </form>
             </div>
         </>
+    );
+}
+export function Divider({ text }: { text: string }) {
+    return (
+        <div className="relative my-10 flex items-center justify-center font-bold sm:justify-start">
+            <div className="bg-black-400 absolute inset-0 m-auto h-0.5 rounded-full"></div>
+            <p className="text-black-400 bg-black-100 text-md absolute w-fit px-2 text-center tracking-wide sm:ml-10 sm:text-lg">
+                {text}
+            </p>
+        </div>
     );
 }
