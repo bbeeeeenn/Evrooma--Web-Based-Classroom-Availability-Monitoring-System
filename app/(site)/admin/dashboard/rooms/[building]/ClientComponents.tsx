@@ -36,7 +36,7 @@ export function Divider({ text }: { text: string }) {
 export function BuildingNameHeader() {
     const { buildingName } = useBuildingInfo();
     return (
-        <h1 className="flex items-center gap-2 text-4xl font-bold">
+        <h1 className="flex items-center gap-2 text-4xl font-bold underline">
             <BuildingIcon size={30} />
             {buildingName}
         </h1>
@@ -46,15 +46,13 @@ export function BuildingNameHeader() {
 type Modals = "none" | "rename" | "remove";
 
 function RenameBuildingComponent({
-    buildingId,
     showModal,
     closeModal,
 }: {
-    buildingId: string;
     showModal: boolean;
     closeModal: () => void;
 }) {
-    const { buildingName: originalName } = useBuildingInfo();
+    const { buildingId, buildingName: originalName } = useBuildingInfo();
     const [name, setName] = useState(originalName);
     const updateBuildingName = useUpdateBuildingName();
     const onAction = async (_: unknown, formData: FormData): Promise<void> => {
@@ -188,14 +186,13 @@ function RenameBuildingComponent({
 }
 
 function RemoveBuildingComponent({
-    buildingId,
     showModal,
     closeModal,
 }: {
-    buildingId: string;
     showModal: boolean;
     closeModal: () => void;
 }) {
+    const { buildingId } = useBuildingInfo();
     const [name, setName] = useState("");
     const inputRef = useRef<HTMLInputElement>(null);
     const router = useRouter();
@@ -262,7 +259,7 @@ function RemoveBuildingComponent({
                             spellCheck={false}
                             autoComplete="off"
                             type="text"
-                            id="newbuilding"
+                            id="buildingName"
                             name="nameConfirmation"
                             className="peer w-full border-b-2 border-gray-700/50 py-1 text-xl font-semibold tracking-wide outline-none placeholder:text-transparent focus:border-gray-700"
                             disabled={!showModal}
@@ -271,10 +268,10 @@ function RemoveBuildingComponent({
                             placeholder="Building Name"
                         />
                         <label
-                            htmlFor="newbuilding"
-                            className="pointer-events-none absolute -top-5 left-0 text-sm text-gray-700 transition-all peer-placeholder-shown:top-1 peer-placeholder-shown:text-xl peer-placeholder-shown:text-gray-700/50 peer-focus:-top-5 peer-focus:text-sm peer-focus:text-gray-700"
+                            htmlFor="buildingName"
+                            className="pointer-events-none absolute -top-5 left-0 w-full truncate text-sm text-gray-700 transition-all peer-placeholder-shown:top-1 peer-placeholder-shown:text-xl peer-placeholder-shown:text-gray-700/50 peer-focus:-top-5 peer-focus:text-sm peer-focus:text-gray-700"
                         >
-                            Enter the building's name to confirm
+                            Confirm building's name
                         </label>
                     </div>
                 </div>
@@ -316,11 +313,7 @@ function RemoveBuildingComponent({
     );
 }
 
-export function BuildingSettings({
-    buildingId,
-}: Readonly<{
-    buildingId: string;
-}>) {
+export function BuildingSettings() {
     const [openedModal, setOpenedModal] = useState<Modals>("none");
 
     const closeModal = () => {
@@ -330,12 +323,10 @@ export function BuildingSettings({
     return (
         <>
             <RenameBuildingComponent
-                buildingId={buildingId}
                 showModal={openedModal === "rename"}
                 closeModal={closeModal}
             />
             <RemoveBuildingComponent
-                buildingId={buildingId}
                 showModal={openedModal === "remove"}
                 closeModal={closeModal}
             />
@@ -359,9 +350,8 @@ export function BuildingSettings({
     );
 }
 
-export function AddClassroomComponent({
-    buildingId,
-}: Readonly<{ buildingId: string }>) {
+export function AddClassroomComponent() {
+    const { buildingId } = useBuildingInfo();
     const [code, setCode] = useState("");
     const [showModal, setShowModal] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);

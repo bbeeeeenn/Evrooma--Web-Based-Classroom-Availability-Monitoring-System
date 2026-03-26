@@ -16,7 +16,7 @@ async function Classrooms({ buildingId }: { buildingId: string }) {
     await connectDB();
     classrooms = await Room.find({ building: buildingId })
         .populate("building")
-        .sort()
+        .sort({ createdAt: 1 })
         .lean();
 
     return (
@@ -46,9 +46,9 @@ export default async function BuildingPage({
             <BackButton dest={adminRoomsPage} />
             <BuildingNameHeader />
             <Divider text="Settings" />
-            <BuildingSettings buildingId={buildingId} />
+            <BuildingSettings />
             <Divider text="Classrooms" />
-            <AddClassroomComponent buildingId={buildingId} />
+            <AddClassroomComponent />
             <Suspense fallback={"Loading Classrooms..."}>
                 <Classrooms buildingId={buildingId} />
             </Suspense>

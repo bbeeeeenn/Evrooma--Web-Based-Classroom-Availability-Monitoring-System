@@ -1,7 +1,7 @@
 "use server";
 
 import { isValidObjectId } from "mongoose";
-import { ServerActionResponse } from "./_";
+import { type ServerActionResponse } from "./_";
 import { AuthenticateAdmin } from "./AdminAuthActions";
 import { Building } from "@/app/mongoDb/models/building";
 import { Room } from "@/app/mongoDb/models/room";
@@ -11,6 +11,141 @@ import { adminRoomsPage } from "@/constants";
 
 function escapeRegex(value: string): string {
     return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+export async function RenameClassroom(
+    roomId: string,
+    newCode: string,
+): Promise<ServerActionResponse> {
+    if (!(await AuthenticateAdmin())) {
+        return {
+            status: "error",
+            message: "Unauthorized.",
+        };
+    }
+    if (!isValidObjectId(roomId)) {
+        return {
+            status: "error",
+            message: "Invalid room ID.",
+        };
+    }
+    const sanitizedClassRoomCode = newCode.trim().toUpperCase();
+    if (!sanitizedClassRoomCode) {
+        return {
+            status: "error",
+            message: "Classroom code must not be empty.",
+        };
+    }
+
+    try {
+        await connectDB();
+
+        const classroom = await Room.findById(roomId);
+        if (!classroom) {
+            return {
+                status: "error",
+                message: "Classroom with such ID was not found.",
+            };
+        }
+
+        const existingRoom = await Room.findOne({
+            building: classroom.building,
+            code: {
+                $regex: `^${escapeRegex(sanitizedClassRoomCode)}$`,
+                $options: "i",
+            },
+        }).lean();
+        if (existingRoom) {
+            return {
+                status: "error",
+                message: "Classroom with such code already exists.",
+            };
+        }
+
+        classroom.code = sanitizedClassRoomCode;
+        await classroom.save();
+        revalidatePath(`${adminRoomsPage}/${classroom.building}`);
+        return {
+            status: "success",
+            message: "Classroom renamed.",
+        };
+    } catch (e) {
+        if (
+            typeof e === "object" &&
+            e !== null &&
+            "code" in e &&
+            (e as { code?: number }).code === 11000
+        ) {
+            // AI Generated
+            //  Why this matters:
+
+            // You already pre-check duplicates, but two concurrent requests can still race.
+            // Your unique index in room.ts is the final protection.
+            // When that index rejects a duplicate insert, this block converts that DB error into a clean app response.
+            return {
+                status: "error",
+                message: "Classroom with such code already exists.",
+            };
+        }
+
+        console.error("[RenameClassroom]", e);
+        return {
+            status: "error",
+            message: "Something went wrong. Please try again later.",
+        };
+    }
+}
+
+export async function RemoveClassroom(
+    roomId: string,
+    codeConfirmation: string,
+): Promise<ServerActionResponse> {
+    if (!(await AuthenticateAdmin())) {
+        return {
+            status: "error",
+            message: "Unauthorized.",
+        };
+    }
+
+    if (!isValidObjectId(roomId)) {
+        return { status: "error", message: "Invalid room ID" };
+    }
+    try {
+        await connectDB();
+        const classroom = await Room.findById(roomId);
+        if (!classroom) {
+            return {
+                status: "error",
+                message: "Classroom with such ID not found",
+            };
+        }
+        if (classroom.code !== codeConfirmation) {
+            return {
+                status: "error",
+                message: "Invalid classroom code.",
+            };
+        }
+
+        const deleted = await classroom.deleteOne();
+        if (deleted.deletedCount >= 1) {
+            revalidatePath(`${adminRoomsPage}/${classroom.building}`);
+            return {
+                status: "success",
+                message: `Successfully removed [${classroom.code}]`,
+            };
+        } else {
+            return {
+                status: "error",
+                message: "Something went wrong. Please try again later.",
+            };
+        }
+    } catch (e) {
+        console.error("[RemoveClassroom]", e);
+        return {
+            status: "error",
+            message: "Something went wrong. Please try again later.",
+        };
+    }
 }
 
 export async function AddClassroom(

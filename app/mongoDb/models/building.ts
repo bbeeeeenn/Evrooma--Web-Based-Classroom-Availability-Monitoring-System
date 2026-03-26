@@ -5,9 +5,12 @@ export interface PlainBuildingDocument {
     name: string;
 }
 
-const buildingSchema = new Schema({
-    name: { type: String, required: true },
-});
+const buildingSchema = new Schema(
+    {
+        name: { type: String, required: true },
+    },
+    { timestamps: true },
+);
 
 buildingSchema.index(
     { name: 1 },

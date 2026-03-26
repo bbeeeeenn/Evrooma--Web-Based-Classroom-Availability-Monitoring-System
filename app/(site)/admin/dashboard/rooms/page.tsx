@@ -53,7 +53,9 @@ async function BuildingsList() {
     try {
         await connection();
         await connectDB();
-        buildings = await Building.find().lean<PlainBuildingDocument[]>();
+        buildings = await Building.find()
+            .sort({ createdAt: 1 })
+            .lean<PlainBuildingDocument[]>();
     } catch (error) {
         console.error(error);
         return null;

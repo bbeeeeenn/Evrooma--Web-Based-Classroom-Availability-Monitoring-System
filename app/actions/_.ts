@@ -1,7 +1,7 @@
-export interface ServerActionResponse {
+export type ServerActionResponse = {
     status: "success" | "error" | "initial";
     message: string;
-}
+};
 
 export interface LoginFormActionResponse extends ServerActionResponse {
     formData: FormData;

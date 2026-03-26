@@ -12,17 +12,22 @@ export type PopulatedPlainRoomDocument = Omit<PlainRoomDocument, "building"> & {
     building: PlainBuildingDocument;
 };
 
-const roomSchema = new Schema({
-    code: {
-        type: String,
-        required: true,
+const roomSchema = new Schema(
+    {
+        code: {
+            type: String,
+            required: true,
+        },
+        building: {
+            type: SchemaTypes.ObjectId,
+            ref: "Building",
+            required: true,
+        },
     },
-    building: {
-        type: SchemaTypes.ObjectId,
-        ref: "Building",
-        required: true,
+    {
+        timestamps: true,
     },
-});
+);
 
 // roomSchema.virtual("schedules", {
 //     ref: "Schedule",
