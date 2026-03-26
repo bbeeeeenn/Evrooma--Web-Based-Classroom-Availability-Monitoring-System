@@ -44,6 +44,7 @@ const scheduleSchema = new Schema({
         type: String,
         default: "Undefined",
         required: false,
+        trim: true,
     },
     slot: [slotSchema],
 });

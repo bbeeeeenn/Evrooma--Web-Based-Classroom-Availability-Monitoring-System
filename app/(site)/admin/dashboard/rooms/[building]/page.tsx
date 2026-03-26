@@ -13,11 +13,11 @@ import { connectDB } from "@/app/mongoDb/mongodb";
 
 function ClassroomsSkeleton() {
     return (
-        <>
+        <ul>
             {Array.from({ length: 4 }).map((_, i) => (
-                <div
+                <li
                     key={i}
-                    className="mb-4 block space-y-2 bg-white px-5 py-3 shadow-md"
+                    className="mb-4 block space-y-2 bg-white px-5 py-3 opacity-70 shadow-md"
                 >
                     <p className="h-fit w-fit animate-pulse truncate bg-gray-200 text-2xl font-bold text-gray-200">
                         DUMMY
@@ -28,9 +28,9 @@ function ClassroomsSkeleton() {
                     <p className="w-fit animate-pulse bg-gray-200 font-semibold text-gray-200">
                         Building.......
                     </p>
-                </div>
+                </li>
             ))}
-        </>
+        </ul>
     );
 }
 

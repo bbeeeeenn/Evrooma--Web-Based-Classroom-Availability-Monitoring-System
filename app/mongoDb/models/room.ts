@@ -17,6 +17,7 @@ const roomSchema = new Schema(
         code: {
             type: String,
             required: true,
+            trim: true,
         },
         building: {
             type: SchemaTypes.ObjectId,

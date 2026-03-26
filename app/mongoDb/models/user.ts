@@ -21,9 +21,17 @@ adminSchema.virtual("fullName").get(function () {
 });
 
 const instructorSchema = new Schema({
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    username: { type: String, required: true },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        lowercase: true,
+        trim: true,
+        match: [/^\S+@\S+\.\S+$/, "Please use a valid email"],
+    },
+    firstName: { type: String, required: true, trim: true },
+    lastName: { type: String, required: true, trim: true },
+    username: { type: String, required: true, trim: true },
     password: { type: String, required: true },
 });
 instructorSchema.virtual("fullName").get(function () {

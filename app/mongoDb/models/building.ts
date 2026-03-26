@@ -7,7 +7,7 @@ export interface PlainBuildingDocument {
 
 const buildingSchema = new Schema(
     {
-        name: { type: String, required: true },
+        name: { type: String, required: true, trim: true },
     },
     { timestamps: true },
 );
