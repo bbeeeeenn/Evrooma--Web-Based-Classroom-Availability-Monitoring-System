@@ -1,6 +1,7 @@
 "use client";
 import clsx from "clsx";
 import { BookText, CirclePlus, Lock, Mail, User } from "lucide-react";
+import { useActionState, useState } from "react";
 
 /**
  * Creates a form component for registering a new instructor.
@@ -20,10 +21,41 @@ import { BookText, CirclePlus, Lock, Mail, User } from "lucide-react";
  *
  * @returns {React.ReactNode} A form element for creating new instructor accounts
  */
+
+type Data = {
+    fname: string;
+    lname: string;
+    email: string;
+    password: string;
+    password2: string;
+};
+
+const defaultData: Data = {
+    fname: "",
+    lname: "",
+    email: "",
+    password: "",
+    password2: "",
+};
+
 export function CreateInstructorForm(): React.ReactNode {
+    // TODO: matulog 9pm
+    const [data, setData] = useState<Data>({ ...defaultData });
+
+    const onAction = async (_: unknown, formData: FormData): Promise<void> => {
+        const fname = (formData.get("fname") as string | null)?.trim() ?? "";
+        const lname = (formData.get("lname") as string | null)?.trim() ?? "";
+        const email = (formData.get("email") as string | null)?.trim() ?? "";
+        const password =
+            (formData.get("password") as string | null)?.trim() ?? "";
+        const password2 =
+            (formData.get("password2") as string | null)?.trim() ?? "";
+    };
+
+    const [_, formAction, isPending] = useActionState(onAction, null);
     return (
         <form
-            action={() => {}}
+            action={formAction}
             className="cif font-poppins m-auto mt-10 max-w-sm rounded-lg bg-white px-2 sm:max-w-lg sm:p-10 sm:shadow-md"
         >
             <p className="flex items-center gap-2 text-lg font-semibold">
@@ -38,6 +70,10 @@ export function CreateInstructorForm(): React.ReactNode {
                     id="fname"
                     name="fname"
                     placeholder="First Name"
+                    value={data.fname}
+                    onChange={(e) =>
+                        setData((prev) => ({ ...prev, fname: e.target.value }))
+                    }
                     className="peer w-full border-b-2 border-gray-300 text-xl outline-transparent placeholder:text-transparent focus:border-gray-600"
                 />
                 <label
@@ -60,6 +96,10 @@ export function CreateInstructorForm(): React.ReactNode {
                     id="lname"
                     name="lname"
                     placeholder="Last Name"
+                    value={data.lname}
+                    onChange={(e) =>
+                        setData((prev) => ({ ...prev, lname: e.target.value }))
+                    }
                     className="peer w-full border-b-2 border-gray-300 text-xl outline-transparent placeholder:text-transparent focus:border-gray-600"
                 />
                 <label
@@ -85,6 +125,10 @@ export function CreateInstructorForm(): React.ReactNode {
                     id="email"
                     name="email"
                     placeholder="Email"
+                    value={data.email}
+                    onChange={(e) =>
+                        setData((prev) => ({ ...prev, email: e.target.value }))
+                    }
                     className="peer w-full border-b-2 border-gray-300 text-xl outline-transparent placeholder:text-transparent focus:border-gray-600"
                 />
                 <label
@@ -120,6 +164,13 @@ export function CreateInstructorForm(): React.ReactNode {
                     id="password"
                     name="password"
                     placeholder="Password"
+                    value={data.password}
+                    onChange={(e) =>
+                        setData((prev) => ({
+                            ...prev,
+                            password: e.target.value,
+                        }))
+                    }
                     className="peer w-full border-b-2 border-gray-300 text-xl outline-transparent placeholder:text-transparent focus:border-gray-600"
                 />
                 <label
@@ -142,6 +193,13 @@ export function CreateInstructorForm(): React.ReactNode {
                     id="password2"
                     name="password2"
                     placeholder="Password"
+                    value={data.password2}
+                    onChange={(e) =>
+                        setData((prev) => ({
+                            ...prev,
+                            password2: e.target.value,
+                        }))
+                    }
                     className="peer w-full border-b-2 border-gray-300 text-xl outline-transparent placeholder:text-transparent focus:border-gray-600"
                 />
                 <label
@@ -157,7 +215,10 @@ export function CreateInstructorForm(): React.ReactNode {
             </div>
             <button
                 type="submit"
-                className="text-black-100 bg-black-400 mt-10 flex w-full items-center justify-center gap-2 rounded-md px-10 py-2 text-xl font-semibold"
+                className={clsx(
+                    "text-black-100 bg-black-400 mt-10 flex w-full items-center justify-center gap-2 rounded-md px-10 py-2 text-xl font-semibold",
+                    "cursor-pointer",
+                )}
             >
                 <CirclePlus color="#f2f2f2" /> Create
             </button>
