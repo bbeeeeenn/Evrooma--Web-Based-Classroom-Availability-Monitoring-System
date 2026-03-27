@@ -52,7 +52,6 @@ function BuildingListSkeleton() {
 }
 
 async function BuildingsList() {
-    await connection();
     let buildings: PlainBuildingDocument[] = [];
     try {
         await connectDB();
@@ -88,7 +87,6 @@ async function BuildingsList() {
 }
 
 async function ClassroomsSkeleton() {
-    await connection();
     return (
         <ul>
             {Array.from({ length: 4 }).map((_, i) => (
@@ -112,7 +110,6 @@ async function ClassroomsSkeleton() {
 }
 
 async function Classrooms() {
-    await connection();
     let classrooms: PopulatedPlainRoomDocument[] = [];
     await connectDB();
     classrooms = await Room.find()
@@ -158,6 +155,7 @@ async function Classrooms() {
 }
 
 export default async function AdminRoomsPage() {
+    await connection();
     return (
         <>
             <BackButton dest={adminDashboardPage} />
