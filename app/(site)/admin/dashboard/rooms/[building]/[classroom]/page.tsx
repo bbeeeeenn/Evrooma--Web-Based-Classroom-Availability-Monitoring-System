@@ -3,7 +3,7 @@ import { BackButton } from "../../../ClientComponents";
 import { Divider } from "../../ClientComponents";
 import { ClassroomCodeHeader, ClassroomSettings } from "./ClientComponents";
 
-export default function AdminClassroomPage() {
+export default async function AdminClassroomPage() {
     return (
         <>
             <BackButton />

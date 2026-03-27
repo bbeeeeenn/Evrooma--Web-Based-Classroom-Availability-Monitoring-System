@@ -45,7 +45,8 @@ function RenameClassroomComponent({
     const onAction = async (_: unknown, formData: FormData): Promise<void> => {
         const loadingToast = toast.loading("Waiting...");
         const newCode =
-            (formData.get("newCode") as string | null)?.trim() ?? "";
+            (formData.get("newCode") as string | null)?.trim().toUpperCase() ??
+            "";
         const res = await RenameClassroom(classroomId, newCode);
         if (res.status === "success") {
             updateRoomCode(newCode);

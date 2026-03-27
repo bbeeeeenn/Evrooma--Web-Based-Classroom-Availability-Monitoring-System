@@ -1,8 +1,7 @@
 import { connectDB } from "@/app/mongoDb/mongodb";
 import { BackButton } from "../ClientComponents";
-import AddBuilding from "./ClientComponents";
+import AddBuilding, { Divider } from "./ClientComponents";
 import { Building, PlainBuildingDocument } from "@/app/mongoDb/models/building";
-import { connection } from "next/server";
 import { Suspense } from "react";
 import {
     type PopulatedPlainRoomDocument,
@@ -11,6 +10,7 @@ import {
 import Link from "next/link";
 import { adminDashboardPage, adminRoomsPage } from "@/constants";
 import { Building2, DoorOpen } from "lucide-react";
+import { connection } from "next/server";
 
 async function ClassroomCount({
     buildingId,
@@ -110,7 +110,6 @@ function ClassroomsSkeleton() {
 }
 
 async function Classrooms() {
-    // i wonder why classrooms here are updated when i rename a classroom even though the classroom rename server action didnt revalidate this path
     let classrooms: PopulatedPlainRoomDocument[] = [];
     await connectDB();
     classrooms = await Room.find()
@@ -118,21 +117,40 @@ async function Classrooms() {
         .sort({ building: 1, createdAt: 1 })
         .lean();
 
+    let currBuilding = "";
+
     return (
-        <>
-            {classrooms.map((classroom) => (
-                <Link
-                    key={classroom._id.toString()}
-                    href={`${adminRoomsPage}/${classroom.building._id}/${classroom._id}`}
-                    className="mb-4 block border-r-4 bg-white px-5 py-3 shadow-md"
-                >
-                    <p className="flex items-center gap-2 truncate text-4xl font-bold">
-                        <DoorOpen size={25} /> {classroom.code}
-                    </p>
-                    <p className="font-semibold">{classroom.building.name}</p>
-                </Link>
-            ))}
-        </>
+        <ul>
+            {classrooms.map((classroom) => {
+                // TODO: chain delete all the schedules related to this classroom if the building is already deleted. Do it with server-action
+                if (!classroom.building) {
+                    return null;
+                }
+                const BuildingDiv = () => {
+                    if (currBuilding !== classroom.building.name) {
+                        currBuilding = classroom.building.name;
+                        return <Divider text={currBuilding} />;
+                    }
+                    return null;
+                };
+                return (
+                    <li key={classroom._id.toString()}>
+                        <BuildingDiv />
+                        <Link
+                            href={`${adminRoomsPage}/${classroom.building._id}/${classroom._id}`}
+                            className="mb-4 block border-r-4 bg-white px-5 py-3 shadow-md"
+                        >
+                            <p className="flex items-center gap-2 truncate text-4xl font-bold">
+                                <DoorOpen size={25} /> {classroom.code}
+                            </p>
+                            <p className="font-semibold">
+                                {classroom.building.name}
+                            </p>
+                        </Link>
+                    </li>
+                );
+            })}
+        </ul>
     );
 }
 
