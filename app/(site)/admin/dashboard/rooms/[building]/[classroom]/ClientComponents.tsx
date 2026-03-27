@@ -199,7 +199,9 @@ function RemoveClassroomComponent({
     const onAction = async (_: unknown, formData: FormData): Promise<void> => {
         const loadingToast = toast.loading("Waiting...");
         const codeConfirmation =
-            (formData.get("codeConfirmation") as string | null) ?? "";
+            (
+                formData.get("codeConfirmation") as string | null
+            )?.toUpperCase() ?? "";
         const res = await RemoveClassroom(classroomId, codeConfirmation);
         if (res.status === "success") {
             closeModal();
