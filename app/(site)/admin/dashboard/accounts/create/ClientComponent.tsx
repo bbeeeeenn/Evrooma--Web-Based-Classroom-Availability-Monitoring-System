@@ -1,6 +1,8 @@
 "use client";
+import { adminCreateAccountPage } from "@/constants";
 import clsx from "clsx";
 import { BookText, CirclePlus, Lock, Mail, User } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { useActionState, useState } from "react";
 
 /**
@@ -39,8 +41,8 @@ const defaultData: Data = {
 };
 
 export function CreateInstructorForm(): React.ReactNode {
-    // TODO: matulog 9pm
     const [data, setData] = useState<Data>({ ...defaultData });
+    const pathname = usePathname();
 
     const onAction = async (_: unknown, formData: FormData): Promise<void> => {
         const fname = (formData.get("fname") as string | null)?.trim() ?? "";
@@ -56,7 +58,10 @@ export function CreateInstructorForm(): React.ReactNode {
     return (
         <form
             action={formAction}
-            className="cif font-poppins m-auto mt-10 max-w-sm rounded-lg bg-white px-2 sm:max-w-lg sm:p-10 sm:shadow-md"
+            className={clsx(
+                "font-poppins m-auto mt-10 max-w-sm rounded-lg bg-white px-2 sm:max-w-lg sm:p-10 sm:shadow-md",
+                pathname === adminCreateAccountPage && "cif",
+            )}
         >
             <p className="flex items-center gap-2 text-lg font-semibold">
                 <User size={20} /> Name
