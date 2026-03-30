@@ -234,9 +234,10 @@ export function CreateInstructorForm(): React.ReactNode {
             </div>
             <button
                 type="submit"
+                disabled={isPending}
                 className={clsx(
                     "text-black-100 bg-black-400 mt-10 flex w-full items-center justify-center gap-2 rounded-md px-10 py-2 text-xl font-semibold",
-                    "cursor-pointer",
+                    isPending ? "opacity-70" : "cursor-pointer",
                 )}
             >
                 <CirclePlus color="#f2f2f2" /> Create
