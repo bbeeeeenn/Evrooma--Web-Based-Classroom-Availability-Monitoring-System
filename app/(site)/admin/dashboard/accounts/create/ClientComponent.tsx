@@ -2,9 +2,9 @@
 import { CreateInstructor } from "@/app/actions/InstructorActions";
 import { adminAccountsPage, adminCreateAccountPage } from "@/constants";
 import clsx from "clsx";
-import { CirclePlus, Lock, Mail, User } from "lucide-react";
+import { CirclePlus, LoaderCircle, Lock, Mail, User } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 type Data = {
@@ -29,6 +29,7 @@ export function CreateInstructorForm(): React.ReactNode {
     const pathname = usePathname();
 
     const onAction = async (_: unknown, formData: FormData): Promise<void> => {
+        await new Promise((res) => setTimeout(res, 3000));
         const fname = (formData.get("fname") as string | null)?.trim() ?? "";
         const lname = (formData.get("lname") as string | null)?.trim() ?? "";
         const email = (formData.get("email") as string | null)?.trim() ?? "";
@@ -57,7 +58,6 @@ export function CreateInstructorForm(): React.ReactNode {
                 autoClose: 3000,
             });
             router.replace(adminAccountsPage);
-            setData({ ...defaultData });
         } else {
             toast.update(loadingToast, {
                 isLoading: false,
@@ -69,6 +69,13 @@ export function CreateInstructorForm(): React.ReactNode {
     };
 
     const [_, formAction, isPending] = useActionState(onAction, null);
+
+    useEffect(() => {
+        if (!isPending) {
+            setData({ ...defaultData });
+        }
+    }, [isPending]);
+
     return (
         <form
             action={formAction}
@@ -240,7 +247,15 @@ export function CreateInstructorForm(): React.ReactNode {
                     isPending ? "opacity-70" : "cursor-pointer",
                 )}
             >
-                <CirclePlus color="#f2f2f2" /> Create
+                {isPending ? (
+                    <>
+                        <LoaderCircle className="animate-spin" /> Creating
+                    </>
+                ) : (
+                    <>
+                        <CirclePlus color="#f2f2f2" /> Create
+                    </>
+                )}
             </button>
         </form>
     );
