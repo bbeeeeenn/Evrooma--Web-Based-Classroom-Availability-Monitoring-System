@@ -1,12 +1,7 @@
 "use client";
 
 import { LoginFormActionResponse } from "@/app/actions/_";
-import {
-    adminDashboardPage,
-    homePage,
-    instructorDashboardPage,
-} from "@/constants";
-import { useAuth, useAuthUpdate } from "@/app/contexts/AuthProvider";
+import { adminRoomsPage, homePage, instructorDashboardPage } from "@/constants";
 import clsx from "clsx";
 import {
     BookText,
@@ -20,8 +15,7 @@ import {
     User,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useActionState, useEffect, useState } from "react";
-import Loading from "../(site)/loading";
+import { useActionState, useState } from "react";
 import Link from "next/link";
 import { AdminAuth } from "../actions/AdminAuthActions";
 import { InstructorAuth } from "../actions/InstructorAuthActions";
@@ -37,21 +31,6 @@ export default function LoginForm({
         remember: true,
     });
 
-    const user = useAuth();
-    const updateAuth = useAuthUpdate();
-
-    useEffect(() => {
-        // Checks if the client is authenticated
-        // redirect to dashboard if so
-        if (user) {
-            router.replace(
-                formType === "admin"
-                    ? adminDashboardPage
-                    : instructorDashboardPage,
-            );
-        }
-    }, [router, user, formType]);
-
     const onAction = async (
         _: unknown,
         formData: FormData,
@@ -61,11 +40,8 @@ export default function LoginForm({
                 ? await AdminAuth(formData)
                 : await InstructorAuth(formData);
         if (res.status === "success") {
-            updateAuth(res.user);
             router.replace(
-                formType === "admin"
-                    ? adminDashboardPage
-                    : instructorDashboardPage,
+                formType === "admin" ? adminRoomsPage : instructorDashboardPage,
             );
             setFormState({
                 showPassword: false,
@@ -88,7 +64,7 @@ export default function LoginForm({
     const onRemember = () =>
         setFormState((prev) => ({ ...prev, remember: !prev.remember }));
 
-    return !user ? (
+    return (
         <>
             <h1 className="text-black-400 font-poppins mb-7 flex items-center gap-2 text-center text-2xl font-bold tracking-widest">
                 {formType === "instructor" ? (
@@ -218,7 +194,5 @@ export default function LoginForm({
                 )}
             </form>
         </>
-    ) : (
-        <Loading />
     );
 }

@@ -1,11 +1,11 @@
 import { adminRoomsPage } from "@/constants";
-import { BackButton } from "../../ClientComponents";
+import { BackButton } from "../../../ClientComponents";
 import {
     AddClassroomComponent,
     BuildingNameHeader,
     BuildingSettings,
 } from "./ClientComponents";
-import { Divider } from "../../ClientComponents";
+import { Divider } from "../../../ClientComponents";
 import { Suspense } from "react";
 import Link from "next/link";
 import { PopulatedPlainRoomDocument, Room } from "@/app/mongoDb/models/room";

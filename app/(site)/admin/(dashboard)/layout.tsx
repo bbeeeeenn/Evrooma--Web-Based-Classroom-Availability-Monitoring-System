@@ -1,7 +1,7 @@
 import { AuthenticateAdmin } from "@/app/actions/AdminAuthActions";
 import { adminLoginPage } from "@/constants";
 import { redirect } from "next/navigation";
-import { AdminNavBar } from "./ClientComponents";
+import { AdminNavBar } from "../ClientComponents";
 import { Suspense } from "react";
 
 async function Authenticate({

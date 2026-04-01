@@ -1,6 +1,6 @@
 import { CalendarDays } from "lucide-react";
-import { BackButton } from "../../../ClientComponents";
-import { Divider } from "../../../ClientComponents";
+import { BackButton } from "../../../../ClientComponents";
+import { Divider } from "../../../../ClientComponents";
 import { ClassroomCodeHeader, ClassroomSettings } from "./ClientComponents";
 import { adminRoomsPage } from "@/constants";
 

@@ -7,7 +7,6 @@ import { useState } from "react";
 import {
     adminAccountsPage,
     adminChartsPage,
-    adminDashboardPage,
     adminLogoutPage,
     adminRoomsPage,
 } from "@/constants";
@@ -25,8 +24,7 @@ export function AdminNavBar() {
     const pathname = usePathname();
 
     return (
-        (pathname === adminDashboardPage ||
-            pathname === adminRoomsPage ||
+        (pathname === adminRoomsPage ||
             pathname === adminAccountsPage ||
             pathname === adminChartsPage) && (
             <>

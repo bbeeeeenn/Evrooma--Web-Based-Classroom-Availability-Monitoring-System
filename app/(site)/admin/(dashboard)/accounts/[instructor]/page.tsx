@@ -1,5 +1,5 @@
 import { adminAccountsPage } from "@/constants";
-import { BackButton, Divider } from "../../ClientComponents";
+import { BackButton, Divider } from "../../../ClientComponents";
 import { InstructorInfoComponent } from "./ClientComponents";
 import { CalendarDays } from "lucide-react";
 

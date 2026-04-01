@@ -1,7 +1,7 @@
 import { connectDB } from "@/app/mongoDb/mongodb";
-import { BackButton } from "../ClientComponents";
+import { BackButton } from "../../ClientComponents";
 import AddBuilding from "./ClientComponents";
-import { Divider } from "../ClientComponents";
+import { Divider } from "../../ClientComponents";
 import { Building, PlainBuildingDocument } from "@/app/mongoDb/models/building";
 import { Suspense } from "react";
 import {
@@ -9,7 +9,7 @@ import {
     Room,
 } from "@/app/mongoDb/models/room";
 import Link from "next/link";
-import { adminDashboardPage, adminRoomsPage } from "@/constants";
+import { adminRoomsPage } from "@/constants";
 import { Building2, DoorOpen } from "lucide-react";
 import { connection } from "next/server";
 
@@ -159,7 +159,6 @@ export default async function AdminRoomsPage() {
     await connection();
     return (
         <>
-            <BackButton dest={adminDashboardPage} />
             <h1 className="mb-10 text-4xl font-bold">Buildings</h1>
             <AddBuilding />
             <Suspense fallback={<BuildingListSkeleton />}>

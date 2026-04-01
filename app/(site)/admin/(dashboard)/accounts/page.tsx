@@ -1,11 +1,6 @@
 import clsx from "clsx";
 import { BookText, Plus } from "lucide-react";
-import { BackButton } from "../ClientComponents";
-import {
-    adminAccountsPage,
-    adminCreateAccountPage,
-    adminDashboardPage,
-} from "@/constants";
+import { adminAccountsPage, adminCreateAccountPage } from "@/constants";
 import Link from "next/link";
 import { Suspense } from "react";
 import { Instructor, PlainInstructorDocument } from "@/app/mongoDb/models/user";
@@ -63,7 +58,6 @@ async function InstructorsList() {
 export default function AccountsPage() {
     return (
         <>
-            <BackButton dest={adminDashboardPage} />
             <h1 className="flex items-center gap-2 text-4xl font-bold">
                 Instructors
             </h1>

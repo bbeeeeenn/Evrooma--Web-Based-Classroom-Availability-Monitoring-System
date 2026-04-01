@@ -1,14 +1,14 @@
 import { AuthenticateAdmin } from "@/app/actions/AdminAuthActions";
 import LoginForm from "@/app/components/LoginForm";
-import { adminDashboardPage } from "@/constants";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import Loading from "../loading";
+import { adminRoomsPage } from "@/constants";
 
 async function Login() {
     const user = await AuthenticateAdmin();
     if (user) {
-        redirect(adminDashboardPage);
+        redirect(adminRoomsPage);
     }
 
     return (

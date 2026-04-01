@@ -4,7 +4,7 @@ import {
     useUpdateInstructorInfo,
 } from "@/app/contexts/InstructorProvider";
 import { BookText, SquarePen, Trash2 } from "lucide-react";
-import { Divider } from "../../ClientComponents";
+import { Divider } from "../../../ClientComponents";
 
 function Row({
     label,
