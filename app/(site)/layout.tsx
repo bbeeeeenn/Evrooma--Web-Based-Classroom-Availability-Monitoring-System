@@ -55,7 +55,7 @@ const poppins = Poppins({
 async function VineSFX() {
     await connection();
     const date = new Date();
-    return date.getDate() === 3 && date.getDay() === 1 && <VineSounds />;
+    return date.getMonth() === 3 && date.getDate() === 1 && <VineSounds />;
 }
 
 export default async function RootLayout({
