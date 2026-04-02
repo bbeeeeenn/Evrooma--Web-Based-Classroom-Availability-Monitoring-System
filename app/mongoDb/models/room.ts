@@ -30,12 +30,6 @@ const roomSchema = new Schema(
     },
 );
 
-// roomSchema.virtual("schedules", {
-//     ref: "Schedule",
-//     foreignField: "room",
-//     localField: "_id",
-// });
-
 roomSchema.index(
     { building: 1, code: 1 },
     { unique: true, collation: { locale: "en", strength: 2 } },

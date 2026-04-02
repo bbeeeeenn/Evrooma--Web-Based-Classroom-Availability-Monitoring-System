@@ -22,6 +22,7 @@ export async function AdminAuth(
 ): Promise<LoginFormActionResponse> {
     const username = (formData.get("username") as string).trim();
     const password = (formData.get("password") as string).trim();
+    const rememberme = formData.get("rememberme") !== null;
 
     try {
         await connectDB();
@@ -38,10 +39,13 @@ export async function AdminAuth(
             };
         }
 
-        const session = await getIronSession<AuthSessionData>(
-            await cookies(),
-            adminSessionOptions,
-        );
+        const session = await getIronSession<AuthSessionData>(await cookies(), {
+            ...adminSessionOptions,
+            cookieOptions: {
+                ...adminSessionOptions.cookieOptions,
+                maxAge: rememberme ? 60 * 60 * 24 * 7 : undefined,
+            },
+        });
         session.data = { userId: user._id.toString() };
         await session.save();
         return {

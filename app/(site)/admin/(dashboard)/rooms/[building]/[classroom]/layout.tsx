@@ -14,21 +14,24 @@ async function Suspended({
     params: Promise<{ building: string; classroom: string }>;
     children: React.ReactNode;
 }) {
-    const urlParams = await params;
-    if (!isValidObjectId(urlParams.classroom)) {
-        redirect(`${adminRoomsPage}/${urlParams.building}`);
+    const { building: buildingId, classroom: classroomId } = await params;
+    if (!isValidObjectId(classroomId)) {
+        redirect(`${adminRoomsPage}/${buildingId}`);
     }
     let classroom: PlainRoomDocument;
     try {
         await connectDB();
-        classroom = await Room.findById(urlParams.classroom).lean();
+        classroom = await Room.findOne({
+            _id: classroomId,
+            building: buildingId,
+        }).lean();
         if (!classroom) {
-            redirect(`${adminRoomsPage}/${urlParams.building}`);
+            redirect(`${adminRoomsPage}/${buildingId}`);
         }
     } catch (e) {
         if (!(e instanceof Error) || e.message !== "NEXT_REDIRECT")
             console.error(e);
-        redirect(`${adminRoomsPage}/${urlParams.building}`);
+        redirect(`${adminRoomsPage}/${buildingId}`);
     }
 
     return (

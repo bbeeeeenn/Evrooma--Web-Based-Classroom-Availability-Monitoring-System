@@ -1,7 +1,13 @@
 "use client";
 
 import { LoginFormActionResponse } from "@/app/actions/_";
-import { adminRoomsPage, homePage, instructorDashboardPage } from "@/constants";
+import {
+    adminLoginForgotPage,
+    adminRoomsPage,
+    homePage,
+    instructorDashboardPage,
+    instructorLoginForgotPage,
+} from "@/constants";
 import clsx from "clsx";
 import {
     BookText,
@@ -15,7 +21,7 @@ import {
     User,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import Link from "next/link";
 import { AdminAuth } from "../actions/AdminAuthActions";
 import { InstructorAuth } from "../actions/InstructorAuthActions";
@@ -26,10 +32,14 @@ export default function LoginForm({
     formType: "admin" | "instructor";
 }) {
     const router = useRouter();
-    const [formState, setFormState] = useState({
-        showPassword: false,
-        remember: true,
-    });
+    const [showPassword, setShowPassword] = useState(false);
+    const [rememberMe, setRememberMe] = useState<boolean | null>(null);
+
+    useEffect(() => {
+        setRememberMe(
+            window.localStorage.getItem(formType + "RememberMe") === "on",
+        );
+    }, []);
 
     const onAction = async (
         _: unknown,
@@ -43,10 +53,7 @@ export default function LoginForm({
             router.replace(
                 formType === "admin" ? adminRoomsPage : instructorDashboardPage,
             );
-            setFormState({
-                showPassword: false,
-                remember: true,
-            });
+            setShowPassword(false);
         }
         return res;
     };
@@ -58,11 +65,17 @@ export default function LoginForm({
         user: null,
     });
 
-    const onShowPassword = () =>
-        setFormState((prev) => ({ ...prev, showPassword: !prev.showPassword }));
+    const onShowPassword = () => setShowPassword((prev) => !prev);
 
-    const onRemember = () =>
-        setFormState((prev) => ({ ...prev, remember: !prev.remember }));
+    const onRemember = () => {
+        setRememberMe((prev) => {
+            window.localStorage.setItem(
+                formType + "RememberMe",
+                prev ? "off" : "on",
+            );
+            return !prev;
+        });
+    };
 
     return (
         <>
@@ -114,7 +127,7 @@ export default function LoginForm({
                     </label>
                     <div className="relative flex min-w-0 grow items-center gap-2">
                         <input
-                            type={formState.showPassword ? "text" : "password"}
+                            type={showPassword ? "text" : "password"}
                             name="password"
                             id="password"
                             placeholder="Password"
@@ -138,7 +151,7 @@ export default function LoginForm({
                             onClick={onShowPassword}
                             type="button"
                         >
-                            {formState.showPassword ? (
+                            {showPassword ? (
                                 <Eye className="text-gray-600 transition-all duration-200 peer-placeholder-shown:text-gray-400 peer-focus:text-gray-600" />
                             ) : (
                                 <EyeClosed className="text-gray-600 transition-all duration-200 peer-placeholder-shown:text-gray-400 peer-focus:text-gray-600" />
@@ -146,19 +159,22 @@ export default function LoginForm({
                         </button>
                     </div>
                 </div>
-                <label
-                    htmlFor="rememberme"
-                    className="font-inter text-md flex w-fit cursor-pointer items-center gap-2 font-bold text-gray-600 hover:underline"
-                >
-                    <input
-                        type="checkbox"
-                        id="rememberme"
-                        defaultChecked={formState.remember}
-                        onChange={onRemember}
-                        className="accent-black-400 size-4 cursor-pointer"
-                    />
-                    Remember me?
-                </label>
+                {rememberMe !== null && (
+                    <label
+                        htmlFor="rememberme"
+                        className="font-inter text-md flex w-fit cursor-pointer items-center gap-2 font-bold text-gray-600 hover:underline"
+                    >
+                        <input
+                            type="checkbox"
+                            id="rememberme"
+                            name="rememberme"
+                            checked={rememberMe}
+                            onChange={onRemember}
+                            className="accent-black-400 size-4 cursor-pointer"
+                        />
+                        Remember me?
+                    </label>
+                )}
                 {state.status === "error" && (
                     <p className="mb-3 text-center text-sm text-red-600 select-text">
                         {state.message}
@@ -180,9 +196,16 @@ export default function LoginForm({
                         </>
                     )}
                 </button>
-                <p className="m-auto w-fit cursor-pointer text-center text-sm underline">
+                <Link
+                    href={
+                        formType === "admin"
+                            ? adminLoginForgotPage
+                            : instructorLoginForgotPage
+                    }
+                    className="m-auto block w-fit cursor-pointer text-center text-sm underline"
+                >
                     Forgot Username or Password?
-                </p>
+                </Link>
                 {!isPending && (
                     <Link
                         href={homePage}

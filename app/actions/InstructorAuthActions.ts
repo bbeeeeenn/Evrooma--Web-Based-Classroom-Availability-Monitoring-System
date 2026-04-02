@@ -22,6 +22,7 @@ export async function InstructorAuth(
 ): Promise<LoginFormActionResponse> {
     const email = (formData.get("email") as string).trim();
     const password = (formData.get("password") as string).trim();
+    const rememberme = formData.get("rememberme") !== null;
 
     try {
         await connectDB();
@@ -39,10 +40,13 @@ export async function InstructorAuth(
             };
         }
 
-        const session = await getIronSession<AuthSessionData>(
-            await cookies(),
-            instructorSessionOptions,
-        );
+        const session = await getIronSession<AuthSessionData>(await cookies(), {
+            ...instructorSessionOptions,
+            cookieOptions: {
+                ...instructorSessionOptions.cookieOptions,
+                maxAge: rememberme ? 60 * 60 * 24 * 7 : undefined,
+            },
+        });
         session.data = { userId: user._id.toString() };
         await session.save();
         return {
