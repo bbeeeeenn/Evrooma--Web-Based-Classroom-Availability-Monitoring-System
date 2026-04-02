@@ -56,7 +56,9 @@ export function CreateInstructorForm(): React.ReactNode {
                 render: response.message,
                 autoClose: 3000,
             });
-            router.replace(adminAccountsPage);
+            router.replace(
+                `${adminAccountsPage}/${response.instructorId ?? ""}`,
+            );
         } else {
             toast.update(loadingToast, {
                 isLoading: false,
@@ -73,7 +75,7 @@ export function CreateInstructorForm(): React.ReactNode {
         if (!isPending) {
             setData({ ...defaultData });
         }
-    }, [isPending]);
+    }, [router]);
 
     return (
         <form

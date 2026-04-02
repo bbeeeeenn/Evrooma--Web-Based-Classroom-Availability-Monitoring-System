@@ -17,7 +17,7 @@ export type RawInstructorData = {
 };
 export async function CreateInstructor(
     data: RawInstructorData,
-): Promise<ServerActionResponse> {
+): Promise<ServerActionResponse & { instructorId?: string }> {
     if (!(await AuthenticateAdmin())) {
         return {
             status: "error",
@@ -63,7 +63,7 @@ export async function CreateInstructor(
 
         const hashedPassword = await encrypt(normalizedPassword);
 
-        await Instructor.create({
+        const newInstructor = await Instructor.create({
             firstName,
             lastName,
             email: normalizedEmail,
@@ -75,6 +75,7 @@ export async function CreateInstructor(
         return {
             status: "success",
             message: "Instructor created successfully.",
+            instructorId: newInstructor._id.toString(),
         };
     } catch (e) {
         console.error("[CreateInstructor]", e);
