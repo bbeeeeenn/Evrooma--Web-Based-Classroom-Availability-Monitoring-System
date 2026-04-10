@@ -9,14 +9,14 @@ import { connection } from "next/server";
 
 function InstructorListSkeleton() {
     return (
-        <ul className="space-y-4">
+        <ul className="space-y-4 opacity-50">
             {Array.from({ length: 3 }).map((_, i) => (
                 <li
                     key={i}
-                    className="block w-full space-y-2 rounded-md border-b-4 border-gray-200 bg-white px-5 py-5 opacity-70 shadow-md"
+                    className="bg-green-secondary border-green-tertiary/30 block w-full space-y-2 rounded-md border-b-4 px-5 py-5 shadow-md"
                 >
-                    <div className="h-8 max-w-2xs animate-pulse bg-gray-200"></div>
-                    <div className="h-5 max-w-xs animate-pulse bg-gray-200"></div>
+                    <div className="h-8 max-w-2xs animate-pulse bg-white/30"></div>
+                    <div className="h-5 max-w-xs animate-pulse bg-white/30"></div>
                 </li>
             ))}
         </ul>

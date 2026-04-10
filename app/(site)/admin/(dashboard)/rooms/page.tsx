@@ -1,5 +1,4 @@
 import { connectDB } from "@/app/mongoDb/mongodb";
-import { BackButton } from "../../ClientComponents";
 import AddBuilding from "./ClientComponents";
 import { Divider } from "../../ClientComponents";
 import { Building, PlainBuildingDocument } from "@/app/mongoDb/models/building";
@@ -34,16 +33,16 @@ async function ClassroomCount({
 
 function BuildingListSkeleton() {
     return (
-        <ul className="my-5 flex flex-wrap gap-x-6 gap-y-4 opacity-70">
-            {Array.from({ length: 5 }).map((_, i) => (
+        <ul className="my-5 flex flex-wrap gap-x-6 gap-y-4 opacity-50">
+            {Array.from({ length: 3 }).map((_, i) => (
                 <li
                     key={i}
-                    className="font-poppins min-w-3xs grow rounded-lg border-b-4 border-gray-200 bg-white p-5 font-semibold shadow-md transition-transform sm:max-w-sm"
+                    className="font-poppins bg-green-secondary border-green-tertiary/50 min-w-3xs grow rounded-lg border-b-4 p-5 font-semibold shadow-md transition-transform sm:max-w-sm"
                 >
-                    <p className="mb-1 w-5/6 animate-pulse truncate bg-gray-200 text-2xl text-gray-200">
+                    <p className="mb-1 w-5/6 animate-pulse truncate bg-white/30 text-2xl text-transparent">
                         I Love Spaghetti
                     </p>
-                    <p className="w-1/2 animate-pulse truncate bg-gray-200 text-sm tracking-wide text-gray-200">
+                    <p className="w-1/2 animate-pulse truncate bg-white/30 text-sm tracking-wide text-transparent">
                         Hell yeah... Fuck the cops...
                     </p>
                 </li>
@@ -87,21 +86,21 @@ async function BuildingsList() {
     );
 }
 
-async function ClassroomsSkeleton() {
+export async function ClassroomsSkeleton() {
     return (
         <ul>
             {Array.from({ length: 4 }).map((_, i) => (
                 <li
                     key={i}
-                    className="mb-4 block space-y-2 bg-white px-5 py-3 opacity-70 shadow-md"
+                    className="bg-green-secondary mb-4 block space-y-2 px-5 py-3 opacity-50 shadow-md"
                 >
-                    <p className="h-fit w-fit animate-pulse truncate bg-gray-200 text-2xl font-bold text-gray-200">
+                    <p className="h-fit w-fit animate-pulse truncate bg-white/30 text-2xl font-bold text-transparent">
                         DUMMY
                         {Array.from({
                             length: Math.ceil(7 * Math.random()),
                         }).map(() => "#")}
                     </p>
-                    <p className="w-fit animate-pulse bg-gray-200 font-semibold text-gray-200">
+                    <p className="w-fit animate-pulse bg-white/30 font-semibold text-transparent">
                         Building.......
                     </p>
                 </li>

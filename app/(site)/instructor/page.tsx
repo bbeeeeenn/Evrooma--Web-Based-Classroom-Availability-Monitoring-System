@@ -12,7 +12,7 @@ async function Login() {
     }
 
     return (
-        <section className="sm:bg-landing-green-primary flex h-svh min-h-161.75 flex-col items-center justify-center bg-transparent">
+        <section className="sm:bg-landing-green-primary bg-green-tertiary flex h-svh min-h-161.75 flex-col items-center justify-center">
             <LoginForm formType="instructor" />
         </section>
     );
