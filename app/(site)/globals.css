@@ -10,10 +10,6 @@
     --font-inria-sans: var(--font-inria-sans);
     --font-poppins: var(--font-poppins);
 
-    /* --color-yellow-primary: #F2E44D; */
-    /* --color-green-primary: #004b00; */
-    /* --color-green-secondary: #107A18; */
-
     --color-yellow-primary: #FACC15;
     --color-yellow-secondary: #EAB308;
 
@@ -25,8 +21,6 @@
     --color-text-secondary: #A7F3D0;
 
     --color-subtleborder: #134E4A;
-
-    /*  */
 }
 
 ::selection {
