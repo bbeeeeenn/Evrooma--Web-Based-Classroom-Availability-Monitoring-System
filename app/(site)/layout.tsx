@@ -76,7 +76,7 @@ export default async function RootLayout({
                     inriaSans.variable,
                     poppins.variable,
                     "antialiased select-none",
-                    "has-[.accountform]:bg-green-tertiary bg-green-primary",
+                    "has-[.accountform]:bg-green-tertiary text-text-primary bg-green-primary",
                 )}
             >
                 <Suspense>
