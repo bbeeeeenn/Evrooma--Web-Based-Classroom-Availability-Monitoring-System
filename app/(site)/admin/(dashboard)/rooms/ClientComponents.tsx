@@ -57,14 +57,14 @@ export default function AddBuilding() {
             >
                 <form
                     action={formAction}
-                    onSubmit={(e) => {
-                        if (name.length === 0) e.preventDefault();
-                    }}
                     className={clsx(
-                        "bg-green-secondary border-yellow-primary w-full max-w-md rounded-xl border-b-4 px-6 pt-10 pb-7 text-white shadow-md transition-all",
+                        "bg-green-secondary border-subtleborder w-full max-w-md rounded-xl border-b-4 px-6 pt-10 pb-7 text-white shadow-md transition-all",
                         !showModal && "opacity-0",
                     )}
                     onClick={(e) => e.stopPropagation()}
+                    onSubmit={(e) => {
+                        if (isPending) e.preventDefault();
+                    }}
                 >
                     <div className="flex items-center gap-2">
                         <Building2 />
@@ -76,6 +76,7 @@ export default function AddBuilding() {
                                 type="text"
                                 id="newbuilding"
                                 name="name"
+                                required
                                 className="peer w-full border-b-2 border-green-200 py-1 text-xl font-semibold tracking-wide outline-none placeholder:text-transparent focus:border-green-50"
                                 disabled={!showModal}
                                 value={name}
@@ -94,7 +95,7 @@ export default function AddBuilding() {
                         <button
                             type="button"
                             className={clsx(
-                                "bg-yellow-primary mt-5 flex cursor-pointer items-center justify-center gap-1 rounded-md px-3 py-2 text-black",
+                                "bg-yellow-primary hover:bg-yellow-secondary active:bg-yellow-secondary focus-visible:bg-yellow-secondary mt-5 flex cursor-pointer items-center justify-center gap-1 rounded-md px-3 py-2 text-black",
                             )}
                             onClick={() => setShowModal(false)}
                             disabled={!showModal}
@@ -103,15 +104,10 @@ export default function AddBuilding() {
                         </button>
                         <button
                             type="submit"
-                            disabled={
-                                !showModal || isPending || name.length === 0
-                            }
                             className={clsx(
-                                "bg-yellow-primary mt-5 flex grow items-center justify-center gap-1 rounded-md px-3 py-2 text-black",
-                                isPending || name.length === 0
-                                    ? "opacity-75"
-                                    : "cursor-pointer",
+                                "bg-yellow-primary hover:bg-yellow-secondary active:bg-yellow-secondary focus-visible:bg-yellow-secondary mt-5 flex grow cursor-pointer items-center justify-center gap-1 rounded-md px-3 py-2 text-black",
                             )}
+                            disabled={!showModal || isPending}
                         >
                             {isPending ? (
                                 <>

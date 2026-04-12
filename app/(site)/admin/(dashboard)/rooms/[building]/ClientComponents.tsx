@@ -3,11 +3,14 @@
 import { RemoveBuilding, RenameBuilding } from "@/app/actions/BuildingsActions";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { adminRoomsPage } from "@/constants";
+import { AddClassroom } from "@/app/actions/ClassroomActions";
+import clsx from "clsx";
 import {
     useBuildingInfo,
     useUpdateBuildingName,
 } from "@/app/contexts/BuildingProvider";
-import clsx from "clsx";
 import {
     Building2,
     DoorOpen,
@@ -17,9 +20,6 @@ import {
     Trash2,
     X,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { adminRoomsPage } from "@/constants";
-import { AddClassroom } from "@/app/actions/ClassroomActions";
 
 export function BuildingNameHeader() {
     const { buildingName } = useBuildingInfo();
@@ -44,9 +44,13 @@ function RenameBuildingComponent({
     const [name, setName] = useState(originalName);
     const updateBuildingName = useUpdateBuildingName();
     const onAction = async (_: unknown, formData: FormData): Promise<void> => {
-        const loadingToast = toast.loading("Waiting...");
         const newName =
             (formData.get("newName") as string | null)?.trim() ?? "";
+        if (newName === originalName) {
+            closeModal();
+            return;
+        }
+        const loadingToast = toast.loading("Waiting...");
         const res = await RenameBuilding(buildingId, newName);
         if (res.status === "success") {
             updateBuildingName(newName);
@@ -99,13 +103,13 @@ function RenameBuildingComponent({
             <form
                 action={formAction}
                 className={clsx(
-                    "w-full max-w-md rounded-xl border-b-4 bg-white px-6 pt-10 pb-7 shadow-md transition-all",
+                    "bg-green-secondary text-text-primary border-subtleborder w-full max-w-md rounded-xl border-b-4 px-6 pt-10 pb-7 shadow-md transition-all",
                     !showModal && "opacity-0",
                 )}
-                onSubmit={(e) => {
-                    if (name.length === 0) e.preventDefault();
-                }}
                 onClick={(e) => e.stopPropagation()}
+                onSubmit={(e) => {
+                    if (isPending) e.preventDefault();
+                }}
             >
                 <div className="flex items-center gap-2">
                     <Building2 />
@@ -117,15 +121,16 @@ function RenameBuildingComponent({
                             type="text"
                             id="newbuilding"
                             name="newName"
-                            className="peer w-full border-b-2 border-gray-700/50 py-1 text-xl font-semibold tracking-wide outline-none placeholder:text-transparent focus:border-gray-700"
+                            className="peer w-full border-b-2 border-green-200 py-1 text-xl font-semibold tracking-wide outline-none placeholder:text-transparent focus:border-green-50"
                             disabled={!showModal}
+                            required
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             placeholder="Building Name"
                         />
                         <label
                             htmlFor="newbuilding"
-                            className="pointer-events-none absolute -top-5 left-0 text-sm text-gray-700 transition-all peer-placeholder-shown:top-1 peer-placeholder-shown:text-xl peer-placeholder-shown:text-gray-700/50 peer-focus:-top-5 peer-focus:text-sm peer-focus:text-gray-700"
+                            className="pointer-events-none absolute -top-5 left-0 text-sm text-green-50 transition-all peer-placeholder-shown:top-1 peer-placeholder-shown:text-xl peer-placeholder-shown:text-green-200 peer-focus:-top-5 peer-focus:text-sm peer-focus:text-green-50"
                         >
                             Building Name
                         </label>
@@ -135,7 +140,7 @@ function RenameBuildingComponent({
                     <button
                         type="button"
                         className={clsx(
-                            "bg-black-400 text-black-100 mt-5 flex cursor-pointer items-center justify-center gap-1 rounded-md px-3 py-2",
+                            "bg-yellow-primary active:bg-yellow-secondary focus:bg-yellow-secondary hover:bg-yellow-secondary text-black-100 mt-5 flex cursor-pointer items-center justify-center gap-1 rounded-md px-3 py-2 text-black",
                         )}
                         onClick={() => closeModal()}
                         disabled={!showModal}
@@ -144,19 +149,9 @@ function RenameBuildingComponent({
                     </button>
                     <button
                         type="submit"
-                        disabled={
-                            !showModal ||
-                            isPending ||
-                            name.length === 0 ||
-                            name === originalName
-                        }
+                        disabled={!showModal || isPending}
                         className={clsx(
-                            "text-black-100 mt-5 flex grow items-center justify-center gap-1 rounded-md px-3 py-2",
-                            isPending ||
-                                name.length === 0 ||
-                                name === originalName
-                                ? "bg-black-400/75"
-                                : "cursor-pointer bg-blue-700",
+                            "text-black-100 bg-yellow-primary active:bg-yellow-secondary focus:bg-yellow-secondary hover:bg-yellow-secondary mt-5 flex grow cursor-pointer items-center justify-center gap-1 rounded-md px-3 py-2 text-black",
                         )}
                     >
                         {isPending ? (
@@ -232,11 +227,11 @@ function RemoveBuildingComponent({
             <form
                 action={formAction}
                 className={clsx(
-                    "w-full max-w-md rounded-xl border-b-4 bg-white px-6 pt-10 pb-7 shadow-md transition-all",
+                    "bg-green-secondary text-text-primary border-subtleborder w-full max-w-md rounded-xl border-b-4 px-6 pt-10 pb-7 shadow-md transition-all",
                     !showModal && "opacity-0",
                 )}
                 onSubmit={(e) => {
-                    if (name.length === 0) e.preventDefault();
+                    if (isPending) e.preventDefault();
                 }}
                 onClick={(e) => e.stopPropagation()}
             >
@@ -250,15 +245,16 @@ function RemoveBuildingComponent({
                             type="text"
                             id="buildingName"
                             name="nameConfirmation"
-                            className="peer w-full border-b-2 border-gray-700/50 py-1 text-xl font-semibold tracking-wide outline-none placeholder:text-transparent focus:border-gray-700"
+                            className="peer w-full border-b-2 border-green-200 py-1 text-xl font-semibold tracking-wide outline-none placeholder:text-transparent focus:border-green-50"
                             disabled={!showModal}
+                            required
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             placeholder="Building Name"
                         />
                         <label
                             htmlFor="buildingName"
-                            className="pointer-events-none absolute -top-5 left-0 w-full truncate text-sm text-gray-700 transition-all peer-placeholder-shown:top-1 peer-placeholder-shown:text-xl peer-placeholder-shown:text-gray-700/50 peer-focus:-top-5 peer-focus:text-sm peer-focus:text-gray-700"
+                            className="pointer-events-none absolute -top-5 left-0 w-full truncate text-sm text-green-50 transition-all peer-placeholder-shown:top-1 peer-placeholder-shown:text-xl peer-placeholder-shown:text-green-200 peer-focus:-top-5 peer-focus:text-sm peer-focus:text-green-50"
                         >
                             Confirm building's name
                         </label>
@@ -268,7 +264,7 @@ function RemoveBuildingComponent({
                     <button
                         type="button"
                         className={clsx(
-                            "bg-black-400 text-black-100 mt-5 flex cursor-pointer items-center justify-center gap-1 rounded-md px-3 py-2",
+                            "bg-yellow-primary focus:bg-yellow-secondary active:bg-yellow-secondary hover:bg-yellow-secondary mt-5 flex cursor-pointer items-center justify-center gap-1 rounded-md px-3 py-2 text-black",
                         )}
                         onClick={() => closeModal()}
                         disabled={!showModal}
@@ -277,12 +273,9 @@ function RemoveBuildingComponent({
                     </button>
                     <button
                         type="submit"
-                        disabled={!showModal || isPending || name.length === 0}
+                        disabled={!showModal || isPending}
                         className={clsx(
-                            "text-black-100 mt-5 flex grow items-center justify-center gap-1 rounded-md px-3 py-2",
-                            isPending || name.length === 0
-                                ? "bg-black-400/75"
-                                : "cursor-pointer bg-red-700",
+                            "text-black-100 bg-yellow-primary focus:bg-yellow-secondary active:bg-yellow-secondary hover:bg-yellow-secondary mt-5 flex grow cursor-pointer items-center justify-center gap-1 rounded-md px-3 py-2 text-black",
                         )}
                     >
                         {isPending ? (
@@ -410,10 +403,10 @@ export function AddClassroomComponent() {
                 <form
                     action={formAction}
                     onSubmit={(e) => {
-                        if (code.length === 0) e.preventDefault();
+                        if (isPending) e.preventDefault();
                     }}
                     className={clsx(
-                        "w-full max-w-md rounded-xl border-b-4 bg-white px-6 pt-10 pb-7 shadow-md transition-all",
+                        "bg-green-secondary text-text-primary border-subtleborder w-full max-w-md rounded-xl border-b-4 px-6 pt-10 pb-7 shadow-md transition-all",
                         !showModal && "opacity-0",
                     )}
                     onClick={(e) => e.stopPropagation()}
@@ -428,15 +421,16 @@ export function AddClassroomComponent() {
                                 type="text"
                                 id="newClassroom"
                                 name="code"
-                                className="peer w-full border-b-2 border-gray-700/50 py-1 text-xl font-semibold tracking-wide uppercase outline-none placeholder:text-transparent focus:border-gray-700"
+                                className="peer w-full border-b-2 border-green-200 py-1 text-xl font-semibold tracking-wide outline-none placeholder:text-transparent focus:border-green-50"
                                 disabled={!showModal}
+                                required
                                 value={code}
                                 onChange={(e) => setCode(e.target.value)}
                                 placeholder="Classroom Code"
                             />
                             <label
                                 htmlFor="newClassroom"
-                                className="pointer-events-none absolute -top-5 left-0 text-sm text-gray-700 transition-all peer-placeholder-shown:top-1 peer-placeholder-shown:text-xl peer-placeholder-shown:text-gray-700/50 peer-focus:-top-5 peer-focus:text-sm peer-focus:text-gray-700"
+                                className="pointer-events-none absolute -top-5 left-0 text-sm text-green-50 transition-all peer-placeholder-shown:top-1 peer-placeholder-shown:text-xl peer-placeholder-shown:text-green-200 peer-focus:-top-5 peer-focus:text-sm peer-focus:text-green-50"
                             >
                                 Classroom Code
                             </label>
@@ -446,7 +440,7 @@ export function AddClassroomComponent() {
                         <button
                             type="button"
                             className={clsx(
-                                "bg-black-400 text-black-100 mt-5 flex cursor-pointer items-center justify-center gap-1 rounded-md px-3 py-2",
+                                "bg-yellow-primary hover:bg-yellow-secondary active:bg-yellow-secondary focus-visible:bg-yellow-secondary mt-5 flex cursor-pointer items-center justify-center gap-1 rounded-md px-3 py-2 text-black",
                             )}
                             onClick={() => setShowModal(false)}
                             disabled={!showModal}
@@ -455,14 +449,12 @@ export function AddClassroomComponent() {
                         </button>
                         <button
                             type="submit"
-                            disabled={
-                                !showModal || isPending || code.length === 0
-                            }
+                            disabled={!showModal || isPending}
                             className={clsx(
-                                "bg-black-400 text-black-100 mt-5 flex grow items-center justify-center gap-1 rounded-md px-3 py-2",
-                                isPending || code.length === 0
-                                    ? "opacity-75"
-                                    : "cursor-pointer",
+                                "bg-yellow-primary hover:bg-yellow-secondary active:bg-yellow-secondary focus-visible:bg-yellow-secondary mt-5 flex grow items-center justify-center gap-1 rounded-md px-3 py-2 text-black",
+                                !isPending &&
+                                    code.length !== 0 &&
+                                    "cursor-pointer",
                             )}
                         >
                             {isPending ? (

@@ -45,10 +45,14 @@ function RenameClassroomComponent({
     const [code, setCode] = useState(originalCode);
     const updateRoomCode = useUpdateClassroomName();
     const onAction = async (_: unknown, formData: FormData): Promise<void> => {
-        const loadingToast = toast.loading("Waiting...");
         const newCode =
             (formData.get("newCode") as string | null)?.trim().toUpperCase() ??
             "";
+        if (newCode === originalCode) {
+            closeModal();
+            return;
+        }
+        const loadingToast = toast.loading("Waiting...");
         const res = await RenameClassroom(classroomId, newCode);
         if (res.status === "success") {
             updateRoomCode(newCode);
@@ -101,13 +105,13 @@ function RenameClassroomComponent({
             <form
                 action={formAction}
                 className={clsx(
-                    "w-full max-w-md rounded-xl border-b-4 bg-white px-6 pt-10 pb-7 shadow-md transition-all",
+                    "bg-green-secondary text-text-primary border-subtleborder w-full max-w-md rounded-xl border-b-4 px-6 pt-10 pb-7 shadow-md transition-all",
                     !showModal && "opacity-0",
                 )}
-                onSubmit={(e) => {
-                    if (code.length === 0) e.preventDefault();
-                }}
                 onClick={(e) => e.stopPropagation()}
+                onSubmit={(e) => {
+                    if (isPending) e.preventDefault();
+                }}
             >
                 <div className="flex items-center gap-2">
                     <DoorOpen />
@@ -119,15 +123,16 @@ function RenameClassroomComponent({
                             type="text"
                             id="newRoomCode"
                             name="newCode"
-                            className="peer w-full border-b-2 border-gray-700/50 py-1 text-xl font-semibold tracking-wide uppercase outline-none placeholder:text-transparent focus:border-gray-700"
+                            className="peer w-full border-b-2 border-green-200 py-1 text-xl font-semibold tracking-wide uppercase outline-none placeholder:text-transparent focus:border-green-50"
                             disabled={!showModal}
+                            required
                             value={code}
                             onChange={(e) => setCode(e.target.value)}
                             placeholder="Classroom Code"
                         />
                         <label
                             htmlFor="newRoomCode"
-                            className="pointer-events-none absolute -top-5 left-0 text-sm text-gray-700 transition-all peer-placeholder-shown:top-1 peer-placeholder-shown:text-xl peer-placeholder-shown:text-gray-700/50 peer-focus:-top-5 peer-focus:text-sm peer-focus:text-gray-700"
+                            className="pointer-events-none absolute -top-5 left-0 text-sm text-green-50 transition-all peer-placeholder-shown:top-1 peer-placeholder-shown:text-xl peer-placeholder-shown:text-green-200 peer-focus:-top-5 peer-focus:text-sm peer-focus:text-green-50"
                         >
                             Classroom Code
                         </label>
@@ -137,7 +142,7 @@ function RenameClassroomComponent({
                     <button
                         type="button"
                         className={clsx(
-                            "bg-black-400 text-black-100 mt-5 flex cursor-pointer items-center justify-center gap-1 rounded-md px-3 py-2",
+                            "bg-yellow-primary focus-visible:bg-yellow-secondary active:bg-yellow-secondary hover:bg-yellow-secondary mt-5 flex cursor-pointer items-center justify-center gap-1 rounded-md px-3 py-2 text-black",
                         )}
                         onClick={() => closeModal()}
                         disabled={!showModal}
@@ -146,19 +151,9 @@ function RenameClassroomComponent({
                     </button>
                     <button
                         type="submit"
-                        disabled={
-                            !showModal ||
-                            isPending ||
-                            code.length === 0 ||
-                            code === originalCode
-                        }
+                        disabled={!showModal || isPending}
                         className={clsx(
-                            "text-black-100 mt-5 flex grow items-center justify-center gap-1 rounded-md px-3 py-2",
-                            isPending ||
-                                code.length === 0 ||
-                                code === originalCode
-                                ? "bg-black-400/75"
-                                : "cursor-pointer bg-blue-700",
+                            "bg-yellow-primary focus-visible:bg-yellow-secondary active:bg-yellow-secondary hover:bg-yellow-secondary mt-5 flex grow cursor-pointer items-center justify-center gap-1 rounded-md px-3 py-2 text-black",
                         )}
                     >
                         {isPending ? (
@@ -236,13 +231,13 @@ function RemoveClassroomComponent({
             <form
                 action={formAction}
                 className={clsx(
-                    "w-full max-w-md rounded-xl border-b-4 bg-white px-6 pt-10 pb-7 shadow-md transition-all",
+                    "bg-green-secondary text-text-primary border-subtleborder w-full max-w-md rounded-xl border-b-4 px-6 pt-10 pb-7 shadow-md transition-all",
                     !showModal && "opacity-0",
                 )}
-                onSubmit={(e) => {
-                    if (code.length === 0) e.preventDefault();
-                }}
                 onClick={(e) => e.stopPropagation()}
+                onSubmit={(e) => {
+                    if (isPending) e.preventDefault();
+                }}
             >
                 <div className="flex items-center gap-2">
                     <DoorOpen />
@@ -254,15 +249,16 @@ function RemoveClassroomComponent({
                             type="text"
                             id="roomCode"
                             name="codeConfirmation"
-                            className="peer w-full border-b-2 border-gray-700/50 py-1 text-xl font-semibold tracking-wide uppercase outline-none placeholder:text-transparent focus:border-gray-700"
+                            className="peer w-full border-b-2 border-green-200 py-1 text-xl font-semibold tracking-wide uppercase outline-none placeholder:text-transparent focus:border-green-50"
                             disabled={!showModal}
+                            required
                             value={code}
                             onChange={(e) => setCode(e.target.value)}
                             placeholder="Building Name"
                         />
                         <label
                             htmlFor="roomCode"
-                            className="pointer-events-none absolute -top-5 left-0 w-full truncate text-sm text-gray-700 transition-all peer-placeholder-shown:top-1 peer-placeholder-shown:text-xl peer-placeholder-shown:text-gray-700/50 peer-focus:-top-5 peer-focus:text-sm peer-focus:text-gray-700"
+                            className="pointer-events-none absolute -top-5 left-0 w-full truncate text-sm text-green-50 transition-all peer-placeholder-shown:top-1 peer-placeholder-shown:text-xl peer-placeholder-shown:text-green-200 peer-focus:-top-5 peer-focus:text-sm peer-focus:text-green-50"
                         >
                             Confirm classroom's code
                         </label>
@@ -272,7 +268,7 @@ function RemoveClassroomComponent({
                     <button
                         type="button"
                         className={clsx(
-                            "bg-black-400 text-black-100 mt-5 flex cursor-pointer items-center justify-center gap-1 rounded-md px-3 py-2",
+                            "bg-yellow-primary active:bg-yellow-secondary focus-visible:bg-yellow-secondary hover:bg-yellow-secondary mt-5 flex cursor-pointer items-center justify-center gap-1 rounded-md px-3 py-2 text-black",
                         )}
                         onClick={() => closeModal()}
                         disabled={!showModal}
@@ -281,12 +277,9 @@ function RemoveClassroomComponent({
                     </button>
                     <button
                         type="submit"
-                        disabled={!showModal || isPending || code.length === 0}
+                        disabled={!showModal || isPending}
                         className={clsx(
-                            "text-black-100 mt-5 flex grow items-center justify-center gap-1 rounded-md px-3 py-2",
-                            isPending || code.length === 0
-                                ? "bg-black-400/75"
-                                : "cursor-pointer bg-red-700",
+                            "bg-yellow-primary focus-visible:bg-yellow-secondary active:bg-yellow-secondary hover:bg-yellow-secondary mt-5 flex grow cursor-pointer items-center justify-center gap-1 rounded-md px-3 py-2 text-black",
                         )}
                     >
                         {isPending ? (

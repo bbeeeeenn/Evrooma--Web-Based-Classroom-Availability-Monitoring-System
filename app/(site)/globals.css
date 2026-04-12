@@ -10,12 +10,12 @@
     --font-inria-sans: var(--font-inria-sans);
     --font-poppins: var(--font-poppins);
 
-    --color-yellow-primary: #FACC15;
-    --color-yellow-secondary: #EAB308;
-
     --color-green-primary: #064E3B;
     --color-green-secondary: #065F46;
     --color-green-tertiary: #047857;
+
+    --color-yellow-primary: #FACC15;
+    --color-yellow-secondary: #EAB308;
 
     --color-text-primary: #ECFDF5;
     --color-text-secondary: #A7F3D0;

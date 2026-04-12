@@ -138,11 +138,16 @@ async function Classrooms() {
                         <BuildingDiv />
                         <Link
                             href={`${adminRoomsPage}/${classroom.building._id}/${classroom._id}`}
-                            className="bg-green-secondary focus-visible:bg-green-tertiary active:bg-green-tertiary hover:bg-green-tertiary text-text-primary mb-4 block px-5 py-3 shadow-md"
+                            className="bg-green-secondary focus-visible:bg-green-tertiary active:bg-green-tertiary group hover:bg-green-tertiary text-text-primary mb-4 block px-5 py-3 shadow-md"
                         >
-                            <p className="flex items-center gap-2 truncate text-4xl font-bold">
-                                <DoorOpen size={25} /> {classroom.code}
-                            </p>
+                            <div className="flex items-center gap-1">
+                                <span>
+                                    <DoorOpen size={25} />
+                                </span>
+                                <p className="items-center gap-2 truncate text-4xl font-bold">
+                                    {classroom.code}
+                                </p>
+                            </div>
                             <p className="text-text-secondary font-semibold">
                                 {classroom.building.name}
                             </p>
