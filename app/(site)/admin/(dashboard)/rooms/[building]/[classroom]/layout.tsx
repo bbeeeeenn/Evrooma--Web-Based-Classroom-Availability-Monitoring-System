@@ -1,4 +1,5 @@
 import Loading from "@/app/(site)/loading";
+import { BackButton } from "@/app/components/BackButton";
 import { ClassroomInfoProvider } from "@/app/contexts/ClassroomProvider";
 import { PlainRoomDocument, Room } from "@/app/mongoDb/models/room";
 import { connectDB } from "@/app/mongoDb/mongodb";
@@ -6,6 +7,20 @@ import { adminRoomsPage } from "@/constants";
 import { isValidObjectId } from "mongoose";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
+import { ClassroomCodeHeader, ClassroomSettings } from "./ClientComponents";
+import { Divider } from "@/app/components/Divider";
+import { CalendarDays } from "lucide-react";
+
+function Classroom({ buildingId }: { buildingId: string }) {
+    return (
+        <>
+            <BackButton dest={`${adminRoomsPage}/${buildingId}`} />
+            <ClassroomCodeHeader />
+            <Divider text="Settings" />
+            <ClassroomSettings />
+        </>
+    );
+}
 
 async function Suspended({
     params,
@@ -41,6 +56,7 @@ async function Suspended({
                 classroomId: classroom._id.toString(),
             }}
         >
+            <Classroom buildingId={buildingId} />
             {children}
         </ClassroomInfoProvider>
     );

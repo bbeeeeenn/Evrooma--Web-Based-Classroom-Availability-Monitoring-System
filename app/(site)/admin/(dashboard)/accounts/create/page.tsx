@@ -1,5 +1,5 @@
 import { adminAccountsPage } from "@/constants";
-import { BackButton } from "../../../ClientComponents";
+import { BackButton } from "@/app/components/BackButton";
 import { BookText } from "lucide-react";
 import { CreateInstructorForm } from "./ClientComponent";
 

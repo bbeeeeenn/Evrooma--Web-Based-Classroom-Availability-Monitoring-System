@@ -1,7 +1,7 @@
 import { AuthenticateInstructor } from "@/app/actions/InstructorAuthActions";
 import { instructorLoginPage } from "@/constants";
 import { redirect } from "next/navigation";
-import { InstructorNavBar } from "./NavBar";
+import { InstructorNavBar } from "./ClientComponents";
 import { Suspense } from "react";
 
 async function Authenticate({

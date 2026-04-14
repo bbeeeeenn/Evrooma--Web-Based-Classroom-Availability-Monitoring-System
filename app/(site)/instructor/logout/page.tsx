@@ -1,21 +1,15 @@
-import InstructorLogout from "./_";
+"use client";
 import Loading from "../../loading";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { instructorLoginPage } from "@/constants";
-import {
-    AuthenticateInstructor,
-    LogoutInstructor,
-} from "@/app/actions/InstructorAuthActions";
+import { LogoutInstructor } from "@/app/actions/InstructorAuthActions";
+import { useEffect } from "react";
 
-export default async function AdminLogoutPage() {
-    if (!(await AuthenticateInstructor())) {
-        redirect(instructorLoginPage);
-    }
+export default function AdminLogoutPage() {
+    const router = useRouter();
+    useEffect(() => {
+        LogoutInstructor().finally(() => router.replace(instructorLoginPage));
+    }, []);
 
-    return (
-        <div className="fixed inset-0 m-auto flex size-fit items-center gap-2 text-3xl font-bold">
-            <InstructorLogout action={LogoutInstructor} />
-            <Loading />
-        </div>
-    );
+    return <Loading />;
 }

@@ -11,16 +11,19 @@
     --font-poppins: var(--font-poppins);
 
     --color-green-primary: #064E3B;
+    /* background */
     --color-green-secondary: #065F46;
+    /* cards */
     --color-green-tertiary: #047857;
+    /* card hover */
+    --color-green-quarternary: #134E4A;
+    /* slightly darker than secondary | for card border and navbar */
 
     --color-yellow-primary: #FACC15;
     --color-yellow-secondary: #EAB308;
 
     --color-text-primary: #ECFDF5;
     --color-text-secondary: #A7F3D0;
-
-    --color-subtleborder: #134E4A;
 }
 
 ::selection {
@@ -38,7 +41,7 @@
 
 body {
     color: var(--foreground);
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: var(--font-inter);
 }
 
 *:focus-visible {

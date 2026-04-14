@@ -94,7 +94,7 @@ function RenameBuildingComponent({
     return (
         <div
             className={clsx(
-                "fixed inset-0 z-40 flex flex-col items-center justify-center blur-none transition-all",
+                "fixed inset-0 z-40 flex flex-col items-center justify-center px-3 blur-none transition-all",
                 !showModal && "pointer-events-none bg-transparent",
                 showModal && "bg-black/30",
             )}
@@ -103,7 +103,7 @@ function RenameBuildingComponent({
             <form
                 action={formAction}
                 className={clsx(
-                    "bg-green-secondary text-text-primary border-subtleborder w-full max-w-md rounded-xl border-b-4 px-6 pt-10 pb-7 shadow-md transition-all",
+                    "bg-green-secondary text-text-primary border-green-quarternary w-full max-w-md rounded-xl border-b-4 px-6 pt-10 pb-7 shadow-md transition-all",
                     !showModal && "opacity-0",
                 )}
                 onClick={(e) => e.stopPropagation()}
@@ -112,7 +112,9 @@ function RenameBuildingComponent({
                 }}
             >
                 <div className="flex items-center gap-2">
-                    <Building2 />
+                    <span>
+                        <Building2 />
+                    </span>
                     <div className="relative grow">
                         <input
                             ref={inputRef}
@@ -218,7 +220,7 @@ function RemoveBuildingComponent({
     return (
         <div
             className={clsx(
-                "fixed inset-0 z-40 flex flex-col items-center justify-center blur-none transition-all",
+                "fixed inset-0 z-40 flex flex-col items-center justify-center px-3 blur-none transition-all",
                 !showModal && "pointer-events-none bg-transparent",
                 showModal && "bg-black/30",
             )}
@@ -227,7 +229,7 @@ function RemoveBuildingComponent({
             <form
                 action={formAction}
                 className={clsx(
-                    "bg-green-secondary text-text-primary border-subtleborder w-full max-w-md rounded-xl border-b-4 px-6 pt-10 pb-7 shadow-md transition-all",
+                    "bg-green-secondary text-text-primary border-green-quarternary w-full max-w-md rounded-xl border-b-4 px-6 pt-10 pb-7 shadow-md transition-all",
                     !showModal && "opacity-0",
                 )}
                 onSubmit={(e) => {
@@ -236,7 +238,9 @@ function RemoveBuildingComponent({
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="flex items-center gap-2">
-                    <Building2 />
+                    <span>
+                        <Building2 />
+                    </span>
                     <div className="relative grow">
                         <input
                             ref={inputRef}
@@ -394,7 +398,7 @@ export function AddClassroomComponent() {
             </button>
             <div
                 className={clsx(
-                    "fixed inset-0 z-40 flex flex-col items-center justify-center blur-none transition-all",
+                    "fixed inset-0 z-40 flex flex-col items-center justify-center px-3 blur-none transition-all",
                     !showModal && "pointer-events-none bg-transparent",
                     showModal && "bg-black/30",
                 )}
@@ -406,13 +410,15 @@ export function AddClassroomComponent() {
                         if (isPending) e.preventDefault();
                     }}
                     className={clsx(
-                        "bg-green-secondary text-text-primary border-subtleborder w-full max-w-md rounded-xl border-b-4 px-6 pt-10 pb-7 shadow-md transition-all",
+                        "bg-green-secondary text-text-primary border-green-quarternary w-full max-w-md rounded-xl border-b-4 px-6 pt-10 pb-7 shadow-md transition-all",
                         !showModal && "opacity-0",
                     )}
                     onClick={(e) => e.stopPropagation()}
                 >
                     <div className="flex items-center gap-2">
-                        <DoorOpen />
+                        <span>
+                            <DoorOpen />
+                        </span>
                         <div className="relative grow">
                             <input
                                 ref={inputRef}

@@ -1,6 +1,6 @@
 import { connectDB } from "@/app/mongoDb/mongodb";
 import AddBuilding from "./ClientComponents";
-import { Divider } from "../../ClientComponents";
+import { Divider } from "@/app/components/Divider";
 import { Building, PlainBuildingDocument } from "@/app/mongoDb/models/building";
 import { Suspense } from "react";
 import {
@@ -68,7 +68,7 @@ async function BuildingsList() {
             {buildings.map((b) => (
                 <li
                     key={b._id.toString()}
-                    className="font-poppins border-subtleborder bg-green-secondary focus-within:bg-green-tertiary active:bg-green-tertiary hover:bg-green-tertiary min-w-3xs grow rounded-lg border-b-4 text-3xl font-semibold shadow-md transition-transform hover:-translate-y-0.5 sm:max-w-sm"
+                    className="font-poppins border-green-quarternary bg-green-secondary focus-within:bg-green-tertiary active:bg-green-tertiary hover:bg-green-tertiary min-w-3xs grow rounded-lg border-b-4 text-3xl font-semibold shadow-md transition-transform hover:-translate-y-0.5 sm:max-w-sm"
                 >
                     <Link
                         href={adminRoomsPage + "/" + b._id}

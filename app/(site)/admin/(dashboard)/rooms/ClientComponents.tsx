@@ -49,7 +49,7 @@ export default function AddBuilding() {
             </button>
             <div
                 className={clsx(
-                    "fixed inset-0 z-40 flex flex-col items-center justify-center blur-none transition-all",
+                    "fixed inset-0 z-40 flex flex-col items-center justify-center px-3 blur-none transition-all",
                     !showModal && "pointer-events-none bg-transparent",
                     showModal && "bg-black/30",
                 )}
@@ -58,7 +58,7 @@ export default function AddBuilding() {
                 <form
                     action={formAction}
                     className={clsx(
-                        "bg-green-secondary border-subtleborder w-full max-w-md rounded-xl border-b-4 px-6 pt-10 pb-7 text-white shadow-md transition-all",
+                        "bg-green-secondary border-green-quarternary w-full max-w-md rounded-xl border-b-4 px-6 pt-10 pb-7 text-white shadow-md transition-all",
                         !showModal && "opacity-0",
                     )}
                     onClick={(e) => e.stopPropagation()}
@@ -67,7 +67,9 @@ export default function AddBuilding() {
                     }}
                 >
                     <div className="flex items-center gap-2">
-                        <Building2 />
+                        <span>
+                            <Building2 />
+                        </span>
                         <div className="relative grow">
                             <input
                                 ref={inputRef}

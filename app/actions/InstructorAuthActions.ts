@@ -89,10 +89,10 @@ export async function GetInstructorInfo(): Promise<PlainInstructorDocument | nul
             instructorSessionOptions,
         );
         await connectDB();
-        const admin = await Instructor.findById(
+        const instructor = await Instructor.findById(
             session.data?.userId,
         ).lean<PlainInstructorDocument>({ virtuals: true });
-        return admin;
+        return instructor;
     } catch (e) {
         console.error(e);
         return null;

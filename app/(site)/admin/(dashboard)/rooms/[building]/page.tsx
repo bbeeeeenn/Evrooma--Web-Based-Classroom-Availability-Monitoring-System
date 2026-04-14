@@ -1,16 +1,16 @@
 import { adminRoomsPage } from "@/constants";
-import { BackButton } from "../../../ClientComponents";
 import {
     AddClassroomComponent,
     BuildingNameHeader,
     BuildingSettings,
 } from "./ClientComponents";
-import { Divider } from "../../../ClientComponents";
+import { Divider } from "@/app/components/Divider";
 import { Suspense } from "react";
 import Link from "next/link";
 import { PopulatedPlainRoomDocument, Room } from "@/app/mongoDb/models/room";
 import { connectDB } from "@/app/mongoDb/mongodb";
 import { ClassroomsSkeleton } from "../page";
+import { BackButton } from "@/app/components/BackButton";
 
 async function Classrooms({ buildingId }: { buildingId: string }) {
     let classrooms: PopulatedPlainRoomDocument[] = [];

@@ -21,7 +21,9 @@ export function ClassroomCodeHeader() {
     const { buildingName } = useBuildingInfo();
     return (
         <div className="text-text-primary flex items-end gap-2">
-            <DoorOpen size={50} />
+            <span>
+                <DoorOpen size={45} />
+            </span>
             <div>
                 <p className="text-text-secondary text-lg font-semibold">
                     {buildingName}
@@ -96,7 +98,7 @@ function RenameClassroomComponent({
     return (
         <div
             className={clsx(
-                "fixed inset-0 z-40 flex flex-col items-center justify-center blur-none transition-all",
+                "fixed inset-0 z-40 flex flex-col items-center justify-center px-3 blur-none transition-all",
                 !showModal && "pointer-events-none bg-transparent",
                 showModal && "bg-black/30",
             )}
@@ -105,7 +107,7 @@ function RenameClassroomComponent({
             <form
                 action={formAction}
                 className={clsx(
-                    "bg-green-secondary text-text-primary border-subtleborder w-full max-w-md rounded-xl border-b-4 px-6 pt-10 pb-7 shadow-md transition-all",
+                    "bg-green-secondary text-text-primary border-green-quarternary w-full max-w-md rounded-xl border-b-4 px-6 pt-10 pb-7 shadow-md transition-all",
                     !showModal && "opacity-0",
                 )}
                 onClick={(e) => e.stopPropagation()}
@@ -114,7 +116,9 @@ function RenameClassroomComponent({
                 }}
             >
                 <div className="flex items-center gap-2">
-                    <DoorOpen />
+                    <span>
+                        <DoorOpen />
+                    </span>
                     <div className="relative grow">
                         <input
                             ref={inputRef}
@@ -222,7 +226,7 @@ function RemoveClassroomComponent({
     return (
         <div
             className={clsx(
-                "fixed inset-0 z-40 flex flex-col items-center justify-center blur-none transition-all",
+                "fixed inset-0 z-40 flex flex-col items-center justify-center px-3 blur-none transition-all",
                 !showModal && "pointer-events-none bg-transparent",
                 showModal && "bg-black/30",
             )}
@@ -231,7 +235,7 @@ function RemoveClassroomComponent({
             <form
                 action={formAction}
                 className={clsx(
-                    "bg-green-secondary text-text-primary border-subtleborder w-full max-w-md rounded-xl border-b-4 px-6 pt-10 pb-7 shadow-md transition-all",
+                    "bg-green-secondary text-text-primary border-green-quarternary w-full max-w-md rounded-xl border-b-4 px-6 pt-10 pb-7 shadow-md transition-all",
                     !showModal && "opacity-0",
                 )}
                 onClick={(e) => e.stopPropagation()}
@@ -240,7 +244,9 @@ function RemoveClassroomComponent({
                 }}
             >
                 <div className="flex items-center gap-2">
-                    <DoorOpen />
+                    <span>
+                        <DoorOpen />
+                    </span>
                     <div className="relative grow">
                         <input
                             ref={inputRef}

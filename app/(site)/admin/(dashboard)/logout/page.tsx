@@ -9,9 +9,7 @@ export default function AdminLogoutPage() {
     const router = useRouter();
 
     useEffect(() => {
-        LogoutAdmin().finally(() => {
-            router.replace(adminLoginPage);
-        });
+        LogoutAdmin().finally(() => router.replace(adminLoginPage));
     }, []);
     return <Loading />;
 }
