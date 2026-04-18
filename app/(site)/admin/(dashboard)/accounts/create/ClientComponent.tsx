@@ -81,7 +81,7 @@ export function CreateInstructorForm(): React.ReactNode {
         <form
             action={formAction}
             className={clsx(
-                "font-poppins bg-green-primary m-auto mt-10 max-w-sm rounded-lg px-2 text-white sm:max-w-lg sm:px-16 sm:py-10 sm:shadow-md",
+                "font-poppins bg-green-secondary m-auto mt-10 max-w-sm rounded-lg px-2 text-white sm:max-w-lg sm:px-16 sm:py-10 sm:shadow-md",
                 pathname === adminCreateAccountPage && "accountform",
             )}
         >

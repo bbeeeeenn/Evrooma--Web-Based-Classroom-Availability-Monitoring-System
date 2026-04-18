@@ -11,7 +11,6 @@ export default function Loading({
                 width={150}
                 height={150}
                 alt="logo"
-                loading="eager"
                 className="animate-bounce"
             />
             <p className="w-full truncate px-5 text-center font-bold">{text}</p>

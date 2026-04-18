@@ -1,9 +1,74 @@
 import { CalendarDays, Plus } from "lucide-react";
-import { BackButton } from "@/app/components/BackButton";
 import { Divider } from "@/app/components/Divider";
-import { ClassroomCodeHeader, ClassroomSettings } from "./ClientComponents";
 import { adminRoomsPage } from "@/constants";
 import Link from "next/link";
+import { connectDB } from "@/app/mongoDb/mongodb";
+import { PlainScheduleDocument, Schedule } from "@/app/mongoDb/models/schedule";
+import { PlainInstructorDocument } from "@/app/mongoDb/models/user";
+
+async function GetSchedule({
+    classroomId,
+    day,
+}: {
+    classroomId: string;
+    day: string;
+}) {
+    let schedules: (Omit<PlainScheduleDocument, "instructor"> & {
+        instructor: PlainInstructorDocument;
+    })[] = []; // Populated Schedule Document
+    try {
+        await connectDB();
+        schedules = await Schedule.find({
+            room: classroomId,
+            "slot.dayOfWeek": day,
+        })
+            .sort({ "slot.start.hour": 1 })
+            .populate("instructor")
+            .lean({ virtuals: true });
+    } catch (e) {
+        console.error(e);
+        return null;
+    }
+    return schedules.length > 0 ? (
+        <>
+            <Divider text={day} />
+            {schedules.map((sched) => {
+                const startMeridiem: "AM" | "PM" =
+                    sched.slot.start.hour < 12 ? "AM" : "PM";
+                const startHour =
+                    sched.slot.start.hour % 12 === 0
+                        ? 12
+                        : sched.slot.start.hour % 12;
+                const startMinute = sched.slot.start.minute;
+                const endMeridiem: "AM" | "PM" =
+                    sched.slot.start.hour < 12 ? "AM" : "PM";
+                const endHour =
+                    sched.slot.end.hour % 12 === 0
+                        ? 12
+                        : sched.slot.end.hour % 12;
+                const endMinute = sched.slot.end.minute;
+                return (
+                    <button
+                        key={sched._id.toString()}
+                        className="text-text-primary focus-visible:bg-green-tertiary active:bg-green-tertiary hover:bg-green-tertiary border-yellow-primary bg-green-secondary mt-3 block w-full rounded-md border-l-4 px-5 py-3 text-start shadow-md"
+                    >
+                        <p className="font-roboto-mono text-2xl font-bold">
+                            {`${startHour}:${startMinute < 10 ? "0" + startMinute : startMinute}${startMeridiem}`}{" "}
+                            -{" "}
+                            {`${endHour}:${endMinute < 10 ? "0" + endMinute : endMinute}${endMeridiem}`}
+                        </p>
+                        <p className="font-poppins font-semibold">
+                            <span className="text-yellow-primary">
+                                {sched.instructor.fullName}
+                            </span>{" "}
+                            - {sched.subject}
+                        </p>
+                    </button>
+                );
+            })}
+        </>
+    ) : null;
+}
 
 export default async function AdminClassroomPage({
     params,
@@ -23,13 +88,12 @@ export default async function AdminClassroomPage({
             >
                 <Plus /> Add Schedule
             </Link>
-            <Divider text="Monday" />
-            <Divider text="Tuesday" />
-            <Divider text="Wednesday" />
-            <Divider text="Thursday" />
-            <Divider text="Friday" />
-            <Divider text="Saturday" />
-            <Divider text="Sunday" />
+            <GetSchedule classroomId={classroomId} day="Monday" />
+            <GetSchedule classroomId={classroomId} day="Tuesday" />
+            <GetSchedule classroomId={classroomId} day="Wednesday" />
+            <GetSchedule classroomId={classroomId} day="Thursday" />
+            <GetSchedule classroomId={classroomId} day="Friday" />
+            <GetSchedule classroomId={classroomId} day="Saturday" />
         </>
     );
 }

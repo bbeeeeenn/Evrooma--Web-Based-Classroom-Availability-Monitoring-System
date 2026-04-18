@@ -1,4 +1,4 @@
-import { model, models, Schema, SchemaTypes } from "mongoose";
+import { model, models, ObjectId, Schema, SchemaTypes } from "mongoose";
 
 const timeSchema = new Schema(
     {
@@ -29,6 +29,25 @@ const slotSchema = new Schema(
     { _id: false },
 );
 
+export type PlainScheduleDocument = {
+    _id: ObjectId;
+    room: ObjectId;
+    instructor: ObjectId;
+    subject: string;
+    slot: {
+        dayOfWeek:
+            | "Monday"
+            | "Tuesday"
+            | "Wednesday"
+            | "Thursday"
+            | "Friday"
+            | "Saturday"
+            | "Sunday";
+        start: { hour: number; minute: number };
+        end: { hour: number; minute: number };
+    };
+};
+
 const scheduleSchema = new Schema({
     room: {
         type: SchemaTypes.ObjectId,
@@ -37,7 +56,7 @@ const scheduleSchema = new Schema({
     },
     instructor: {
         type: SchemaTypes.ObjectId,
-        ref: "User",
+        ref: "Instructor",
         required: true,
     },
     subject: {
@@ -46,7 +65,7 @@ const scheduleSchema = new Schema({
         required: false,
         trim: true,
     },
-    slot: [slotSchema],
+    slot: slotSchema,
 });
 
 export const Schedule = models.Schedule || model("Schedule", scheduleSchema);

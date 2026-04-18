@@ -9,6 +9,8 @@
     --font-inter: var(--font-inter);
     --font-inria-sans: var(--font-inria-sans);
     --font-poppins: var(--font-poppins);
+    --font-roboto: var(--font-roboto);
+    --font-roboto-mono: var(--font-roboto-mono);
 
     --color-green-primary: #064E3B;
     /* background */
@@ -27,10 +29,9 @@
 }
 
 ::selection {
-    background-color: rgb(58, 58, 58);
+    background-color: #047857;
     color: #ffffff;
 }
-
 
 @media (prefers-color-scheme: dark) {
     :root {
@@ -46,4 +47,17 @@ body {
 
 *:focus-visible {
     outline: transparent !important;
+}
+
+button {
+    cursor: pointer;
+}
+
+*::-webkit-scrollbar {
+    width: 8px;
+    background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: rgb(2, 53, 40);
 }

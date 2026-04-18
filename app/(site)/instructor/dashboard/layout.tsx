@@ -1,16 +1,20 @@
-import { AuthenticateInstructor } from "@/app/actions/InstructorAuthActions";
+import { GetInstructorAuthInfo } from "@/app/actions/InstructorAuthActions";
 import { instructorLoginPage } from "@/constants";
 import { redirect } from "next/navigation";
 import { InstructorNavBar } from "./ClientComponents";
 import { Suspense } from "react";
+import { headers } from "next/headers";
 
 async function Authenticate({
     children,
 }: Readonly<{ children: React.ReactNode }>) {
-    const user = await AuthenticateInstructor();
+    const instructor = await GetInstructorAuthInfo();
+    const pathname = (await headers()).get("x-pathname") ?? "";
 
-    if (!user) {
-        redirect(instructorLoginPage);
+    if (!instructor) {
+        redirect(
+            `${instructorLoginPage}?redirect=${encodeURIComponent(pathname)}`,
+        );
     }
 
     return (
@@ -23,7 +27,7 @@ async function Authenticate({
     );
 }
 
-export default async function AdminLayout({
+export default async function Layout({
     children,
 }: Readonly<{ children: React.ReactNode }>) {
     return (

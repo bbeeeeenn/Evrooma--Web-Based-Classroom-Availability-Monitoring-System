@@ -65,21 +65,17 @@ export async function AdminAuth(
     }
 }
 
+/**
+ *
+ * @deprecated Use `GetAdminAuthInfo` instead.
+ */
 export async function AuthenticateAdmin(): Promise<string | null> {
-    const session = await getIronSession<AuthSessionData>(
-        await cookies(),
-        adminSessionOptions,
-    );
+    const adminInfo = await GetAdminAuthInfo();
 
-    return session.data?.userId ?? null;
+    return adminInfo?._id.toString() ?? null;
 }
 
-export async function LogoutAdmin(): Promise<void> {
-    const session = await getIronSession(await cookies(), adminSessionOptions);
-    session.destroy();
-}
-
-export async function GetAdminInfo(): Promise<PlainAdminDocument | null> {
+export async function GetAdminAuthInfo(): Promise<PlainAdminDocument | null> {
     try {
         const session = await getIronSession<AuthSessionData>(
             await cookies(),
@@ -94,4 +90,9 @@ export async function GetAdminInfo(): Promise<PlainAdminDocument | null> {
         console.error(e);
         return null;
     }
+}
+
+export async function LogoutAdmin(): Promise<void> {
+    const session = await getIronSession(await cookies(), adminSessionOptions);
+    session.destroy();
 }

@@ -1,4 +1,4 @@
-import { GetInstructorInfo } from "@/app/actions/InstructorAuthActions";
+import { GetInstructorAuthInfo } from "@/app/actions/InstructorAuthActions";
 import { instructorLoginPage } from "@/constants";
 import { BookText, Settings, Settings2 } from "lucide-react";
 import { redirect } from "next/navigation";
@@ -8,7 +8,7 @@ import Link from "next/link";
 import { Divider } from "@/app/components/Divider";
 
 async function Profile() {
-    const instructor = await GetInstructorInfo();
+    const instructor = await GetInstructorAuthInfo();
     if (!instructor) redirect(instructorLoginPage);
 
     return (

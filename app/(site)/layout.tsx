@@ -1,4 +1,10 @@
-import { Inter, Inria_Sans, Poppins } from "next/font/google";
+import {
+    Inter,
+    Inria_Sans,
+    Poppins,
+    Roboto,
+    Roboto_Mono,
+} from "next/font/google";
 import "./globals.css";
 import clsx from "clsx";
 import VineSounds from "../components/VineSounds";
@@ -51,6 +57,14 @@ const poppins = Poppins({
     variable: "--font-poppins",
     weight: ["300", "400", "900", "600"],
 });
+const roboto = Roboto({
+    variable: "--font-roboto",
+    weight: "800",
+});
+const robotoMono = Roboto_Mono({
+    variable: "--font-roboto-mono",
+    weight: "700",
+});
 
 async function VineSFX() {
     await connection();
@@ -75,8 +89,10 @@ export default async function RootLayout({
                     inter.variable,
                     inriaSans.variable,
                     poppins.variable,
+                    roboto.variable,
+                    robotoMono.variable,
                     "antialiased select-none",
-                    "has-[.accountform]:bg-green-tertiary text-text-primary bg-green-primary",
+                    "text-text-primary bg-green-primary",
                 )}
             >
                 <Suspense>

@@ -66,23 +66,7 @@ export async function InstructorAuth(
     }
 }
 
-export async function AuthenticateInstructor(): Promise<string | null> {
-    const session = await getIronSession<AuthSessionData>(
-        await cookies(),
-        instructorSessionOptions,
-    );
-
-    return session.data?.userId ?? null;
-}
-
-export async function LogoutInstructor(): Promise<void> {
-    const session = await getIronSession(
-        await cookies(),
-        instructorSessionOptions,
-    );
-    session.destroy();
-}
-export async function GetInstructorInfo(): Promise<PlainInstructorDocument | null> {
+export async function GetInstructorAuthInfo(): Promise<PlainInstructorDocument | null> {
     try {
         const session = await getIronSession<AuthSessionData>(
             await cookies(),
@@ -97,4 +81,12 @@ export async function GetInstructorInfo(): Promise<PlainInstructorDocument | nul
         console.error(e);
         return null;
     }
+}
+
+export async function LogoutInstructor(): Promise<void> {
+    const session = await getIronSession(
+        await cookies(),
+        instructorSessionOptions,
+    );
+    session.destroy();
 }

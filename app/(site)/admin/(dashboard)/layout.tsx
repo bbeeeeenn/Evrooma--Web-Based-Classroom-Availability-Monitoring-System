@@ -3,20 +3,22 @@ import { adminLoginPage } from "@/constants";
 import { redirect } from "next/navigation";
 import { AdminNavBar } from "../ClientComponents";
 import { Suspense } from "react";
+import { headers } from "next/headers";
 
 async function Authenticate({
     children,
 }: Readonly<{ children: React.ReactNode }>) {
-    const user = await AuthenticateAdmin();
+    const admin = await AuthenticateAdmin();
+    const pathname = (await headers()).get("x-pathname") ?? "";
 
-    if (!user) {
-        redirect(adminLoginPage);
+    if (!admin) {
+        redirect(`${adminLoginPage}?redirect=${encodeURIComponent(pathname)}`);
     }
 
     return (
         <>
             <AdminNavBar />
-            <main className="font-inter has-[.cif]:bg-green-primary m-auto max-w-5xl px-5 pt-3 pb-40 sm:has-[.cif]:bg-transparent">
+            <main className="font-inter has-[.accountform]:bg-green-secondary m-auto max-w-5xl px-5 pt-3 pb-40 sm:has-[.accountform]:bg-transparent">
                 {children}
             </main>
         </>

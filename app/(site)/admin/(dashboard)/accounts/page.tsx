@@ -64,8 +64,8 @@ export default function AccountsPage() {
             <Link
                 href={adminCreateAccountPage}
                 className={clsx(
-                    "bg-yellow-primary mt-10 mb-5 flex w-fit cursor-pointer items-center gap-1 rounded-md p-2 font-semibold shadow-md hover:text-white",
-                    "hover:bg-green-tertiary hover:text-black-100 transition-colors active:scale-105",
+                    "bg-yellow-primary mt-10 mb-5 flex w-fit cursor-pointer items-center gap-1 rounded-md p-2 font-semibold text-black shadow-md",
+                    "hover:bg-yellow-secondary transition-colors active:scale-105",
                 )}
             >
                 <Plus /> Add Instructor

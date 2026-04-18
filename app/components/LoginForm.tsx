@@ -31,8 +31,10 @@ import { InstructorAuth } from "../actions/InstructorAuthActions";
 
 export default function LoginForm({
     formType,
+    redirectPath,
 }: {
     formType: "admin" | "instructor";
+    redirectPath?: string;
 }) {
     const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
@@ -54,7 +56,11 @@ export default function LoginForm({
                 : await InstructorAuth(formData);
         if (res.status === "success") {
             router.replace(
-                formType === "admin" ? adminRoomsPage : instructorDashboardPage,
+                redirectPath?.startsWith("/")
+                    ? redirectPath
+                    : formType === "admin"
+                      ? adminRoomsPage
+                      : instructorDashboardPage,
             );
             setShowPassword(false);
         }
