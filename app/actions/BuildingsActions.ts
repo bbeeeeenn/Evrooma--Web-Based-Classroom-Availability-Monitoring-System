@@ -8,6 +8,7 @@ import { Building } from "../mongoDb/models/building";
 import { ServerActionResponse } from "./_";
 import { isValidObjectId } from "mongoose";
 import { AuthenticateAdmin } from "./AdminAuthActions";
+import { Room } from "../mongoDb/models/room";
 
 export type AddBuildingAction = (
     _: unknown,
@@ -150,6 +151,18 @@ export async function RemoveBuilding(
                 message: "Building with such ID not found",
             };
         }
+
+        const foundClassroomOfBuilding = await Room.findOne({
+            building: building._id,
+        }).lean();
+        if (foundClassroomOfBuilding) {
+            return {
+                status: "error",
+                message:
+                    "You must remove all classrooms in this building before deleting it.",
+            };
+        }
+
         if (building.name !== nameConfirmation) {
             return {
                 status: "error",
@@ -157,6 +170,7 @@ export async function RemoveBuilding(
             };
         }
         // TODO: Delete the classrooms first.. and maybe do some research on mongoose middlewares/hooks
+        // Changed my mind; The client must delete all the classrooms of the building first before they can delete the building itself (Done...)
 
         const deleted = await building.deleteOne();
         if (deleted.deletedCount >= 1) {
