@@ -31,7 +31,7 @@ async function GetSchedule({
             .lean({ virtuals: true });
     } catch (e) {
         console.error(e);
-        return null;
+        return <>Error</>;
     }
     return (
         schedules.length > 0 && (
