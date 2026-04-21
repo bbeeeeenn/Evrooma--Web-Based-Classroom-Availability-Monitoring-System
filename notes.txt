@@ -1,2 +1,11 @@
 Free Email sender alternatives for "Forgot Password" system
 https://chatgpt.com/share/69cf7a45-f0a8-8323-a682-1bcabeb357d5
+
+
+*pag mag scan ang instructor gamit scanner outside sa website
+   1. I direct siya sa route sa atong website where e process 
+   2.  e check kung naka log-in
+         -if not, mo redirect sa log-in page
+         - mo balik ra sa route pag human
+   3. Kuhaon ang data, (instructor identity, room, time)
+   4. if valid, (like naay naka schedule na instructor sa kadto na room sa kadto na time) ma mark ang classroom as in use. else mag send ug some error message 

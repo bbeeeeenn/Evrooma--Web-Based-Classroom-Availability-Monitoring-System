@@ -1,6 +1,10 @@
 "use server";
 
-import { adminRoomsPage, instructorSchedulesPage } from "@/constants";
+import {
+    adminAccountsPage,
+    adminRoomsPage,
+    instructorSchedulesPage,
+} from "@/constants";
 import { connectDB } from "@/app/mongoDb/mongodb";
 import { Room } from "@/app/mongoDb/models/room";
 import { Schedule } from "@/app/mongoDb/models/schedule";
@@ -239,6 +243,56 @@ export async function CreateSchedule(
         };
     } catch (e) {
         console.error("[CreateSchedule]", e);
+        return {
+            status: "error",
+            message: "Something went wrong. Please try again later.",
+        };
+    }
+}
+
+export async function DeleteSchedule(
+    scheduleId: string,
+): Promise<ServerActionResponse> {
+    if (!(await AuthenticateAdmin())) {
+        return {
+            status: "error",
+            message: "Unauthorized.",
+        };
+    }
+
+    const sanitizedScheduleId = scheduleId.trim();
+
+    if (!isValidObjectId(sanitizedScheduleId)) {
+        return {
+            status: "error",
+            message: "Invalid schedule ID.",
+        };
+    }
+
+    try {
+        await connectDB();
+
+        const schedule = await Schedule.findById(sanitizedScheduleId).lean();
+        if (!schedule) {
+            return {
+                status: "error",
+                message: "Schedule not found.",
+            };
+        }
+
+        await Schedule.findByIdAndDelete(sanitizedScheduleId);
+
+        revalidatePath(`${adminAccountsPage}/${schedule.instructor}`);
+        revalidatePath(`${adminRoomsPage}/${schedule.room}`);
+        revalidatePath(adminRoomsPage);
+        revalidatePath(instructorSchedulesPage);
+
+        return {
+            status: "success",
+            message: "Schedule deleted successfully.",
+        };
+    } catch (e) {
+        console.error("[DeleteSchedule]", e);
         return {
             status: "error",
             message: "Something went wrong. Please try again later.",

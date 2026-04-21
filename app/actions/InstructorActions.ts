@@ -307,3 +307,37 @@ export async function ChangeInstructorEmail(
         };
     }
 }
+
+export async function DeleteInstructor(
+    instructorId: string,
+): Promise<ServerActionResponse> {
+    if (!isValidObjectId(instructorId))
+        return {
+            status: "error",
+            message: "Invalid instructor ID.",
+        };
+
+    try {
+        const instructor = await Instructor.findById(instructorId);
+        if (!instructor) {
+            return {
+                status: "error",
+                message: "Instructor with such ID was not found.",
+            };
+        }
+
+        await instructor.deleteOne();
+        revalidatePath(adminAccountsPage);
+
+        return {
+            status: "success",
+            message: "Deleted successfully.",
+        };
+    } catch (e) {
+        console.error(e);
+        return {
+            status: "error",
+            message: "Something went wrong. Please try again later.",
+        };
+    }
+}

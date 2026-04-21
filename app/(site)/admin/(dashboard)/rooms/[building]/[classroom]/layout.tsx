@@ -9,7 +9,6 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { ClassroomCodeHeader, ClassroomSettings } from "./ClientComponents";
 import { Divider } from "@/app/components/Divider";
-import { CalendarDays } from "lucide-react";
 
 function Classroom({ buildingId }: { buildingId: string }) {
     return (
@@ -18,6 +17,7 @@ function Classroom({ buildingId }: { buildingId: string }) {
             <ClassroomCodeHeader />
             <Divider text="Settings" />
             <ClassroomSettings />
+            <Divider />
         </>
     );
 }

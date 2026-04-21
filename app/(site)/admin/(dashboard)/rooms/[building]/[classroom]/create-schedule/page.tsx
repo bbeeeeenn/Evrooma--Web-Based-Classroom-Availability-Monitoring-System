@@ -57,7 +57,7 @@ export default async function CreateSchedulePage({
     const { building: buildingId, classroom: classroomId } = await params;
     return (
         <>
-            <div className="text-text-primary mt-15 flex items-center gap-3">
+            <div className="text-text-primary flex items-center gap-3">
                 <span>
                     <CalendarDays size={40} />
                 </span>

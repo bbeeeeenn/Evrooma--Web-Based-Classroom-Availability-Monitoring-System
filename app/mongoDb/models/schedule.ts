@@ -1,4 +1,6 @@
 import { model, models, ObjectId, Schema, SchemaTypes } from "mongoose";
+import { PopulatedPlainRoomDocument } from "./room";
+import { PlainInstructorDocument } from "./user";
 
 const timeSchema = new Schema(
     {
@@ -46,6 +48,14 @@ export type PlainScheduleDocument = {
         start: { hour: number; minute: number };
         end: { hour: number; minute: number };
     };
+};
+
+export type PopulatedPlainScheduleDocument = Omit<
+    PlainScheduleDocument,
+    "room" | "instructor"
+> & {
+    room: PopulatedPlainRoomDocument;
+    instructor: PlainInstructorDocument;
 };
 
 const scheduleSchema = new Schema({

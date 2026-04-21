@@ -3,8 +3,11 @@ import { Divider } from "@/app/components/Divider";
 import { adminRoomsPage } from "@/constants";
 import Link from "next/link";
 import { connectDB } from "@/app/mongoDb/mongodb";
-import { PlainScheduleDocument, Schedule } from "@/app/mongoDb/models/schedule";
-import { PlainInstructorDocument } from "@/app/mongoDb/models/user";
+import {
+    PopulatedPlainScheduleDocument,
+    Schedule,
+} from "@/app/mongoDb/models/schedule";
+import { ScheduleCard } from "./ClientComponents";
 
 async function GetSchedule({
     classroomId,
@@ -13,9 +16,7 @@ async function GetSchedule({
     classroomId: string;
     day: string;
 }) {
-    let schedules: (Omit<PlainScheduleDocument, "instructor"> & {
-        instructor: PlainInstructorDocument;
-    })[] = []; // Populated Schedule Document
+    let schedules: PopulatedPlainScheduleDocument[] = []; // Populated Schedule Document
     try {
         await connectDB();
         schedules = await Schedule.find({
@@ -24,50 +25,53 @@ async function GetSchedule({
         })
             .sort({ "slot.start.hour": 1 })
             .populate("instructor")
+            .populate({ path: "room", populate: "building" })
             .lean({ virtuals: true });
     } catch (e) {
         console.error(e);
         return null;
     }
-    return schedules.length > 0 ? (
-        <>
-            <Divider text={day} />
-            {schedules.map((sched) => {
-                const startMeridiem: "AM" | "PM" =
-                    sched.slot.start.hour < 12 ? "AM" : "PM";
-                const startHour =
-                    sched.slot.start.hour % 12 === 0
-                        ? 12
-                        : sched.slot.start.hour % 12;
-                const startMinute = sched.slot.start.minute;
-                const endMeridiem: "AM" | "PM" =
-                    sched.slot.start.hour < 12 ? "AM" : "PM";
-                const endHour =
-                    sched.slot.end.hour % 12 === 0
-                        ? 12
-                        : sched.slot.end.hour % 12;
-                const endMinute = sched.slot.end.minute;
-                return (
-                    <button
-                        key={sched._id.toString()}
-                        className="text-text-primary focus-visible:bg-green-tertiary active:bg-green-tertiary hover:bg-green-tertiary border-yellow-primary bg-green-secondary mt-3 block w-full rounded-md border-l-4 px-5 py-3 text-start shadow-md"
-                    >
-                        <p className="font-roboto-mono text-2xl font-bold">
-                            {`${startHour}:${startMinute < 10 ? "0" + startMinute : startMinute}${startMeridiem}`}{" "}
-                            -{" "}
-                            {`${endHour}:${endMinute < 10 ? "0" + endMinute : endMinute}${endMeridiem}`}
-                        </p>
-                        <p className="font-poppins font-semibold">
-                            <span className="text-yellow-primary">
-                                {sched.instructor.fullName}
-                            </span>{" "}
-                            - {sched.subject}
-                        </p>
-                    </button>
-                );
-            })}
-        </>
-    ) : null;
+    return (
+        schedules.length > 0 && (
+            <>
+                <Divider text={day} />
+                {schedules.map((sched) => {
+                    const startMeridiem: "AM" | "PM" =
+                        sched.slot.start.hour < 12 ? "AM" : "PM";
+                    const startHour =
+                        sched.slot.start.hour % 12 === 0
+                            ? 12
+                            : sched.slot.start.hour % 12;
+                    const startMinute = sched.slot.start.minute;
+                    const endMeridiem: "AM" | "PM" =
+                        sched.slot.start.hour < 12 ? "AM" : "PM";
+                    const endHour =
+                        sched.slot.end.hour % 12 === 0
+                            ? 12
+                            : sched.slot.end.hour % 12;
+                    const endMinute = sched.slot.end.minute;
+                    return (
+                        <ScheduleCard
+                            key={sched._id.toString()}
+                            _id={sched._id.toString()}
+                            building={sched.room.building.name}
+                            room={sched.room.code}
+                            instructorFullName={sched.instructor.fullName}
+                            instructorId={sched.instructor._id.toString()}
+                            subject={sched.subject}
+                            endHour={endHour}
+                            endMinute={endMinute}
+                            endMeridiem={endMeridiem}
+                            startHour={startHour}
+                            startMinute={startMinute}
+                            startMeridiem={startMeridiem}
+                            day={day}
+                        />
+                    );
+                })}
+            </>
+        )
+    );
 }
 
 export default async function AdminClassroomPage({
@@ -78,7 +82,7 @@ export default async function AdminClassroomPage({
     const { building: buildingId, classroom: classroomId } = await params;
     return (
         <>
-            <div className="text-text-primary mt-15 flex items-center gap-3">
+            <div className="text-text-primary flex items-center gap-3">
                 <CalendarDays size={40} />
                 <h1 className="text-4xl font-bold">Schedules</h1>
             </div>
