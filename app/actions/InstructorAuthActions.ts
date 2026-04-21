@@ -1,14 +1,15 @@
 "use server";
 import { getIronSession, SessionOptions } from "iron-session";
-import { AuthSessionData, LoginFormActionResponse } from "./_";
+import { InstructorAuthSessionData, LoginFormActionResponse } from "./_";
 import { connectDB } from "@/app/mongoDb/mongodb";
 import { Instructor, PlainInstructorDocument } from "@/app/mongoDb/models/user";
 import { cookies } from "next/headers";
 import { compare } from "@/app/lib/bcrypt";
+import { INSTRUCTOR_SESSION_SECRET } from "@/constants";
 
 const instructorSessionOptions: SessionOptions = {
     cookieName: "instructorSession",
-    password: process.env.INSTRUCTOR_SESSION_SECRET!,
+    password: INSTRUCTOR_SESSION_SECRET,
     cookieOptions: {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
@@ -40,13 +41,16 @@ export async function InstructorAuth(
             };
         }
 
-        const session = await getIronSession<AuthSessionData>(await cookies(), {
-            ...instructorSessionOptions,
-            cookieOptions: {
-                ...instructorSessionOptions.cookieOptions,
-                maxAge: rememberme ? 60 * 60 * 24 * 7 : undefined,
+        const session = await getIronSession<InstructorAuthSessionData>(
+            await cookies(),
+            {
+                ...instructorSessionOptions,
+                cookieOptions: {
+                    ...instructorSessionOptions.cookieOptions,
+                    maxAge: rememberme ? 60 * 60 * 24 * 7 : undefined,
+                },
             },
-        });
+        );
         session.data = { userId: user._id.toString() };
         await session.save();
         return {
@@ -68,7 +72,7 @@ export async function InstructorAuth(
 
 export async function GetInstructorAuthInfo(): Promise<PlainInstructorDocument | null> {
     try {
-        const session = await getIronSession<AuthSessionData>(
+        const session = await getIronSession<InstructorAuthSessionData>(
             await cookies(),
             instructorSessionOptions,
         );

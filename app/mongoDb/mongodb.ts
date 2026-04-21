@@ -1,6 +1,5 @@
 import mongoose, { Connection } from "mongoose";
-
-const MONGODB_URI = process.env.MONGODB_URI!;
+import { MONGODB_URI, DB_NAME } from "@/constants";
 
 // Define global type for caching
 declare global {
@@ -25,7 +24,7 @@ export async function connectDB(): Promise<Connection> {
     if (!cached.promise) {
         cached.promise = mongoose
             .connect(MONGODB_URI, {
-                dbName: process.env.DB_NAME!,
+                dbName: DB_NAME,
                 bufferCommands: false,
             })
             .then((m) => m.connection);

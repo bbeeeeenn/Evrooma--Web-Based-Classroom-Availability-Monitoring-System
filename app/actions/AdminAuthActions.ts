@@ -1,14 +1,16 @@
 "use server";
 import { getIronSession, SessionOptions } from "iron-session";
-import { AuthSessionData, LoginFormActionResponse } from "./_";
-import { connectDB } from "@/app/mongoDb/mongodb";
-import { Admin, PlainAdminDocument } from "@/app/mongoDb/models/user";
+import { AdminAuthSessionData, LoginFormActionResponse } from "./_";
 import { cookies } from "next/headers";
-import { compare } from "@/app/lib/bcrypt";
+import {
+    ADMIN_PASSWORD,
+    ADMIN_SESSION_SECRET,
+    ADMIN_USERNAME,
+} from "@/constants";
 
 const adminSessionOptions: SessionOptions = {
     cookieName: "adminSession",
-    password: process.env.ADMIN_SESSION_SECRET!,
+    password: ADMIN_SESSION_SECRET,
     cookieOptions: {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
@@ -25,12 +27,9 @@ export async function AdminAuth(
     const rememberme = formData.get("rememberme") !== null;
 
     try {
-        await connectDB();
-        const user = await Admin.findOne({
-            username: username,
-        }).lean<PlainAdminDocument>();
-
-        if (!user || !(await compare(password, user.password))) {
+        const adminUsername = ADMIN_USERNAME;
+        const adminPassword = ADMIN_PASSWORD;
+        if (username !== adminUsername || password !== adminPassword) {
             return {
                 status: "error",
                 message: "Invalid username and password",
@@ -39,20 +38,23 @@ export async function AdminAuth(
             };
         }
 
-        const session = await getIronSession<AuthSessionData>(await cookies(), {
-            ...adminSessionOptions,
-            cookieOptions: {
-                ...adminSessionOptions.cookieOptions,
-                maxAge: rememberme ? 60 * 60 * 24 * 7 : undefined,
+        const session = await getIronSession<AdminAuthSessionData>(
+            await cookies(),
+            {
+                ...adminSessionOptions,
+                cookieOptions: {
+                    ...adminSessionOptions.cookieOptions,
+                    maxAge: rememberme ? 60 * 60 * 24 * 7 : undefined,
+                },
             },
-        });
-        session.data = { userId: user._id.toString() };
+        );
+        session.data = { username: adminUsername, password: adminPassword };
         await session.save();
         return {
             status: "success",
             message: "",
             formData: new FormData(),
-            user: user._id.toString(),
+            user: adminUsername,
         };
     } catch (e) {
         console.error("[AdminAuth]", e);
@@ -65,27 +67,26 @@ export async function AdminAuth(
     }
 }
 
-/**
- *
- * @deprecated Use `GetAdminAuthInfo` instead.
- */
-export async function AuthenticateAdmin(): Promise<string | null> {
+// This should be deprecated, but.. nah
+export async function AuthenticateAdmin(): Promise<{
+    username: string;
+    password: string;
+} | null> {
     const adminInfo = await GetAdminAuthInfo();
 
-    return adminInfo?._id.toString() ?? null;
+    return adminInfo;
 }
 
-export async function GetAdminAuthInfo(): Promise<PlainAdminDocument | null> {
+export async function GetAdminAuthInfo(): Promise<{
+    username: string;
+    password: string;
+} | null> {
     try {
-        const session = await getIronSession<AuthSessionData>(
+        const session = await getIronSession<AdminAuthSessionData>(
             await cookies(),
             adminSessionOptions,
         );
-        await connectDB();
-        const admin = await Admin.findById(
-            session.data?.userId,
-        ).lean<PlainAdminDocument>({ virtuals: true });
-        return admin;
+        return session.data ?? null;
     } catch (e) {
         console.error(e);
         return null;

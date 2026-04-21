@@ -8,6 +8,10 @@ export interface LoginFormActionResponse extends ServerActionResponse {
     user: string | null;
 }
 
-export interface AuthSessionData {
+export interface InstructorAuthSessionData {
     data?: { userId: string };
+}
+
+export interface AdminAuthSessionData {
+    data?: { username: string; password: string };
 }
