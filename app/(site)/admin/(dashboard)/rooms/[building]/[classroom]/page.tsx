@@ -10,6 +10,7 @@ import {
 import { ScheduleCard } from "./ClientComponents";
 import { ScheduleCardSkeleton } from "@/app/(site)/ClientComponents";
 import { Suspense } from "react";
+import { isValidObjectId } from "mongoose";
 
 async function GetSchedule({
     classroomId,
@@ -19,19 +20,27 @@ async function GetSchedule({
     day: string;
 }) {
     let schedules: PopulatedPlainScheduleDocument[] = []; // Populated Schedule Document
+    if (!isValidObjectId(classroomId)) {
+        return <>Error</>;
+    }
+
     try {
         await connectDB();
         schedules = await Schedule.find({
             room: classroomId,
             "slot.dayOfWeek": day,
         })
-            .sort({ "slot.start.hour": 1 })
+            .sort({ "slot.start.hour": 1, "slot.start.minute": 1 })
             .populate("instructor")
             .populate({ path: "room", populate: "building" })
             .lean({ virtuals: true });
     } catch (e) {
         console.error(e);
-        return <div className="text-text-primary">{JSON.stringify(e)}</div>;
+        return (
+            <div className="text-text-primary">
+                {e instanceof Error ? e.message : e}
+            </div>
+        );
     }
     return (
         schedules.length > 0 && (
@@ -46,7 +55,7 @@ async function GetSchedule({
                             : sched.slot.start.hour % 12;
                     const startMinute = sched.slot.start.minute;
                     const endMeridiem: "AM" | "PM" =
-                        sched.slot.start.hour < 12 ? "AM" : "PM";
+                        sched.slot.end.hour < 12 ? "AM" : "PM";
                     const endHour =
                         sched.slot.end.hour % 12 === 0
                             ? 12
