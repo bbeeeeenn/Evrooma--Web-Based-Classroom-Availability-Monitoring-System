@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import {
+    instructorDashboardPage,
     instructorLogoutPage,
     instructorRoomsPage,
     instructorSchedulesPage,
@@ -41,11 +42,16 @@ export function InstructorNavBar() {
 
                 <div className="flex grow">
                     <Link
-                        href={instructorSchedulesPage}
+                        href={
+                            pathname.includes(instructorSchedulesPage)
+                                ? instructorDashboardPage
+                                : instructorSchedulesPage
+                        }
+                        tabIndex={shown ? 0 : -1}
                         className={clsx(
                             "group m-auto flex cursor-pointer flex-col items-center gap-2 text-xs decoration-2 underline-offset-4 sm:flex-row sm:gap-3 sm:text-base",
                             pathname.includes(instructorSchedulesPage) &&
-                                "pointer-events-none underline",
+                                "underline",
                         )}
                     >
                         <CalendarCheck className="transition-transform group-hover:scale-110 group-focus:scale-110 group-active:scale-110" />{" "}
@@ -54,11 +60,16 @@ export function InstructorNavBar() {
                 </div>
                 <div className="flex grow">
                     <Link
-                        href={instructorRoomsPage}
+                        href={
+                            pathname.includes(instructorRoomsPage)
+                                ? instructorDashboardPage
+                                : instructorRoomsPage
+                        }
+                        tabIndex={shown ? 0 : -1}
                         className={clsx(
                             "group m-auto flex cursor-pointer flex-col items-center gap-2 text-xs decoration-2 underline-offset-4 sm:flex-row sm:gap-3 sm:text-base",
                             pathname.includes(instructorRoomsPage) &&
-                                "pointer-events-none underline",
+                                "underline",
                         )}
                     >
                         <DoorClosed className="transition-transform group-hover:scale-110 group-focus:scale-110 group-active:scale-110" />{" "}
@@ -68,6 +79,7 @@ export function InstructorNavBar() {
                 <div className="flex grow">
                     <Link
                         href={instructorLogoutPage}
+                        tabIndex={shown ? 0 : -1}
                         className="group m-auto flex cursor-pointer flex-col items-center gap-2 text-xs decoration-2 sm:flex-row sm:gap-3 sm:text-base"
                     >
                         <SquareArrowRightExit className="transition-transform group-hover:scale-110 group-focus:scale-110 group-active:scale-110" />{" "}
