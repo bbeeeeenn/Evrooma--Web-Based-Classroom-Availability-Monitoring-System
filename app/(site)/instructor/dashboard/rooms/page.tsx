@@ -8,6 +8,7 @@ import { connection } from "next/server";
 import { PopulatedPlainRoomDocument, Room } from "@/app/mongoDb/models/room";
 import { DoorOpen } from "lucide-react";
 import { ClassroomsSkeleton } from "@/app/(site)/admin/(dashboard)/rooms/page";
+import Loading from "@/app/(site)/loading";
 
 async function Filter() {
     await connection();
@@ -88,7 +89,7 @@ export default async function RoomsPage({
     return (
         <>
             <BackButton dest={instructorDashboardPage} />
-            <Suspense>
+            <Suspense fallback={<Loading />}>
                 <Filter key={newKey} />
             </Suspense>
             <div className="mt-5 space-y-4">

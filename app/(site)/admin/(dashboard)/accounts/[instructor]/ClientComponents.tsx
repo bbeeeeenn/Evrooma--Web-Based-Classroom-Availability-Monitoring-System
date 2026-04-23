@@ -359,7 +359,7 @@ export function ScheduleCard({
                     {`${endHour}:${endMinute < 10 ? "0" + endMinute : endMinute}${endMeridiem}`}
                 </p>
                 <p className="font-poppins font-semibold">
-                    <span className="text-yellow-primary">{building}-</span>
+                    <span className="text-yellow-primary">{building} - </span>
                     <span className="text-yellow-primary">{room}</span> -{" "}
                     {subject}
                 </p>

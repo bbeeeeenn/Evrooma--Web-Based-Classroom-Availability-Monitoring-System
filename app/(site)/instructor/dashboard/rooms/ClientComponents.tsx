@@ -93,7 +93,12 @@ export function FilterRooms({
             </div>
             <div className="text-text-primary/80 relative max-w-2xs min-w-40 grow font-semibold">
                 <button
-                    className="bg-green-secondary focus-visible:bg-green-tertiary active:bg-green-tertiary hover:bg-green-tertiary flex w-full cursor-pointer items-center gap-2 rounded-md p-3 text-xl shadow-md"
+                    className={clsx(
+                        "flex w-full cursor-pointer items-center gap-2 rounded-md p-3 text-xl shadow-md",
+                        filter.building
+                            ? "bg-yellow-primary focus-visible:bg-yellow-secondary active:bg-yellow-secondary hover:bg-yellow-secondary text-black"
+                            : "bg-green-secondary focus-visible:bg-green-tertiary active:bg-green-tertiary hover:bg-green-tertiary",
+                    )}
                     onClick={() => setShowBuildings((prev) => !prev)}
                 >
                     <span>
