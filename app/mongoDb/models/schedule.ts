@@ -68,7 +68,7 @@ const scheduleSchema = new Schema({
     },
     instructor: {
         type: SchemaTypes.ObjectId,
-        ref: "Instructor",
+        ref: "User",
         required: true,
     },
     subject: {
