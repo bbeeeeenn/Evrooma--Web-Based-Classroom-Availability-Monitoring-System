@@ -4,6 +4,18 @@ import { model, models, ObjectId, Schema, SchemaTypes } from "mongoose";
 import type { PopulatedPlainRoomDocument } from "./room";
 import type { PlainUserDocument } from "./user";
 
+export type PlainScheduleDocument = {
+    _id: ObjectId;
+    room: ObjectId;
+    instructor: ObjectId;
+    subject: string;
+    slot: {
+        dayOfWeek: number;
+        start: { hour: number; minute: number };
+        end: { hour: number; minute: number };
+    };
+};
+
 const timeSchema = new Schema(
     {
         hour: { type: Number, min: 0, max: 23, required: true },
@@ -15,16 +27,9 @@ const timeSchema = new Schema(
 const slotSchema = new Schema(
     {
         dayOfWeek: {
-            type: String,
-            enum: [
-                "Monday",
-                "Tuesday",
-                "Wednesday",
-                "Thursday",
-                "Friday",
-                "Saturday",
-                "Sunday",
-            ],
+            type: Number,
+            min: 0,
+            max: 6,
             required: true,
         },
         start: timeSchema,
@@ -32,25 +37,6 @@ const slotSchema = new Schema(
     },
     { _id: false },
 );
-
-export type PlainScheduleDocument = {
-    _id: ObjectId;
-    room: ObjectId;
-    instructor: ObjectId;
-    subject: string;
-    slot: {
-        dayOfWeek:
-            | "Monday"
-            | "Tuesday"
-            | "Wednesday"
-            | "Thursday"
-            | "Friday"
-            | "Saturday"
-            | "Sunday";
-        start: { hour: number; minute: number };
-        end: { hour: number; minute: number };
-    };
-};
 
 export type PopulatedPlainScheduleDocument = Omit<
     PlainScheduleDocument,

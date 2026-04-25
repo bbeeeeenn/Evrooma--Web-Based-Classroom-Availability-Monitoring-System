@@ -54,20 +54,22 @@ function hasTimeConflict(
     return existingStart < newEnd && existingEnd > newStart;
 }
 
-function dayLabel(day: DayOfWeek): string {
+function dayLabel(day: DayOfWeek): number {
     switch (day) {
         case "mon":
-            return "Monday";
+            return 1;
         case "tue":
-            return "Tuesday";
+            return 2;
         case "wed":
-            return "Wednesday";
+            return 3;
         case "thu":
-            return "Thursday";
+            return 4;
         case "fri":
-            return "Friday";
+            return 5;
         case "sat":
-            return "Saturday";
+            return 6;
+        default:
+            return 0;
     }
 }
 

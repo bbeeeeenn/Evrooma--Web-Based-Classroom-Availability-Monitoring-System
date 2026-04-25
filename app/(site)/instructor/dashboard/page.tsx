@@ -40,18 +40,9 @@ async function Profile() {
     );
 }
 
-const weekDays = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-];
 async function ScheduleToday() {
     await connection();
-    const day = weekDays[new Date().getDay()];
+    const day = new Date().getDay();
     let schedToday: (Omit<PopulatedPlainScheduleDocument, "instructor"> & {
         instructor: ObjectId;
     })[];
@@ -74,8 +65,7 @@ async function ScheduleToday() {
             </div>
         );
     }
-    return (
-        schedToday.length > 0 &&
+    return schedToday.length > 0 ? (
         schedToday.map((sched) => {
             const startMeridiem: "AM" | "PM" =
                 sched.slot.start.hour < 12 ? "AM" : "PM";
@@ -110,6 +100,10 @@ async function ScheduleToday() {
                 </div>
             );
         })
+    ) : (
+        <div className="text-text-primary bg-green-secondary mt-10 rounded-md p-10 text-center text-xl font-semibold shadow-md">
+            🎉 It's your day off.
+        </div>
     );
 }
 

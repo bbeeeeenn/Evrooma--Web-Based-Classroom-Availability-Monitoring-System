@@ -1,6 +1,6 @@
 import { CalendarDays, Plus } from "lucide-react";
 import { Divider } from "@/app/components/Divider";
-import { adminRoomsPage } from "@/constants";
+import { adminRoomsPage, DaysOfWeek } from "@/constants";
 import Link from "next/link";
 import { connectDB } from "@/app/mongoDb/mongodb";
 import {
@@ -10,7 +10,6 @@ import {
 import { ScheduleCard } from "./ClientComponents";
 import { ScheduleCardSkeleton } from "@/app/(site)/ClientComponents";
 import { Suspense } from "react";
-import { isValidObjectId } from "mongoose";
 
 async function GetSchedule({
     classroomId,
@@ -24,7 +23,7 @@ async function GetSchedule({
         await connectDB();
         schedules = await Schedule.find({
             room: classroomId,
-            "slot.dayOfWeek": day,
+            "slot.dayOfWeek": DaysOfWeek.indexOf(day),
         })
             .sort({ "slot.start.hour": 1, "slot.start.minute": 1 })
             .populate("instructor")
