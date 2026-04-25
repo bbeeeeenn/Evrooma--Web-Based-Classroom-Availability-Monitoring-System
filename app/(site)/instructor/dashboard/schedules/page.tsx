@@ -61,7 +61,7 @@ async function GetSchedule({ instructorId }: { instructorId: string }) {
                 return (
                     <React.Fragment key={sched._id.toString()}>
                         <Divide />
-                        <button className="text-text-primary focus-visible:bg-green-tertiary active:bg-green-tertiary hover:bg-green-tertiary border-yellow-primary bg-green-secondary mt-3 block w-full rounded-md border-l-4 px-5 py-3 text-start shadow-md">
+                        <button className="text-text-primary focus-visible:bg-green-tertiary active:bg-green-tertiary hover:bg-green-tertiary border-yellow-primary bg-green-secondary mt-5 block w-full rounded-md border-l-4 px-5 py-3 text-start shadow-md">
                             <p className="font-roboto-mono text-2xl font-bold">
                                 {`${startHour}:${startMinute < 10 ? "0" + startMinute : startMinute}${startMeridiem}`}{" "}
                                 -{" "}

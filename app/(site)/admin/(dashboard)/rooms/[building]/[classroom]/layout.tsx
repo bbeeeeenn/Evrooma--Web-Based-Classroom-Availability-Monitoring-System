@@ -9,12 +9,14 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { ClassroomCodeHeader, ClassroomSettings } from "./ClientComponents";
 import { Divider } from "@/app/components/Divider";
+import GenerateQrCode from "./GenerateQrCode";
 
 function Classroom({ buildingId }: { buildingId: string }) {
     return (
         <>
             <BackButton dest={`${adminRoomsPage}/${buildingId}`} />
             <ClassroomCodeHeader />
+            <GenerateQrCode />
             <Divider text="Settings" />
             <ClassroomSettings />
             <Divider />
@@ -38,7 +40,6 @@ async function Suspended({
         await connectDB();
         classroom = await Room.findOne({
             _id: classroomId,
-            building: buildingId,
         }).lean();
         if (!classroom) {
             redirect(`${adminRoomsPage}/${buildingId}`);

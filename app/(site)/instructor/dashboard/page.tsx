@@ -1,6 +1,6 @@
 import { GetInstructorAuthInfo } from "@/app/actions/InstructorAuthActions";
-import { instructorLoginPage } from "@/constants";
-import { BookText, Building2, DoorOpen, Settings2 } from "lucide-react";
+import { instructorLoginPage, instructorScanPage } from "@/constants";
+import { BookText, ScanLine, Settings2 } from "lucide-react";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import Loading from "../../loading";
@@ -48,7 +48,7 @@ async function ScheduleToday() {
     })[];
     try {
         const instructor = await GetInstructorAuthInfo();
-        if (!instructor) return <>asd</>;
+        if (!instructor) return null;
 
         await connectDB();
         schedToday = await Schedule.find({
@@ -66,40 +66,53 @@ async function ScheduleToday() {
         );
     }
     return schedToday.length > 0 ? (
-        schedToday.map((sched) => {
-            const startMeridiem: "AM" | "PM" =
-                sched.slot.start.hour < 12 ? "AM" : "PM";
-            const startHour =
-                sched.slot.start.hour % 12 === 0
-                    ? 12
-                    : sched.slot.start.hour % 12;
-            const startMinute = sched.slot.start.minute;
-            const endMeridiem: "AM" | "PM" =
-                sched.slot.start.hour < 12 ? "AM" : "PM";
-            const endHour =
-                sched.slot.end.hour % 12 === 0 ? 12 : sched.slot.end.hour % 12;
-            const endMinute = sched.slot.end.minute;
-            return (
-                <div
-                    key={sched._id.toString()}
-                    className="text-text-primary bg-green-secondary my-5 rounded-md p-4 shadow-md"
-                >
-                    <p className="font-poppins text-yellow-primary font-semibold">
-                        {sched.subject}
-                    </p>
-                    <p className="font-roboto-mono text-2xl font-semibold">
-                        {startHour}:{startMinute < 30 && "0"}
-                        {startMinute}
-                        {startMeridiem} - {endHour}:{endMinute < 30 && "0"}
-                        {endMinute}
-                        {endMeridiem}
-                    </p>
-                    <p className="font-poppins font-semibold">
-                        {sched.room.building.name} - {sched.room.code}
-                    </p>
-                </div>
-            );
-        })
+        <>
+            <Link
+                href={instructorScanPage}
+                className="text-text-primary bg-green-secondary border-green-tertiary focus-visible:bg-green-tertiary active:bg-green-secondary hover:bg-green-tertiary mb-3 hidden w-full items-center justify-center gap-2 rounded-md border-2 py-3 text-lg font-bold shadow-md sm:flex"
+            >
+                <span>
+                    <ScanLine />
+                </span>
+                <p className="">Scan Classroom</p>
+            </Link>
+            {schedToday.map((sched) => {
+                const startMeridiem: "AM" | "PM" =
+                    sched.slot.start.hour < 12 ? "AM" : "PM";
+                const startHour =
+                    sched.slot.start.hour % 12 === 0
+                        ? 12
+                        : sched.slot.start.hour % 12;
+                const startMinute = sched.slot.start.minute;
+                const endMeridiem: "AM" | "PM" =
+                    sched.slot.start.hour < 12 ? "AM" : "PM";
+                const endHour =
+                    sched.slot.end.hour % 12 === 0
+                        ? 12
+                        : sched.slot.end.hour % 12;
+                const endMinute = sched.slot.end.minute;
+                return (
+                    <div
+                        key={sched._id.toString()}
+                        className="text-text-primary bg-green-secondary my-5 rounded-md p-4 shadow-md"
+                    >
+                        <p className="font-poppins text-yellow-primary font-semibold">
+                            {sched.subject}
+                        </p>
+                        <p className="font-roboto-mono text-2xl font-semibold">
+                            {startHour}:{startMinute < 30 && "0"}
+                            {startMinute}
+                            {startMeridiem} - {endHour}:{endMinute < 30 && "0"}
+                            {endMinute}
+                            {endMeridiem}
+                        </p>
+                        <p className="font-poppins font-semibold">
+                            {sched.room.building.name} - {sched.room.code}
+                        </p>
+                    </div>
+                );
+            })}
+        </>
     ) : (
         <div className="text-text-primary bg-green-secondary mt-10 rounded-md p-10 text-center text-xl font-semibold shadow-md">
             🎉 It's your day off.
@@ -112,9 +125,7 @@ export default function InstructorPage() {
         <>
             <Suspense fallback={<Loading />}>
                 <Profile />
-            </Suspense>
-            <Divider text="Today's Schedule" />
-            <Suspense>
+                <Divider text="Today's Schedule" />
                 <ScheduleToday />
             </Suspense>
         </>

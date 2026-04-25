@@ -12,7 +12,11 @@ import {
 } from "@/app/contexts/ClassroomProvider";
 import { PlainScheduleDocument } from "@/app/mongoDb/models/schedule";
 import { PlainUserDocument } from "@/app/mongoDb/models/user";
-import { adminAccountsPage, adminRoomsPage } from "@/constants";
+import {
+    adminAccountsPage,
+    adminRoomsPage,
+    scanLandingPage,
+} from "@/constants";
 import clsx from "clsx";
 import {
     BookText,
@@ -21,13 +25,16 @@ import {
     LinkIcon,
     LoaderCircle,
     Pencil,
+    QrCode,
     Trash2,
     X,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useActionState, useEffect, useRef, useState } from "react";
+import { MouseEvent, useActionState, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
+import QRGenerator from "qrcode";
+import Image from "next/image";
 
 export function ClassroomCodeHeader() {
     const { classroomCode } = useClassroomInfo();
@@ -484,7 +491,7 @@ export function ScheduleCard({
                 </div>
             </dialog>
             <button
-                className="text-text-primary focus-visible:bg-green-tertiary active:bg-green-tertiary hover:bg-green-tertiary border-yellow-primary bg-green-secondary mt-3 block w-full rounded-md border-l-4 px-5 py-3 text-start shadow-md"
+                className="text-text-primary focus-visible:bg-green-tertiary active:bg-green-tertiary hover:bg-green-tertiary border-yellow-primary bg-green-secondary mt-5 block w-full rounded-md border-l-4 px-5 py-3 text-start shadow-md"
                 onClick={() => dialog.current?.showModal()}
             >
                 <p className="font-roboto-mono text-2xl font-bold">

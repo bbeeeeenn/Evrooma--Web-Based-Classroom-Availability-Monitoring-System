@@ -97,7 +97,7 @@ export default function AddBuilding() {
                         <button
                             type="button"
                             className={clsx(
-                                "bg-yellow-primary hover:bg-yellow-secondary active:bg-yellow-secondary focus-visible:bg-yellow-secondary mt-5 flex cursor-pointer items-center justify-center gap-1 rounded-md px-3 py-2 text-black",
+                                "bg-yellow-primary hover:bg-yellow-secondary active:bg-yellow-secondary focus-visible:bg-yellow-secondary mt-5 flex cursor-pointer items-center justify-center gap-1 rounded-md px-3 py-2 text-black shadow-md",
                             )}
                             onClick={() => setShowModal(false)}
                             disabled={!showModal}
@@ -107,7 +107,7 @@ export default function AddBuilding() {
                         <button
                             type="submit"
                             className={clsx(
-                                "bg-yellow-primary hover:bg-yellow-secondary active:bg-yellow-secondary focus-visible:bg-yellow-secondary mt-5 flex grow cursor-pointer items-center justify-center gap-1 rounded-md px-3 py-2 text-black",
+                                "bg-yellow-primary hover:bg-yellow-secondary active:bg-yellow-secondary focus-visible:bg-yellow-secondary mt-5 flex grow cursor-pointer items-center justify-center gap-1 rounded-md px-3 py-2 text-black shadow-md",
                             )}
                             disabled={!showModal || isPending}
                         >

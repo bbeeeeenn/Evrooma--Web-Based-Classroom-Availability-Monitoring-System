@@ -1,4 +1,5 @@
 export const homePage = "/";
+export const scanLandingPage = "/scan";
 
 export const adminLoginPage = "/admin";
 export const adminLoginForgotPage = "/admin/forgot";
@@ -11,6 +12,7 @@ export const adminLogoutPage = "/admin/logout";
 export const instructorLoginPage = "/instructor";
 export const instructorLoginForgotPage = "/instructor/forgot";
 export const instructorDashboardPage = "/instructor/dashboard";
+export const instructorScanPage = "/instructor/dashboard/scan";
 export const instructorSchedulesPage = "/instructor/dashboard/schedules";
 export const instructorRoomsPage = "/instructor/dashboard/rooms";
 export const instructorLogoutPage = "/instructor/logout";

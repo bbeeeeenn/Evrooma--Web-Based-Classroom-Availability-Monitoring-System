@@ -8,12 +8,15 @@ import {
     instructorDashboardPage,
     instructorLogoutPage,
     instructorRoomsPage,
+    instructorScanPage,
     instructorSchedulesPage,
 } from "@/constants";
 import {
     CalendarCheck,
     ChevronUp,
     DoorClosed,
+    ScanLine,
+    ScanQrCode,
     SquareArrowRightExit,
 } from "lucide-react";
 
@@ -22,12 +25,26 @@ export function InstructorNavBar() {
     const pathname = usePathname();
 
     return (
-        <nav    
+        <nav
             className={clsx(
                 "bg-green-quarternary border-yellow-secondary fixed inset-x-0 bottom-0 z-50 m-auto flex justify-evenly border-t-2 pt-3 pb-2 font-bold tracking-wide text-white shadow-md transition-transform sm:inset-x-1/12 sm:bottom-4 sm:max-w-xl sm:rounded-xl sm:border-2 sm:py-4",
                 !shown && "translate-y-full sm:translate-y-[calc(100%+1rem)]",
             )}
         >
+            {!pathname.includes(instructorScanPage) && (
+                <Link
+                    href={instructorScanPage}
+                    className={clsx(
+                        "absolute right-5 bottom-[calc(100%+1.25rem)] block w-fit cursor-pointer rounded-full border-3 p-3 sm:hidden",
+                        "text-text-primary/95 bg-green-tertiary border-green-secondary",
+                        "hover:bg-yellow-primary hover:border-yellow-primary hover:text-black",
+                        "active:bg-yellow-primary active:border-yellow-primary active:text-black",
+                        "focus-visible:bg-yellow-primary focus-visible:border-yellow-primary focus-visible:text-black",
+                    )}
+                >
+                    <ScanLine size={30} />
+                </Link>
+            )}
             <button
                 className={clsx(
                     "absolute bottom-full mb-1 cursor-pointer rounded-full border-0 p-1 backdrop-blur-xs transition-transform",
@@ -37,7 +54,6 @@ export function InstructorNavBar() {
             >
                 <ChevronUp size={30} />
             </button>
-
             <div className="flex grow">
                 <Link
                     href={

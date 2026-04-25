@@ -268,7 +268,7 @@ function RemoveBuildingComponent({
                     <button
                         type="button"
                         className={clsx(
-                            "bg-yellow-primary focus:bg-yellow-secondary active:bg-yellow-secondary hover:bg-yellow-secondary mt-5 flex cursor-pointer items-center justify-center gap-1 rounded-md px-3 py-2 text-black",
+                            "bg-yellow-primary focus:bg-yellow-secondary active:bg-yellow-secondary hover:bg-yellow-secondary mt-5 flex cursor-pointer items-center justify-center gap-1 rounded-md px-3 py-2 text-black shadow-md",
                         )}
                         onClick={() => closeModal()}
                         disabled={!showModal}
@@ -279,7 +279,7 @@ function RemoveBuildingComponent({
                         type="submit"
                         disabled={!showModal || isPending}
                         className={clsx(
-                            "text-black-100 bg-yellow-primary focus:bg-yellow-secondary active:bg-yellow-secondary hover:bg-yellow-secondary mt-5 flex grow cursor-pointer items-center justify-center gap-1 rounded-md px-3 py-2 text-black",
+                            "text-black-100 bg-yellow-primary focus:bg-yellow-secondary active:bg-yellow-secondary hover:bg-yellow-secondary mt-5 flex grow cursor-pointer items-center justify-center gap-1 rounded-md px-3 py-2 text-black shadow-md",
                         )}
                     >
                         {isPending ? (
@@ -446,7 +446,7 @@ export function AddClassroomComponent() {
                         <button
                             type="button"
                             className={clsx(
-                                "bg-yellow-primary hover:bg-yellow-secondary active:bg-yellow-secondary focus-visible:bg-yellow-secondary mt-5 flex cursor-pointer items-center justify-center gap-1 rounded-md px-3 py-2 text-black",
+                                "bg-yellow-primary hover:bg-yellow-secondary active:bg-yellow-secondary focus-visible:bg-yellow-secondary mt-5 flex cursor-pointer items-center justify-center gap-1 rounded-md px-3 py-2 text-black shadow-md",
                             )}
                             onClick={() => setShowModal(false)}
                             disabled={!showModal}
@@ -457,7 +457,7 @@ export function AddClassroomComponent() {
                             type="submit"
                             disabled={!showModal || isPending}
                             className={clsx(
-                                "bg-yellow-primary hover:bg-yellow-secondary active:bg-yellow-secondary focus-visible:bg-yellow-secondary mt-5 flex grow items-center justify-center gap-1 rounded-md px-3 py-2 text-black",
+                                "bg-yellow-primary hover:bg-yellow-secondary active:bg-yellow-secondary focus-visible:bg-yellow-secondary mt-5 flex grow items-center justify-center gap-1 rounded-md px-3 py-2 text-black shadow-md",
                                 !isPending &&
                                     code.length !== 0 &&
                                     "cursor-pointer",
