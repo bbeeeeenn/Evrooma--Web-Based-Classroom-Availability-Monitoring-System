@@ -37,18 +37,18 @@ export default function GenerateQrCode() {
             );
 
             // draw QR onto final canvas
-            ctx.drawImage(qrCanvas, 50, 40);
+            ctx.drawImage(qrCanvas, 50, 50);
 
             // text
             ctx.fillStyle = "black";
             ctx.textAlign = "center";
             ctx.font = "25px Poppins";
-            ctx.fillText("EVROOMA", 300, 590);
+            ctx.fillText("EVROOMA", 300, 600);
             ctx.font = "600 40px Poppins";
             ctx.fillText(
                 `${building.buildingName} - ${classroom.classroomCode}`,
                 300,
-                650,
+                660,
             );
 
             setData(finalCanvas.toDataURL("image/png"));

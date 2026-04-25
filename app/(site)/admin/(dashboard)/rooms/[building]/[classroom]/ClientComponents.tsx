@@ -10,13 +10,7 @@ import {
     useClassroomInfo,
     useUpdateClassroomName,
 } from "@/app/contexts/ClassroomProvider";
-import { PlainScheduleDocument } from "@/app/mongoDb/models/schedule";
-import { PlainUserDocument } from "@/app/mongoDb/models/user";
-import {
-    adminAccountsPage,
-    adminRoomsPage,
-    scanLandingPage,
-} from "@/constants";
+import { adminAccountsPage, adminRoomsPage } from "@/constants";
 import clsx from "clsx";
 import {
     BookText,
@@ -25,16 +19,13 @@ import {
     LinkIcon,
     LoaderCircle,
     Pencil,
-    QrCode,
     Trash2,
     X,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { MouseEvent, useActionState, useEffect, useRef, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
-import QRGenerator from "qrcode";
-import Image from "next/image";
 
 export function ClassroomCodeHeader() {
     const { classroomCode } = useClassroomInfo();
