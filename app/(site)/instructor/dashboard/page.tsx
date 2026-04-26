@@ -1,6 +1,13 @@
 import { GetInstructorAuthInfo } from "@/app/actions/InstructorAuthActions";
 import { instructorLoginPage, instructorScanPage } from "@/constants";
-import { BookText, ScanLine, Settings2 } from "lucide-react";
+import {
+    BookText,
+    CircleCheckBig,
+    ScanLine,
+    Settings2,
+    Square,
+    SquareCheckBig,
+} from "lucide-react";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import Loading from "../../loading";
@@ -13,6 +20,10 @@ import {
 import { connection } from "next/server";
 import { ObjectId } from "mongoose";
 import { connectDB } from "@/app/mongoDb/mongodb";
+import { getAttendanceDateKey } from "@/app/actions/ScheduleActions";
+import { AttendanceLog } from "@/app/mongoDb/models/log";
+import clsx from "clsx";
+import { slotToMinutes } from "@/app/lib/utils";
 
 async function Profile() {
     const instructor = await GetInstructorAuthInfo();
@@ -46,8 +57,9 @@ async function ScheduleToday() {
     let schedToday: (Omit<PopulatedPlainScheduleDocument, "instructor"> & {
         instructor: ObjectId;
     })[];
+    let instructor: PlainUserDocument | null;
     try {
-        const instructor = await GetInstructorAuthInfo();
+        instructor = await GetInstructorAuthInfo();
         if (!instructor) return null;
 
         await connectDB();
@@ -69,14 +81,14 @@ async function ScheduleToday() {
         <>
             <Link
                 href={instructorScanPage}
-                className="text-text-primary bg-green-secondary border-green-tertiary focus-visible:bg-green-tertiary active:bg-green-secondary hover:bg-green-tertiary mb-3 hidden w-full items-center justify-center gap-2 rounded-md border-2 py-3 text-lg font-bold shadow-md sm:flex"
+                className="text-text-primary bg-green-secondary focus-visible:bg-yellow-primary active:bg-yellow-primary hover:bg-yellow-primary m-auto mb-3 hidden w-full items-center justify-center gap-2 rounded-md py-3 text-lg font-bold shadow-md transition-colors hover:text-black focus-visible:text-black active:text-black sm:flex"
             >
                 <span>
                     <ScanLine />
                 </span>
                 <p className="">Scan Classroom</p>
             </Link>
-            {schedToday.map((sched) => {
+            {schedToday.map(async (sched) => {
                 const startMeridiem: "AM" | "PM" =
                     sched.slot.start.hour < 12 ? "AM" : "PM";
                 const startHour =
@@ -91,10 +103,23 @@ async function ScheduleToday() {
                         ? 12
                         : sched.slot.end.hour % 12;
                 const endMinute = sched.slot.end.minute;
+
+                const now = new Date();
+                const dateKey = await getAttendanceDateKey(now);
+                const done = await AttendanceLog.findOne({
+                    schedule: sched._id,
+                    user: instructor._id,
+                    attendanceDate: dateKey,
+                });
+
                 return (
                     <div
                         key={sched._id.toString()}
-                        className="text-text-primary bg-green-secondary my-5 rounded-md p-4 shadow-md"
+                        className={clsx(
+                            "text-text-primary bg-green-secondary relative my-5 overflow-hidden rounded-md p-4 shadow-md",
+                            slotToMinutes(sched.slot.end) <
+                                slotToMinutes(now) && "opacity-60",
+                        )}
                     >
                         <p className="font-poppins text-yellow-primary font-semibold">
                             {sched.subject}
@@ -109,6 +134,13 @@ async function ScheduleToday() {
                         <p className="font-poppins font-semibold">
                             {sched.room.building.name} - {sched.room.code}
                         </p>
+                        <div className="absolute top-3 right-3 my-auto h-fit w-fit rounded-md p-1">
+                            {done ? (
+                                <SquareCheckBig size={30} />
+                            ) : (
+                                <Square size={30} />
+                            )}
+                        </div>
                     </div>
                 );
             })}

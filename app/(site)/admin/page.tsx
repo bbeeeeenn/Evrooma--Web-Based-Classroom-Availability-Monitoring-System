@@ -6,8 +6,8 @@ import Loading from "../loading";
 import { adminRoomsPage } from "@/constants";
 
 async function Login({ redirectPath }: { redirectPath?: string }) {
-    const user = await AuthenticateAdmin();
-    if (user) {
+    const admin = await AuthenticateAdmin();
+    if (admin) {
         redirect(redirectPath || adminRoomsPage);
     }
     return (

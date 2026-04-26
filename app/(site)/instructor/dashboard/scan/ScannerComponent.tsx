@@ -44,7 +44,7 @@ export function QRScanner() {
                     <Scanner
                         classNames={{
                             container: clsx(
-                                "rounded-xl shadow-md max-w-md m-auto",
+                                "rounded-xl shadow-md max-w-md m-auto bg-green-secondary",
                             ),
                         }}
                         onScan={handleScan}

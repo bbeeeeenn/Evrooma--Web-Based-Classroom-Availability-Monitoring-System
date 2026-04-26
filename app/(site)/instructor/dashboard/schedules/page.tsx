@@ -18,7 +18,11 @@ async function GetSchedule({ instructorId }: { instructorId: string }) {
         schedules = await Schedule.find({
             instructor: instructorId,
         })
-            .sort({ "slot.start.hour": 1, "slot.start.minute": 1 })
+            .sort({
+                "slot.dayOfWeek": 1,
+                "slot.start.hour": 1,
+                "slot.start.minute": 1,
+            })
             .populate({ path: "room", populate: "building" })
             .lean();
     } catch (e) {
