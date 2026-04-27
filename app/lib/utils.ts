@@ -1,6 +1,3 @@
-function slotToMinutes(time: { hour: number; minute: number }): number;
-function slotToMinutes(date: Date): number;
-
 export function slotToMinutes(
     value: { hour: number; minute: number } | Date,
 ): number {
