@@ -24,7 +24,7 @@ import type {
 } from "../(site)/admin/(dashboard)/rooms/[building]/[classroom]/create-schedule/NewScheduleProvider";
 import { GetInstructorAuthInfo } from "./InstructorAuthActions";
 import { AttendanceLog } from "../mongoDb/models/log";
-import { getAttendanceDateKey } from "../lib/utils";
+import { formatPH, getAttendanceDateKey } from "../lib/utils";
 
 export type NewScheduleInput = Omit<NewSchedule, "day"> & {
     day: DayOfWeek[];
@@ -326,7 +326,7 @@ export async function ProcessInstructorSchedule(
 
     try {
         await connectDB();
-        const now = new Date();
+        const now = new Date(formatPH());
         const currentDay = now.getDay();
         const currentHour = now.getHours();
         const currentMinute = now.getMinutes();

@@ -52,7 +52,8 @@ async function Profile() {
 
 async function ScheduleToday() {
     await connection();
-    const day = new Date().getDay();
+    const now = new Date(formatPH());
+    const day = now.getDay();
     let schedToday: (Omit<PopulatedPlainScheduleDocument, "instructor"> & {
         instructor: ObjectId;
     })[];
@@ -103,7 +104,6 @@ async function ScheduleToday() {
                         : sched.slot.end.hour % 12;
                 const endMinute = sched.slot.end.minute;
 
-                const now = new Date(formatPH());
                 const dateKey = getAttendanceDateKey(now);
                 const done = await AttendanceLog.findOne({
                     schedule: sched._id,
