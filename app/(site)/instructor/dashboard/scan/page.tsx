@@ -99,7 +99,7 @@ export default function Page({
 }) {
     return (
         <>
-            <BackButton dest={instructorDashboardPage} />
+            <BackButton dest={instructorDashboardPage} text="Home" />
             <Suspense fallback={<Loading />}>
                 <Suspended searchParams={searchParams} />
             </Suspense>

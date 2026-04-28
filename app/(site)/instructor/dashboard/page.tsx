@@ -17,12 +17,15 @@ import {
     Schedule,
 } from "@/app/mongoDb/models/schedule";
 import { connection } from "next/server";
-import { ObjectId } from "mongoose";
 import { connectDB } from "@/app/mongoDb/mongodb";
-import { AttendanceLog } from "@/app/mongoDb/models/log";
 import { type PlainUserDocument } from "@/app/mongoDb/models/user";
 import clsx from "clsx";
-import { formatPH, getAttendanceDateKey, slotToMinutes } from "@/app/lib/utils";
+import {
+    formatPH,
+    GetTimeComponentsFromScheduleDocument,
+    IsInUseSchedule,
+    slotToMinutes,
+} from "@/app/lib/utils";
 
 async function Profile() {
     const instructor = await GetInstructorAuthInfo();
@@ -54,9 +57,7 @@ async function ScheduleToday() {
     await connection();
     const now = new Date(formatPH());
     const day = now.getDay();
-    let schedToday: (Omit<PopulatedPlainScheduleDocument, "instructor"> & {
-        instructor: ObjectId;
-    })[];
+    let schedToday: PopulatedPlainScheduleDocument[];
     let instructor: PlainUserDocument | null;
     try {
         instructor = await GetInstructorAuthInfo();
@@ -89,27 +90,16 @@ async function ScheduleToday() {
                 <p className="">Scan Classroom</p>
             </Link>
             {schedToday.map(async (sched) => {
-                const startMeridiem: "AM" | "PM" =
-                    sched.slot.start.hour < 12 ? "AM" : "PM";
-                const startHour =
-                    sched.slot.start.hour % 12 === 0
-                        ? 12
-                        : sched.slot.start.hour % 12;
-                const startMinute = sched.slot.start.minute;
-                const endMeridiem: "AM" | "PM" =
-                    sched.slot.start.hour < 12 ? "AM" : "PM";
-                const endHour =
-                    sched.slot.end.hour % 12 === 0
-                        ? 12
-                        : sched.slot.end.hour % 12;
-                const endMinute = sched.slot.end.minute;
+                const {
+                    startHour,
+                    startMinute,
+                    startMeridiem,
+                    endHour,
+                    endMinute,
+                    endMeridiem,
+                } = GetTimeComponentsFromScheduleDocument(sched);
 
-                const dateKey = getAttendanceDateKey(now);
-                const done = await AttendanceLog.findOne({
-                    schedule: sched._id,
-                    user: instructor._id,
-                    attendanceDate: dateKey,
-                });
+                const done = await IsInUseSchedule(sched);
 
                 return (
                     <div
@@ -124,10 +114,8 @@ async function ScheduleToday() {
                             {sched.subject}
                         </p>
                         <p className="font-roboto-mono text-2xl font-semibold">
-                            {startHour}:{startMinute < 30 && "0"}
-                            {startMinute}
-                            {startMeridiem} - {endHour}:{endMinute < 30 && "0"}
-                            {endMinute}
+                            {startHour}:{startMinute}
+                            {startMeridiem} - {endHour}:{endMinute}
                             {endMeridiem}
                         </p>
                         <p className="font-poppins font-semibold">

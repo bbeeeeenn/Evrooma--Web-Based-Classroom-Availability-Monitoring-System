@@ -3,6 +3,7 @@
 import {
     adminAccountsPage,
     adminRoomsPage,
+    DaysOfWeek,
     instructorSchedulesPage,
 } from "@/constants";
 import { connectDB } from "@/app/mongoDb/mongodb";
@@ -213,7 +214,7 @@ export async function CreateSchedule(
                             : matchesRoom
                               ? "classroom"
                               : "instructor"
-                    } schedule on ${dayOfWeek}.`,
+                    } schedule on ${DaysOfWeek[dayOfWeek]}.`,
                 };
             }
         }

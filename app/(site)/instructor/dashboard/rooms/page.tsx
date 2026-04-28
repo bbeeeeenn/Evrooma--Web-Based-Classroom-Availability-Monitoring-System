@@ -13,7 +13,11 @@ import clsx from "clsx";
 import Link from "next/link";
 import { isValidObjectId } from "mongoose";
 import { Schedule } from "@/app/mongoDb/models/schedule";
-import { formatPH, getAttendanceDateKey } from "@/app/lib/utils";
+import {
+    formatPH,
+    GetActiveSchedule,
+    getAttendanceDateKey,
+} from "@/app/lib/utils";
 import { AttendanceLog } from "@/app/mongoDb/models/log";
 import ErrorFallback from "@/app/components/ErrorFallback";
 
@@ -39,66 +43,28 @@ async function Filter() {
 async function ClassroomAvailability({ roomId }: { roomId: string }) {
     if (!isValidObjectId(roomId)) return null;
     const now = new Date(formatPH());
-    try {
-        const activeSchedule = await Schedule.findOne({
-            room: roomId,
-            "slot.dayOfWeek": now.getDay(),
-            $expr: {
-                $and: [
-                    {
-                        $lte: [
-                            {
-                                $add: [
-                                    {
-                                        $multiply: ["$slot.start.hour", 60],
-                                    },
-                                    "$slot.start.minute",
-                                ],
-                            },
-                            now.getHours() * 60 + now.getMinutes(),
-                        ],
-                    },
-                    {
-                        $gt: [
-                            {
-                                $add: [
-                                    { $multiply: ["$slot.end.hour", 60] },
-                                    "$slot.end.minute",
-                                ],
-                            },
-                            now.getHours() * 60 + now.getMinutes(),
-                        ],
-                    },
-                ],
-            },
-        }).lean();
-        if (!activeSchedule) {
-            return (
-                <>
-                    <span className="size-3 rounded-full bg-green-400"></span>
-                    Available
-                </>
-            );
-        }
-        const markedInUsed = await AttendanceLog.findOne({
-            schedule: activeSchedule._id,
-            user: activeSchedule.instructor,
-            attendanceDate: getAttendanceDateKey(now),
-        }).lean();
-        if (!markedInUsed) {
-            return (
-                <>
-                    <span className="size-3 rounded-full bg-green-400"></span>
-                    Available
-                </>
-            );
-        }
-    } catch (e) {
-        console.error(e);
+
+    const activeSchedule = await GetActiveSchedule(roomId);
+    if (!activeSchedule)
         return (
-            <div className="text-text-primary font-semibold">
-                {e instanceof Error ? e.message : "Unexpected Error"}
-            </div>
+            <>
+                <span className="size-3 rounded-full bg-green-400"></span>
+                Available
+            </>
+        );
+
+    const markedInUsed = await AttendanceLog.findOne({
+        schedule: activeSchedule._id,
+        user: activeSchedule.instructor,
+        attendanceDate: getAttendanceDateKey(now),
+    }).lean();
+
+    if (!markedInUsed) {
+        return (
+            <>
+                <span className="size-3 rounded-full bg-green-400"></span>
+                Available
+            </>
         );
     }
 
@@ -175,7 +141,7 @@ export default async function RoomsPage({
 
     return (
         <>
-            <BackButton dest={instructorDashboardPage} />
+            <BackButton dest={instructorDashboardPage} text="Home" />
             <Suspense fallback={<Loading />}>
                 <Filter key={newKey} />
             </Suspense>
