@@ -1,5 +1,6 @@
 import { GetStudentAuthInfo } from "@/app/actions/StudentAuthActions";
 import {
+    studentDashboardPage,
     studentLoginPage,
     studentLogoutPage,
     studentLogsPage,
@@ -10,7 +11,7 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import Loading from "../../loading";
 import { CoolSidebar } from "@/app/components/CoolSidebar";
-import { DoorClosed, LogOut, Logs } from "lucide-react";
+import { DoorClosed, Home, LogOut, Logs } from "lucide-react";
 
 async function Authenticate({
     children,
@@ -27,6 +28,11 @@ async function Authenticate({
     return (
         <CoolSidebar
             items={[
+                {
+                    icon: <Home size={30} />,
+                    text: "Dashboard",
+                    href: studentDashboardPage,
+                },
                 {
                     icon: <DoorClosed size={30} />,
                     text: "Rooms",
