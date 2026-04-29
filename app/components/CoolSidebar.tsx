@@ -83,7 +83,7 @@ export function CoolSidebar({
                             href={item.href}
                             className={clsx(
                                 "hover:bg-green-quinary active:bg-green-quinary focus-visible:bg-green-quinary flex h-fit w-full items-center gap-4 px-7 py-5 text-2xl font-semibold",
-                                pathname === item.href &&
+                                pathname.includes(item.href) &&
                                     "bg-yellow-primary pointer-events-none text-black",
                                 item.text === "Logout" && "mt-auto",
                             )}
