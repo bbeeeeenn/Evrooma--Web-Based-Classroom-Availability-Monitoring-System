@@ -1,5 +1,5 @@
 "use client";
-import Loading from "../../loading";
+import Loading from "../../../loading";
 import { useRouter } from "next/navigation";
 import { instructorLoginPage } from "@/constants";
 import { LogoutInstructor } from "@/app/actions/InstructorAuthActions";

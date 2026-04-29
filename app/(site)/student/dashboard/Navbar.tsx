@@ -1,36 +1,31 @@
 "use client";
-
-import clsx from "clsx";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
 import {
-    instructorDashboardPage,
-    instructorLogoutPage,
-    instructorLogsPage,
-    instructorRoomsPage,
-    instructorScanPage,
-    instructorSchedulesPage,
+    studentDashboardPage,
+    studentLogoutPage,
+    studentLogsPage,
+    studentRoomsPage,
+    studentScanPage,
 } from "@/constants";
+import clsx from "clsx";
 import {
-    CalendarCheck,
     ChevronUp,
     DoorClosed,
+    Logs,
     ScanLine,
     SquareArrowRightExit,
 } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 
-export function InstructorNavBar() {
+export function StudentNavbar() {
     const [shown, setShown] = useState(true);
     const pathname = usePathname();
 
     return (
-        [
-            instructorDashboardPage,
-            instructorRoomsPage,
-            instructorSchedulesPage,
-            instructorLogsPage,
-        ].includes(pathname) && (
+        [studentDashboardPage, studentRoomsPage, studentLogsPage].includes(
+            pathname,
+        ) && (
             <nav
                 className={clsx(
                     "bg-green-quarternary border-yellow-secondary fixed inset-x-0 bottom-0 z-50 m-auto flex justify-evenly border-t-2 pt-3 pb-2 font-bold tracking-wide text-white shadow-md transition-transform sm:inset-x-1/12 sm:bottom-4 sm:max-w-xl sm:rounded-xl sm:border-2 sm:py-4",
@@ -38,9 +33,9 @@ export function InstructorNavBar() {
                         "translate-y-full sm:translate-y-[calc(100%+1rem)]",
                 )}
             >
-                {!pathname.includes(instructorScanPage) && (
+                {!pathname.includes(studentScanPage) && (
                     <Link
-                        href={instructorScanPage}
+                        href={studentScanPage}
                         className={clsx(
                             "absolute right-5 bottom-[calc(100%+1.25rem)] block w-fit cursor-pointer rounded-full border-3 p-3 sm:hidden",
                             "text-text-primary/95 bg-green-tertiary border-green-secondary",
@@ -64,15 +59,14 @@ export function InstructorNavBar() {
                 <div className="flex grow">
                     <Link
                         href={
-                            pathname.includes(instructorRoomsPage)
-                                ? instructorDashboardPage
-                                : instructorRoomsPage
+                            pathname.includes(studentRoomsPage)
+                                ? studentDashboardPage
+                                : studentRoomsPage
                         }
                         tabIndex={shown ? 0 : -1}
                         className={clsx(
                             "group m-auto flex cursor-pointer flex-col items-center gap-2 text-xs decoration-2 underline-offset-4 sm:flex-row sm:gap-3 sm:text-base",
-                            pathname.includes(instructorRoomsPage) &&
-                                "underline",
+                            pathname.includes(studentRoomsPage) && "underline",
                         )}
                     >
                         <DoorClosed className="transition-transform group-hover:scale-110 group-focus:scale-110 group-active:scale-110" />{" "}
@@ -82,24 +76,23 @@ export function InstructorNavBar() {
                 <div className="flex grow">
                     <Link
                         href={
-                            pathname.includes(instructorSchedulesPage)
-                                ? instructorDashboardPage
-                                : instructorSchedulesPage
+                            pathname.includes(studentLogsPage)
+                                ? studentDashboardPage
+                                : studentLogsPage
                         }
                         tabIndex={shown ? 0 : -1}
                         className={clsx(
                             "group m-auto flex cursor-pointer flex-col items-center gap-2 text-xs decoration-2 underline-offset-4 sm:flex-row sm:gap-3 sm:text-base",
-                            pathname.includes(instructorSchedulesPage) &&
-                                "underline",
+                            pathname.includes(studentLogsPage) && "underline",
                         )}
                     >
-                        <CalendarCheck className="transition-transform group-hover:scale-110 group-focus:scale-110 group-active:scale-110" />{" "}
-                        My Schedules
+                        <Logs className="transition-transform group-hover:scale-110 group-focus:scale-110 group-active:scale-110" />{" "}
+                        My Logs
                     </Link>
                 </div>
                 <div className="flex grow">
                     <Link
-                        href={instructorLogoutPage}
+                        href={studentLogoutPage}
                         tabIndex={shown ? 0 : -1}
                         className="group m-auto flex cursor-pointer flex-col items-center gap-2 text-xs decoration-2 sm:flex-row sm:gap-3 sm:text-base"
                     >

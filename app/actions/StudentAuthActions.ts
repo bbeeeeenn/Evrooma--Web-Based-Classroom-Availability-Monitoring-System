@@ -7,8 +7,8 @@ import { cookies } from "next/headers";
 import { compare } from "@/app/lib/bcrypt";
 import { INSTRUCTOR_SESSION_SECRET } from "@/constants";
 
-const instructorSessionOptions: SessionOptions = {
-    cookieName: "instructorSession",
+const studentSessionOptions: SessionOptions = {
+    cookieName: "studentSession",
     password: INSTRUCTOR_SESSION_SECRET,
     cookieOptions: {
         httpOnly: true,
@@ -18,7 +18,7 @@ const instructorSessionOptions: SessionOptions = {
     ttl: 60 * 60 * 24 * 7,
 };
 
-export async function InstructorAuth(
+export async function StudentAuth(
     formData: FormData,
 ): Promise<LoginFormActionResponse> {
     const email = (formData.get("email") as string).trim();
@@ -29,7 +29,7 @@ export async function InstructorAuth(
         await connectDB();
 
         const user = await User.findOne({
-            type: "instructor",
+            type: "student",
             email,
         }).lean<PlainUserDocument>();
 
@@ -45,9 +45,9 @@ export async function InstructorAuth(
         const session = await getIronSession<UserAuthSessionData>(
             await cookies(),
             {
-                ...instructorSessionOptions,
+                ...studentSessionOptions,
                 cookieOptions: {
-                    ...instructorSessionOptions.cookieOptions,
+                    ...studentSessionOptions.cookieOptions,
                     maxAge: rememberme ? 60 * 60 * 24 * 7 : undefined,
                 },
             },
@@ -61,7 +61,7 @@ export async function InstructorAuth(
             formData: new FormData(),
         };
     } catch (e) {
-        console.error("[InstructorAuth]", e);
+        console.error("[StudentAuth]", e);
         return {
             status: "error",
             message: "Something went wrong. Please try again later.",
@@ -71,28 +71,28 @@ export async function InstructorAuth(
     }
 }
 
-export async function GetInstructorAuthInfo(): Promise<PlainUserDocument | null> {
+export async function GetStudentAuthInfo(): Promise<PlainUserDocument | null> {
     try {
         const session = await getIronSession<UserAuthSessionData>(
             await cookies(),
-            instructorSessionOptions,
+            studentSessionOptions,
         );
         await connectDB();
-        const instructor = await User.findOne({
+        const student = await User.findOne({
             _id: session.data?.userId,
-            type: "instructor",
+            type: "student",
         }).lean<PlainUserDocument>({ virtuals: true });
-        return instructor;
+        return student;
     } catch (e) {
         console.error(e);
         return null;
     }
 }
 
-export async function LogoutInstructor(): Promise<void> {
+export async function LogoutStudent(): Promise<void> {
     const session = await getIronSession(
         await cookies(),
-        instructorSessionOptions,
+        studentSessionOptions,
     );
     session.destroy();
 }

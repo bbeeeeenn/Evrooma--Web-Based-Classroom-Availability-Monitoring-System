@@ -1,5 +1,9 @@
 "use client";
-import { adminLoginPage, instructorLoginPage } from "@/constants";
+import {
+    adminLoginPage,
+    instructorLoginPage,
+    studentLoginPage,
+} from "@/constants";
 import {
     ArrowDown,
     BookText,
@@ -79,9 +83,12 @@ export default function Home() {
                             OR
                         </p>
                     </div>
-                    <button className="bg-green-secondary font-inria-sans focus-visible:bg-green-tertiary active:bg-green-tertiary hover:bg-green-tertiary flex cursor-pointer items-center justify-center gap-2 rounded-md py-2 text-lg shadow-md sm:text-xl">
+                    <Link
+                        href={studentLoginPage}
+                        className="bg-green-secondary font-inria-sans focus-visible:bg-green-tertiary active:bg-green-tertiary hover:bg-green-tertiary flex cursor-pointer items-center justify-center gap-2 rounded-md py-2 text-lg shadow-md sm:text-xl"
+                    >
                         <GraduationCap /> Student
-                    </button>
+                    </Link>
                 </div>
             </section>
             <footer className="font-inter bg-yellow-primary snap-start py-1 text-center text-xs text-black">

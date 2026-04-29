@@ -12,6 +12,9 @@ import {
     homePage,
     instructorDashboardPage,
     instructorLoginForgotPage,
+    studentDashboardPage,
+    studentLoginForgotPage,
+    studentRegisterPage,
 } from "@/constants";
 import clsx from "clsx";
 import {
@@ -19,21 +22,25 @@ import {
     Check,
     Eye,
     EyeClosed,
+    GraduationCap,
     LoaderCircle,
     Lock,
     ShieldUser,
     Square,
     SquareArrowRightEnter,
     SquareCheck,
+    SquarePen,
     Undo2,
     User,
 } from "lucide-react";
+import { StudentAuth } from "../actions/StudentAuthActions";
+import { Divider } from "./Divider";
 
 export default function LoginForm({
     formType,
     redirectPath,
 }: {
-    formType: "admin" | "instructor";
+    formType: "admin" | "instructor" | "student";
     redirectPath?: string;
 }) {
     const router = useRouter();
@@ -53,14 +60,18 @@ export default function LoginForm({
         const res =
             formType === "admin"
                 ? await AdminAuth(formData)
-                : await InstructorAuth(formData);
+                : formType === "instructor"
+                  ? await InstructorAuth(formData)
+                  : await StudentAuth(formData);
         if (res.status === "success") {
             router.replace(
                 redirectPath?.startsWith("/")
                     ? redirectPath
                     : formType === "admin"
                       ? adminRoomsPage
-                      : instructorDashboardPage,
+                      : formType === "instructor"
+                        ? instructorDashboardPage
+                        : studentDashboardPage,
             );
             setShowPassword(false);
         }
@@ -93,9 +104,13 @@ export default function LoginForm({
                     <>
                         <BookText size={30} /> Instructor
                     </>
-                ) : (
+                ) : formType === "admin" ? (
                     <>
                         <ShieldUser size={30} /> Administrator
+                    </>
+                ) : (
+                    <>
+                        <GraduationCap size={30} /> Student
                     </>
                 )}
             </h1>
@@ -194,7 +209,7 @@ export default function LoginForm({
                                 />
                             )}
                         </Square>
-                        Remember me?
+                        Remember me
                     </label>
                 )}
                 {state.status === "error" && (
@@ -222,12 +237,35 @@ export default function LoginForm({
                     href={
                         formType === "admin"
                             ? adminLoginForgotPage
-                            : instructorLoginForgotPage
+                            : formType === "instructor"
+                              ? instructorLoginForgotPage
+                              : studentLoginForgotPage
                     }
                     className="m-auto block w-fit cursor-pointer text-center text-sm underline"
                 >
                     Forgot Username or Password?
                 </Link>
+                {formType === "student" && (
+                    <>
+                        <div className="relative my-10 flex items-center justify-center font-semibold">
+                            <div className="absolute inset-0 m-auto h-px rounded-full bg-green-100"></div>
+                            <p className="bg-green-secondary text-md absolute w-fit px-2 text-center tracking-wide text-green-100 sm:text-lg">
+                                OR
+                            </p>
+                        </div>
+                        <Link
+                            href={studentRegisterPage}
+                            className={clsx(
+                                "bg-yellow-primary font-inter mb-3 flex w-full cursor-pointer items-center justify-center gap-2 rounded-md py-2 font-bold text-black/80 focus:outline-0",
+                            )}
+                        >
+                            <span>
+                                <SquarePen />
+                            </span>
+                            Sign Up
+                        </Link>
+                    </>
+                )}
                 {!isPending && (
                     <Link
                         href={homePage}

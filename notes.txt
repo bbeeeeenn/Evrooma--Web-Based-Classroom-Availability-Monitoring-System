@@ -2,11 +2,12 @@ Free Email sender alternatives for "Forgot Password" system
 https://chatgpt.com/share/69cf7a45-f0a8-8323-a682-1bcabeb357d5
 
 
-Room status at instructor rooms page
+Room status at /instructor/dashboard/rooms/[roomId]
 
 Student Login/SignUp page
+
 Student Scanning, Logs, and Room browsing page
 
 Instructor account settings
 
-Finish modifying instructor account at Admin 
+Finish modifying instructor account at Admin

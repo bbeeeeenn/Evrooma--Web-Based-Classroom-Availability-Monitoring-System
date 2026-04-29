@@ -18,7 +18,7 @@ async function Authenticate({
     return (
         <>
             <AdminNavBar />
-            <main className="font-inter has-[.accountform]:bg-green-secondary m-auto max-w-5xl px-5 pt-3 pb-40 sm:has-[.accountform]:bg-transparent">
+            <main className="font-inter has-[.accountform]:bg-green-secondary m-auto max-w-5xl px-5 pt-3 pb-20 sm:has-[.accountform]:bg-transparent">
                 {children}
             </main>
         </>
