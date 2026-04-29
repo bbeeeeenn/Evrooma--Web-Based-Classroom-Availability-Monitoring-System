@@ -7,7 +7,6 @@ import {
     instructorSchedulesPage,
 } from "@/constants";
 import { redirect } from "next/navigation";
-import { InstructorNavBar } from "./ClientComponents";
 import { Suspense } from "react";
 import { headers } from "next/headers";
 import Loading from "../../loading";

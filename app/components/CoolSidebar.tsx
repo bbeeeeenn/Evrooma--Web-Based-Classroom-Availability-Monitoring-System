@@ -1,10 +1,10 @@
 "use client";
 import { homePage } from "@/constants";
 import clsx from "clsx";
-import { ChevronRight, GraduationCap, Menu, X } from "lucide-react";
+import { ChevronRight, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 
 type SidebarItems = {
     text: string;
@@ -23,7 +23,12 @@ export function CoolSidebar({
     const [open, setOpen] = useState(false);
     const pathname = usePathname();
 
-    const handleBurgerClick = () => setOpen((prev) => !prev);
+    const handleBurgerClick = () =>
+        setOpen((prev) => {
+            if (prev) document.body.classList.remove("overflow-hidden");
+            else document.body.classList.add("overflow-hidden");
+            return !prev;
+        });
     return (
         <>
             <div className="text-text-primary bg-green-quarternary border-yellow-primary fixed inset-x-0 top-0 z-20 flex items-center gap-3 border-b-2 px-3 py-5 text-xl font-bold tracking-widest sm:px-5">
@@ -48,7 +53,7 @@ export function CoolSidebar({
             <main
                 inert={open}
                 className={
-                    "font-inter has-[.accountform]:bg-green-secondary m-auto max-w-5xl px-5 pt-20.5 pb-20 sm:has-[.accountform]:bg-transparent"
+                    "font-inter has-[.accountform]:bg-green-secondary m-auto max-w-5xl px-5 pt-21 pb-20 sm:has-[.accountform]:bg-transparent"
                 }
             >
                 {children}

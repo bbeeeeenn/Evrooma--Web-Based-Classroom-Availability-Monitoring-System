@@ -91,7 +91,7 @@ export default async function RootLayout({
                     poppins.variable,
                     roboto.variable,
                     robotoMono.variable,
-                    "antialiased select-none",
+                    "antialiased select-none sm:overflow-auto",
                     "text-text-primary bg-green-primary",
                 )}
             >

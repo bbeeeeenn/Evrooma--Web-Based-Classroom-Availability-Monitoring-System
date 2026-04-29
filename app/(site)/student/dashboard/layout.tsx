@@ -9,7 +9,6 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import Loading from "../../loading";
-import { StudentNavbar } from "./Navbar";
 import { CoolSidebar } from "@/app/components/CoolSidebar";
 import { DoorClosed, LogOut, Logs } from "lucide-react";
 

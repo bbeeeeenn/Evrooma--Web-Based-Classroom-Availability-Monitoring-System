@@ -6,11 +6,10 @@ import {
     adminRoomsPage,
 } from "@/constants";
 import { redirect } from "next/navigation";
-import { AdminNavBar } from "../ClientComponents";
 import { Suspense } from "react";
 import { headers } from "next/headers";
 import { CoolSidebar } from "@/app/components/CoolSidebar";
-import { DoorClosed, LogOut, UserRound, UsersRound } from "lucide-react";
+import { DoorClosed, LogOut, UsersRound } from "lucide-react";
 
 async function Authenticate({
     children,
