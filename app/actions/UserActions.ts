@@ -14,14 +14,14 @@ export type RawUserData = Omit<PlainUserDocument, "fullName" | "_id">;
 export async function CreateUser(
     data: RawUserData,
 ): Promise<ServerActionResponse & { userId?: string }> {
-    if (!(await AuthenticateAdmin())) {
+    const { firstName, lastName, email, password, type } = data;
+
+    if (type === "instructor" && !(await AuthenticateAdmin())) {
         return {
             status: "error",
             message: "Unauthorized.",
         };
     }
-
-    const { firstName, lastName, email, password, type } = data;
 
     const normalizedFirstname = firstName.trim();
     const normalizedLastname = lastName.trim();
