@@ -4,7 +4,7 @@ import clsx from "clsx";
 import { ChevronRight, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 type SidebarItems = {
     text: string;
@@ -23,12 +23,12 @@ export function CoolSidebar({
     const [open, setOpen] = useState(false);
     const pathname = usePathname();
 
-    const handleBurgerClick = () =>
-        setOpen((prev) => {
-            if (prev) document.body.classList.remove("overflow-hidden");
-            else document.body.classList.add("overflow-hidden");
-            return !prev;
-        });
+    useEffect(() => {
+        if (open) document.body.classList.add("overflow-hidden");
+        else document.body.classList.remove("overflow-hidden");
+    }, [open]);
+
+    const handleBurgerClick = () => setOpen((prev) => !prev);
     return (
         <>
             <div className="text-text-primary bg-green-quarternary border-yellow-primary fixed inset-x-0 top-0 z-20 flex items-center gap-3 border-b-2 px-3 py-5 text-xl font-bold tracking-widest sm:px-5">
