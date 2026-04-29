@@ -1,10 +1,17 @@
 import { GetStudentAuthInfo } from "@/app/actions/StudentAuthActions";
-import { studentLoginPage } from "@/constants";
+import {
+    studentLoginPage,
+    studentLogoutPage,
+    studentLogsPage,
+    studentRoomsPage,
+} from "@/constants";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import Loading from "../../loading";
 import { StudentNavbar } from "./Navbar";
+import { CoolSidebar } from "@/app/components/CoolSidebar";
+import { DoorClosed, LogOut, Logs } from "lucide-react";
 
 async function Authenticate({
     children,
@@ -19,12 +26,27 @@ async function Authenticate({
     }
 
     return (
-        <>
-            <StudentNavbar />
-            <main className="font-inter m-auto max-w-5xl px-5 pt-3 pb-40">
-                {children}
-            </main>
-        </>
+        <CoolSidebar
+            items={[
+                {
+                    icon: <DoorClosed size={30} />,
+                    text: "Rooms",
+                    href: studentRoomsPage,
+                },
+                {
+                    icon: <Logs size={30} />,
+                    text: "My Logs",
+                    href: studentLogsPage,
+                },
+                {
+                    icon: <LogOut size={30} />,
+                    text: "Logout",
+                    href: studentLogoutPage,
+                },
+            ]}
+        >
+            {children}
+        </CoolSidebar>
     );
 }
 

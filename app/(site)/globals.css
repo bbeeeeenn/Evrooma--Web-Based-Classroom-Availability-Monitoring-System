@@ -20,6 +20,8 @@
     /* card hover */
     --color-green-quarternary: #134E4A;
     /* slightly darker than secondary | for card border and navbar */
+    --color-green-quinary: #1a5e59;
+    /* slightly lighter than quarternary */
 
     --color-yellow-primary: #FACC15;
     --color-yellow-secondary: #EAB308;
@@ -53,11 +55,11 @@ button {
     cursor: pointer;
 }
 
-*::-webkit-scrollbar {
+/* *::-webkit-scrollbar {
     width: 8px;
     background: transparent;
 }
 
 *::-webkit-scrollbar-thumb {
     background: rgb(2, 53, 40);
-}
+} */

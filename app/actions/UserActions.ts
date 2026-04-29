@@ -23,8 +23,26 @@ export async function CreateUser(
         };
     }
 
-    const normalizedFirstname = firstName.trim();
-    const normalizedLastname = lastName.trim();
+    const normalizedFirstname = firstName
+        .trim()
+        .replace(/\s+/g, " ")
+        .replace(/[^a-zA-Z\s'-]/g, "")
+        .split(" ")
+        .map(
+            (word) =>
+                word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+        )
+        .join(" ");
+    const normalizedLastname = lastName
+        .trim()
+        .replace(/\s+/g, " ")
+        .replace(/[^a-zA-Z\s'-]/g, "")
+        .split(" ")
+        .map(
+            (word) =>
+                word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+        )
+        .join(" ");
     const normalizedEmail = email.trim().toLowerCase();
     const normalizedPassword = password.trim();
 

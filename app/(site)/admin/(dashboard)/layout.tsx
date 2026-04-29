@@ -1,9 +1,16 @@
 import { AuthenticateAdmin } from "@/app/actions/AdminAuthActions";
-import { adminLoginPage } from "@/constants";
+import {
+    adminAccountsPage,
+    adminLoginPage,
+    adminLogoutPage,
+    adminRoomsPage,
+} from "@/constants";
 import { redirect } from "next/navigation";
 import { AdminNavBar } from "../ClientComponents";
 import { Suspense } from "react";
 import { headers } from "next/headers";
+import { CoolSidebar } from "@/app/components/CoolSidebar";
+import { DoorClosed, LogOut, UserRound, UsersRound } from "lucide-react";
 
 async function Authenticate({
     children,
@@ -16,12 +23,27 @@ async function Authenticate({
     }
 
     return (
-        <>
-            <AdminNavBar />
-            <main className="font-inter has-[.accountform]:bg-green-secondary m-auto max-w-5xl px-5 pt-3 pb-20 sm:has-[.accountform]:bg-transparent">
-                {children}
-            </main>
-        </>
+        <CoolSidebar
+            items={[
+                {
+                    icon: <DoorClosed size={30} />,
+                    text: "Rooms",
+                    href: adminRoomsPage,
+                },
+                {
+                    icon: <UsersRound size={30} />,
+                    text: "Accounts",
+                    href: adminAccountsPage,
+                },
+                {
+                    icon: <LogOut size={30} />,
+                    text: "Logout",
+                    href: adminLogoutPage,
+                },
+            ]}
+        >
+            {children}
+        </CoolSidebar>
     );
 }
 

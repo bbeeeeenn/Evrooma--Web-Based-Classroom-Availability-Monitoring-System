@@ -26,13 +26,14 @@ export const studentLogsPage = "/student/dashboard/logs";
 export const studentScanPage = "/student/dashboard/scan";
 export const studentLogoutPage = "/student/dashboard/logout";
 
-export const ADMIN_SESSION_SECRET = process.env.ADMIN_SESSION_SECRET!;
-export const INSTRUCTOR_SESSION_SECRET = process.env.INSTRUCTOR_SESSION_SECRET!;
-export const STUDENT_SESSION_SECRET = process.env.STUDENT_SESSION_SECRET!;
-export const MONGODB_URI = process.env.MONGODB_URI!;
-export const DB_NAME = process.env.DB_NAME!;
-export const ADMIN_USERNAME = process.env.ADMIN_USERNAME!;
-export const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD!;
+export const ADMIN_SESSION_SECRET = process.env.ADMIN_SESSION_SECRET || "";
+export const INSTRUCTOR_SESSION_SECRET =
+    process.env.INSTRUCTOR_SESSION_SECRET || "";
+export const STUDENT_SESSION_SECRET = process.env.STUDENT_SESSION_SECRET || "";
+export const MONGODB_URI = process.env.MONGODB_URI || "";
+export const DB_NAME = process.env.DB_NAME || "";
+export const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "";
+export const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "";
 
 export const DaysOfWeek = [
     "Sunday",

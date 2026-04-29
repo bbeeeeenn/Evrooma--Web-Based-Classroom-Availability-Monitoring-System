@@ -1,10 +1,18 @@
 import { GetInstructorAuthInfo } from "@/app/actions/InstructorAuthActions";
-import { instructorLoginPage } from "@/constants";
+import {
+    instructorDashboardPage,
+    instructorLoginPage,
+    instructorLogoutPage,
+    instructorRoomsPage,
+    instructorSchedulesPage,
+} from "@/constants";
 import { redirect } from "next/navigation";
 import { InstructorNavBar } from "./ClientComponents";
 import { Suspense } from "react";
 import { headers } from "next/headers";
 import Loading from "../../loading";
+import { CoolSidebar } from "@/app/components/CoolSidebar";
+import { CalendarCheck, DoorClosed, Home, LogOut } from "lucide-react";
 
 async function Authenticate({
     children,
@@ -19,12 +27,32 @@ async function Authenticate({
     }
 
     return (
-        <>
-            <InstructorNavBar />
-            <main className="font-inter m-auto max-w-5xl px-5 pt-3 pb-40">
-                {children}
-            </main>
-        </>
+        <CoolSidebar
+            items={[
+                {
+                    icon: <Home size={30} />,
+                    text: "Dashboard",
+                    href: instructorDashboardPage,
+                },
+                {
+                    icon: <DoorClosed size={30} />,
+                    text: "Rooms",
+                    href: instructorRoomsPage,
+                },
+                {
+                    icon: <CalendarCheck size={30} />,
+                    text: "My Schedules",
+                    href: instructorSchedulesPage,
+                },
+                {
+                    icon: <LogOut size={30} />,
+                    text: "Logout",
+                    href: instructorLogoutPage,
+                },
+            ]}
+        >
+            {children}
+        </CoolSidebar>
     );
 }
 
