@@ -141,7 +141,6 @@ export default async function RoomsPage({
 
     return (
         <>
-            <BackButton dest={instructorDashboardPage} text="Home" />
             <Suspense fallback={<Loading />}>
                 <Filter key={newKey} />
             </Suspense>

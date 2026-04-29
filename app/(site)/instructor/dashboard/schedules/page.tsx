@@ -102,8 +102,7 @@ async function Schedules() {
 export default function SchedulesPage() {
     return (
         <>
-            <BackButton dest={instructorDashboardPage} text="Home" />
-            <div className="mt-10 flex items-center gap-3 text-white/90">
+            <div className="mt-3 mb-10 flex items-center gap-3 text-white/90">
                 <CalendarDays size={40} />
                 <h1 className="text-4xl font-bold">My Schedules</h1>
             </div>

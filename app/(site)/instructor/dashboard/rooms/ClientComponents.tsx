@@ -66,7 +66,7 @@ export function FilterRooms({
     };
 
     return (
-        <div className="flex flex-wrap gap-3">
+        <div className="mt-3 flex flex-wrap gap-3">
             <div className="bg-green-secondary text-text-primary flex h-fit min-w-50 grow-2 items-center gap-2 rounded-md p-3 shadow-md">
                 <span className="opacity-90">
                     <DoorOpen />
