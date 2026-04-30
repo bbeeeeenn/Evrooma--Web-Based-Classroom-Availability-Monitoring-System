@@ -3,15 +3,26 @@ import {
     instructorDashboardPage,
     instructorLoginPage,
     instructorLogoutPage,
+    instructorLogsPage,
     instructorRoomsPage,
+    instructorScanPage,
     instructorSchedulesPage,
+    instructorSettingsPage,
 } from "@/constants";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { headers } from "next/headers";
 import Loading from "../../loading";
 import { CoolSidebar } from "@/app/components/CoolSidebar";
-import { CalendarCheck, DoorClosed, Home, LogOut } from "lucide-react";
+import {
+    CalendarCheck,
+    DoorClosed,
+    Home,
+    LogOut,
+    Logs,
+    ScanLine,
+    Settings2,
+} from "lucide-react";
 
 async function Authenticate({
     children,
@@ -42,6 +53,22 @@ async function Authenticate({
                     icon: <CalendarCheck size={30} />,
                     text: "My Schedules",
                     href: instructorSchedulesPage,
+                },
+                {
+                    icon: <Logs size={30} />,
+                    text: "My Logs",
+                    href: instructorLogsPage,
+                },
+                {
+                    icon: <ScanLine size={30} />,
+                    text: "Scanner",
+                    href: instructorScanPage,
+                },
+                {
+                    icon: <Settings2 size={30} />,
+                    text: "Settings",
+                    href: instructorSettingsPage,
+                    pushdown: true,
                 },
                 {
                     icon: <LogOut size={30} />,

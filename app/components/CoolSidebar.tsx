@@ -2,6 +2,7 @@
 import { homePage } from "@/constants";
 import clsx from "clsx";
 import { ChevronRight, Menu, X } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
@@ -10,6 +11,7 @@ type SidebarItems = {
     text: string;
     icon: React.ReactNode;
     href: string;
+    pushdown?: boolean;
 }[];
 
 export function CoolSidebar({
@@ -31,22 +33,28 @@ export function CoolSidebar({
     const handleBurgerClick = () => setOpen((prev) => !prev);
     return (
         <>
-            <div className="text-text-primary bg-green-quarternary border-yellow-primary fixed inset-x-0 top-0 z-20 flex items-center gap-3 border-b-2 px-3 py-5 text-xl font-bold tracking-widest sm:px-5">
-                <button
+            <div className="text-text-primary bg-green-quarternary border-yellow-primary fixed inset-x-0 top-0 z-20 flex items-center gap-3 border-b-2 py-5 text-xl font-bold tracking-widest">
+                {/* <button
                     className="absolute left-3 sm:hidden"
                     onClick={handleBurgerClick}
                 >
                     {open ? <X /> : <Menu />}
-                </button>
-                <button className="hidden sm:block" onClick={handleBurgerClick}>
+                </button> */}
+                <button className="absolute left-5" onClick={handleBurgerClick}>
                     {open ? <X size={30} /> : <Menu size={30} />}
                 </button>
                 <Link
                     href={homePage}
                     onClick={() => setOpen(false)}
-                    className="mx-auto"
+                    className="mx-auto flex items-center gap-3"
                 >
-                    EVROOMA
+                    <Image
+                        src="/favicon_dark.svg"
+                        alt=""
+                        height={30}
+                        width={30}
+                    />
+                    <p>EVROOMA</p>
                 </Link>
             </div>
 
@@ -85,7 +93,7 @@ export function CoolSidebar({
                                 "hover:bg-green-quinary active:bg-green-quinary focus-visible:bg-green-quinary flex h-fit w-full items-center gap-4 px-7 py-5 text-2xl font-semibold",
                                 pathname === item.href &&
                                     "bg-yellow-primary pointer-events-none text-black",
-                                item.text === "Logout" && "mt-auto",
+                                item.pushdown && "mt-auto",
                             )}
                             onClick={() => setOpen(false)}
                         >

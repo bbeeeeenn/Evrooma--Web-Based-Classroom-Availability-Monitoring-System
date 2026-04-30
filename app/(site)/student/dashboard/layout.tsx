@@ -5,13 +5,22 @@ import {
     studentLogoutPage,
     studentLogsPage,
     studentRoomsPage,
+    studentScanPage,
+    studentSettingsPage,
 } from "@/constants";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import Loading from "../../loading";
 import { CoolSidebar } from "@/app/components/CoolSidebar";
-import { DoorClosed, Home, LogOut, Logs } from "lucide-react";
+import {
+    DoorClosed,
+    Home,
+    LogOut,
+    Logs,
+    ScanLine,
+    Settings2,
+} from "lucide-react";
 
 async function Authenticate({
     children,
@@ -42,6 +51,17 @@ async function Authenticate({
                     icon: <Logs size={30} />,
                     text: "My Logs",
                     href: studentLogsPage,
+                },
+                {
+                    icon: <ScanLine size={30} />,
+                    text: "Scanner",
+                    href: studentScanPage,
+                },
+                {
+                    icon: <Settings2 size={30} />,
+                    text: "Settings",
+                    href: studentSettingsPage,
+                    pushdown: true,
                 },
                 {
                     icon: <LogOut size={30} />,

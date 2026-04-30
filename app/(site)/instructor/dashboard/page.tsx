@@ -32,23 +32,12 @@ async function Profile() {
     if (!instructor) redirect(instructorLoginPage);
 
     return (
-        <div className="flex items-end justify-between gap-5">
-            <div className="text-text-primary flex items-center gap-2">
-                <BookText size={45} />
-                <div>
-                    <p className="text-text-secondary font-semibold">
-                        Welcome,
-                    </p>
-                    <p className="text-2xl font-bold">{instructor.fullName}</p>
-                </div>
+        <div className="text-text-primary flex items-center gap-2">
+            <BookText size={45} />
+            <div>
+                <p className="text-text-secondary font-semibold">Welcome,</p>
+                <p className="text-2xl font-bold">{instructor.fullName}</p>
             </div>
-            <Link
-                href={""}
-                className="bg-yellow-primary focus-visible:bg-yellow-secondary active:bg-yellow-secondary hover:bg-yellow-secondary font-poppins flex items-center justify-center gap-2 rounded-md p-2 px-3 text-sm font-semibold text-black shadow-md"
-            >
-                <Settings2 size={20} />{" "}
-                <span className="hidden sm:inline">Settings</span>
-            </Link>
         </div>
     );
 }
@@ -80,15 +69,6 @@ async function ScheduleToday() {
     }
     return schedToday.length > 0 ? (
         <>
-            <Link
-                href={instructorScanPage}
-                className="text-text-primary bg-green-secondary focus-visible:bg-yellow-primary active:bg-yellow-primary hover:bg-yellow-primary m-auto mb-3 hidden w-full items-center justify-center gap-2 rounded-md py-3 text-lg font-bold shadow-md transition-colors hover:text-black focus-visible:text-black active:text-black sm:flex"
-            >
-                <span>
-                    <ScanLine />
-                </span>
-                <p className="">Scan Classroom</p>
-            </Link>
             {schedToday.map(async (sched) => {
                 const {
                     startHour,

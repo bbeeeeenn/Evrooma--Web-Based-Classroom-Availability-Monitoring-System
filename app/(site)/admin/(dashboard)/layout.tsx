@@ -38,6 +38,7 @@ async function Authenticate({
                     icon: <LogOut size={30} />,
                     text: "Logout",
                     href: adminLogoutPage,
+                    pushdown: true,
                 },
             ]}
         >
