@@ -22,6 +22,7 @@ import clsx from "clsx";
 import { CalendarDays } from "lucide-react";
 import { Divider } from "@/app/components/Divider";
 import { ClassroomHeader } from "@/app/components/ClassroomComponents";
+import { headers } from "next/headers";
 
 async function Schedules({ roomId }: { roomId: string }) {
     let schedules: PopulatedPlainScheduleDocument[];
@@ -239,14 +240,19 @@ async function ClassroomPage({
     );
 }
 
-export default function Page({
+export default async function Page({
     params,
 }: {
     params: Promise<{ classroom: string }>;
 }) {
+    const referer = (await headers()).get("referer");
     return (
         <>
-            <BackButton dest={instructorRoomsPage} text="Rooms" />
+            <BackButton
+                dest={instructorRoomsPage}
+                text="Rooms"
+                referer={referer}
+            />
             <Suspense fallback={<Loading />}>
                 <ClassroomPage params={params} />
             </Suspense>
