@@ -16,30 +16,22 @@ export function BackButton({
         setOrigin(window.location.origin);
     }, []);
 
+    if ((referer && origin && referer.includes(origin)) || !dest)
+        return (
+            <button
+                onClick={() => router.back()}
+                className="hover:bg-yellow-secondary focus-visible:bg-yellow-secondary active:bg-yellow-secondary bg-yellow-primary mt-2 mb-7 flex w-fit cursor-pointer items-center gap-1 rounded-md px-3 py-1 text-sm font-semibold shadow-md transition-colors active:scale-105"
+            >
+                <ArrowLeft size={15} /> {text}
+            </button>
+        );
+
     return (
-        <>
-            {referer && origin && referer.includes(origin) ? (
-                <button
-                    onClick={() => router.back()}
-                    className="hover:bg-yellow-secondary focus-visible:bg-yellow-secondary active:bg-yellow-secondary bg-yellow-primary mt-2 mb-7 flex w-fit cursor-pointer items-center gap-1 rounded-md px-3 py-1 text-sm font-semibold shadow-md transition-colors active:scale-105"
-                >
-                    <ArrowLeft size={15} /> {text}
-                </button>
-            ) : dest ? (
-                <Link
-                    href={dest}
-                    className="hover:bg-yellow-secondary focus-visible:bg-yellow-secondary active:bg-yellow-secondary bg-yellow-primary mt-2 mb-7 flex w-fit cursor-pointer items-center gap-1 rounded-md px-3 py-1 text-sm font-semibold shadow-md transition-colors active:scale-105"
-                >
-                    <ArrowLeft size={15} /> {text}
-                </Link>
-            ) : (
-                <button
-                    onClick={() => router.back()}
-                    className="hover:bg-yellow-secondary focus-visible:bg-yellow-secondary active:bg-yellow-secondary bg-yellow-primary mt-2 mb-7 flex w-fit cursor-pointer items-center gap-1 rounded-md px-3 py-1 text-sm font-semibold shadow-md transition-colors active:scale-105"
-                >
-                    <ArrowLeft size={15} /> {text}
-                </button>
-            )}
-        </>
+        <Link
+            href={dest}
+            className="hover:bg-yellow-secondary focus-visible:bg-yellow-secondary active:bg-yellow-secondary bg-yellow-primary mt-2 mb-7 flex w-fit cursor-pointer items-center gap-1 rounded-md px-3 py-1 text-sm font-semibold shadow-md transition-colors active:scale-105"
+        >
+            <ArrowLeft size={15} /> {text}
+        </Link>
     );
 }
