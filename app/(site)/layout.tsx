@@ -14,7 +14,10 @@ import { Bounce, ToastContainer } from "react-toastify";
 
 export async function generateMetadata() {
     return {
-        metadataBase: new URL("https://www.evrooma.online"),
+        metadataBase:
+            process.env.NODE_ENV === "development"
+                ? new URL("http://localhost:3000")
+                : new URL("https://www.evrooma.online"),
 
         title: "EVROOMA",
         description:
