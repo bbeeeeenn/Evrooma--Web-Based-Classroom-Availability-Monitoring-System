@@ -7,6 +7,36 @@ import { MouseEvent, useEffect, useRef, useState } from "react";
 import QRGenerator from "qrcode";
 import Image from "next/image";
 
+const width = 600;
+const height = 775;
+
+function wrapText(
+    ctx: CanvasRenderingContext2D,
+    text: string,
+    x: number,
+    y: number,
+    maxWidth: number,
+    lineHeight: number,
+): void {
+    const words: string[] = text.split(" ");
+    let line: string = "";
+
+    for (let i = 0; i < words.length; i++) {
+        const testLine: string = line + words[i] + " ";
+        const metrics: TextMetrics = ctx.measureText(testLine);
+
+        if (metrics.width > maxWidth && i > 0) {
+            ctx.fillText(line, x, y);
+            line = words[i] + " ";
+            y += lineHeight;
+        } else {
+            line = testLine;
+        }
+    }
+
+    ctx.fillText(line, x, y);
+}
+
 export default function GenerateQrCode() {
     const building = useBuildingInfo();
     const classroom = useClassroomInfo();
@@ -14,15 +44,15 @@ export default function GenerateQrCode() {
     useEffect(() => {
         (async () => {
             const finalCanvas = document.createElement("canvas");
-            finalCanvas.width = 600;
-            finalCanvas.height = 720;
+            finalCanvas.width = width;
+            finalCanvas.height = height;
 
             const ctx = finalCanvas.getContext("2d");
             if (!ctx) return;
 
             // background
             ctx.fillStyle = "white";
-            ctx.fillRect(0, 0, 600, 720);
+            ctx.fillRect(0, 0, width, height);
 
             // temp QR canvas
             const qrCanvas = document.createElement("canvas");
@@ -45,10 +75,13 @@ export default function GenerateQrCode() {
             ctx.font = "25px Poppins";
             ctx.fillText("EVROOMA", 300, 600);
             ctx.font = "600 40px Poppins";
-            ctx.fillText(
+            wrapText(
+                ctx,
                 `${building.buildingName} - ${classroom.classroomCode}`,
                 300,
                 660,
+                500, // max width
+                55, // line height
             );
 
             setData(finalCanvas.toDataURL("image/png"));
@@ -77,8 +110,8 @@ export default function GenerateQrCode() {
                     <Image
                         src={data}
                         alt=""
-                        width={600}
-                        height={720}
+                        width={width}
+                        height={height}
                         draggable={false}
                         className="w-full rounded-md"
                     />
