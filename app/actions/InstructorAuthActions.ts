@@ -18,6 +18,21 @@ const instructorSessionOptions: SessionOptions = {
     ttl: 60 * 60 * 24 * 7,
 };
 
+export async function AuthenticateInstructor(
+    userId: string,
+    rememberme: boolean,
+) {
+    const session = await getIronSession<UserAuthSessionData>(await cookies(), {
+        ...instructorSessionOptions,
+        cookieOptions: {
+            ...instructorSessionOptions.cookieOptions,
+            maxAge: rememberme ? 60 * 60 * 24 * 7 : undefined,
+        },
+    });
+    session.data = { userId };
+    await session.save();
+}
+
 export async function InstructorAuth(
     formData: FormData,
 ): Promise<LoginFormActionResponse> {
@@ -42,18 +57,8 @@ export async function InstructorAuth(
             };
         }
 
-        const session = await getIronSession<UserAuthSessionData>(
-            await cookies(),
-            {
-                ...instructorSessionOptions,
-                cookieOptions: {
-                    ...instructorSessionOptions.cookieOptions,
-                    maxAge: rememberme ? 60 * 60 * 24 * 7 : undefined,
-                },
-            },
-        );
-        session.data = { userId: user._id.toString() };
-        await session.save();
+        await AuthenticateInstructor(user._id.toString(), rememberme);
+
         return {
             status: "success",
             message: "",

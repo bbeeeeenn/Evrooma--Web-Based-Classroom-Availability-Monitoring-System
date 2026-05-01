@@ -7,13 +7,11 @@ import Link from "next/link";
 import { AdminAuth } from "../actions/AdminAuthActions";
 import { InstructorAuth } from "../actions/InstructorAuthActions";
 import {
-    adminLoginForgotPage,
     adminRoomsPage,
+    forgotPasswordPage,
     homePage,
     instructorHomePage,
-    instructorLoginForgotPage,
     studentHomePage,
-    studentLoginForgotPage,
     studentRegisterPage,
 } from "@/constants";
 import clsx from "clsx";
@@ -132,8 +130,9 @@ export default function LoginForm({
                             placeholder="Username"
                             required
                             defaultValue={
-                                formType == "admin" ? "admin" : ""
-                                // : (state.formData.get("username") as string)
+                                formType == "admin"
+                                    ? "admin"
+                                    : (state.formData.get("email") as string)
                             }
                             autoComplete="off"
                             spellCheck={false}
@@ -233,18 +232,14 @@ export default function LoginForm({
                         </>
                     )}
                 </button>
-                <Link
-                    href={
-                        formType === "admin"
-                            ? adminLoginForgotPage
-                            : formType === "instructor"
-                              ? instructorLoginForgotPage
-                              : studentLoginForgotPage
-                    }
-                    className="m-auto block w-fit cursor-pointer text-center text-sm underline"
-                >
-                    Forgot Username or Password?
-                </Link>
+                {formType !== "admin" && (
+                    <Link
+                        href={forgotPasswordPage}
+                        className="m-auto block w-fit cursor-pointer text-center text-sm underline"
+                    >
+                        Forgot Username or Password?
+                    </Link>
+                )}
                 {formType === "student" && (
                     <>
                         <div className="relative my-10 flex items-center justify-center font-semibold">

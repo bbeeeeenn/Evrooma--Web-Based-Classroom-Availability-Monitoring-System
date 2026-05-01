@@ -3,8 +3,8 @@ import Loading from "../../loading";
 import { GetStudentAuthInfo } from "@/app/actions/StudentAuthActions";
 import { redirect } from "next/navigation";
 import { studentLoginPage } from "@/constants";
-import { GraduationCap, Settings2 } from "lucide-react";
-import Link from "next/link";
+import { GraduationCap } from "lucide-react";
+import { Divider } from "@/app/components/Divider";
 
 async function Profile() {
     const student = await GetStudentAuthInfo();
@@ -26,6 +26,7 @@ export default function InstructorPage() {
         <>
             <Suspense fallback={<Loading />}>
                 <Profile />
+                <Divider text="Classes attended" />
             </Suspense>
         </>
     );

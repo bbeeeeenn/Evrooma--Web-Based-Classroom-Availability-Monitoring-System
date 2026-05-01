@@ -1,15 +1,15 @@
 export const homePage = "/";
 export const scanLandingPage = "/scan";
+export const forgotPasswordPage = "/forgot";
+export const resetPasswordPage = "/resetpassword";
 
 export const adminLoginPage = "/admin";
-export const adminLoginForgotPage = "/admin/forgot";
 export const adminRoomsPage = "/admin/rooms";
 export const adminAccountsPage = "/admin/accounts";
 export const adminCreateAccountPage = "/admin/accounts/create";
 export const adminLogoutPage = "/admin/logout";
 
 export const instructorLoginPage = "/instructor";
-export const instructorLoginForgotPage = "/instructor/forgot";
 export const instructorHomePage = "/instructor/home";
 export const instructorScanPage = "/instructor/home/scan";
 export const instructorSchedulesPage = "/instructor/home/schedules";
@@ -20,7 +20,6 @@ export const instructorSettingsPage = "/instructor/home/settings";
 
 export const studentLoginPage = "/student";
 export const studentRegisterPage = "/student/register";
-export const studentLoginForgotPage = "/student/forgot";
 export const studentHomePage = "/student/home";
 export const studentRoomsPage = "/student/home/rooms";
 export const studentLogsPage = "/student/home/logs";

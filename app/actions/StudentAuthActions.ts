@@ -18,6 +18,18 @@ const studentSessionOptions: SessionOptions = {
     ttl: 60 * 60 * 24 * 7,
 };
 
+export async function AuthenticateStudent(userId: string, rememberme: boolean) {
+    const session = await getIronSession<UserAuthSessionData>(await cookies(), {
+        ...studentSessionOptions,
+        cookieOptions: {
+            ...studentSessionOptions.cookieOptions,
+            maxAge: rememberme ? 60 * 60 * 24 * 7 : undefined,
+        },
+    });
+    session.data = { userId };
+    await session.save();
+}
+
 export async function StudentAuth(
     formData: FormData,
 ): Promise<LoginFormActionResponse> {
@@ -42,18 +54,8 @@ export async function StudentAuth(
             };
         }
 
-        const session = await getIronSession<UserAuthSessionData>(
-            await cookies(),
-            {
-                ...studentSessionOptions,
-                cookieOptions: {
-                    ...studentSessionOptions.cookieOptions,
-                    maxAge: rememberme ? 60 * 60 * 24 * 7 : undefined,
-                },
-            },
-        );
-        session.data = { userId: user._id.toString() };
-        await session.save();
+        await AuthenticateStudent(user._id.toString(), rememberme);
+
         return {
             status: "success",
             message: "",

@@ -33,7 +33,7 @@ export function CoolSidebar({
     const handleBurgerClick = () => setOpen((prev) => !prev);
     return (
         <>
-            <div className="text-text-primary bg-green-quarternary border-yellow-primary fixed inset-x-0 top-0 z-20 flex items-center gap-3 border-b-2 py-5 text-xl font-bold tracking-widest">
+            <div className="text-text-primary bg-green-quarternary border-yellow-primary fixed inset-x-0 top-0 z-20 flex items-center border-b-2 py-5 text-xl font-bold tracking-widest">
                 <button className="absolute left-5" onClick={handleBurgerClick}>
                     {open ? <X size={30} /> : <Menu size={30} />}
                 </button>

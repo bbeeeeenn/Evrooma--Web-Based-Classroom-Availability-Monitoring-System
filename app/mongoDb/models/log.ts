@@ -1,9 +1,33 @@
 import "./user";
-import { model, models, Schema, SchemaTypes } from "mongoose";
+import "./schedule";
+import { model, models, ObjectId, Schema, SchemaTypes } from "mongoose";
+import { PlainUserDocument } from "./user";
+import { PopulatedPlainScheduleDocument } from "./schedule";
+
+export type PlainLogDocument = {
+    _id: ObjectId;
+    schedule: ObjectId;
+    user: ObjectId;
+    attendanceDate: string;
+    createdAt: Date;
+    updatedAt: Date;
+};
+
+export type PopulatePlainLogDocument = Omit<
+    PlainLogDocument,
+    "schedule" | "user"
+> & {
+    schedule: PopulatedPlainScheduleDocument;
+    user: PlainUserDocument;
+};
 
 const attendanceLogSchema = new Schema(
     {
-        schedule: { type: SchemaTypes.ObjectId, required: true },
+        schedule: {
+            type: SchemaTypes.ObjectId,
+            ref: "Schedule",
+            required: true,
+        },
         user: { type: SchemaTypes.ObjectId, ref: "User", required: true },
         attendanceDate: { type: String, required: true },
     },

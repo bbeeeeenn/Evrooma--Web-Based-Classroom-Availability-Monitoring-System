@@ -26,6 +26,7 @@ import type {
 import { GetInstructorAuthInfo } from "./InstructorAuthActions";
 import { AttendanceLog } from "../mongoDb/models/log";
 import { formatPH, getAttendanceDateKey } from "../lib/utils";
+import { GetStudentAuthInfo } from "./StudentAuthActions";
 
 export type NewScheduleInput = Omit<NewSchedule, "day"> & {
     day: DayOfWeek[];
@@ -393,6 +394,114 @@ export async function ProcessInstructorSchedule(
         const log = new AttendanceLog({
             schedule: schedule._id,
             user: instructor._id,
+            attendanceDate,
+        });
+        await log.save();
+        return {
+            status: "success",
+            message: "Attendance verified successfully.",
+            schedule,
+        };
+    } catch (e) {
+        if (
+            e instanceof Error &&
+            "code" in e &&
+            (e as { code?: number }).code === 11000
+        ) {
+            return {
+                status: "error",
+                message:
+                    "You’ve already marked attendance for this schedule today.",
+            };
+        }
+        console.error(e);
+        return {
+            status: "error",
+            message: "Unable to verify attendance. Please try again.",
+        };
+    }
+}
+
+export async function ProcessStudentSchedule(
+    roomId: string,
+): Promise<
+    ServerActionResponse & { schedule?: PopulatedPlainScheduleDocument }
+> {
+    const student = await GetStudentAuthInfo();
+    if (!student) {
+        return {
+            status: "error",
+            message: "Please sign in to verify attendance.",
+        };
+    }
+
+    try {
+        await connectDB();
+        const now = new Date(formatPH());
+        const currentDay = now.getDay();
+        const currentHour = now.getHours();
+        const currentMinute = now.getMinutes();
+        const schedule: PopulatedPlainScheduleDocument = await Schedule.findOne(
+            {
+                room: roomId,
+                "slot.dayOfWeek": currentDay,
+                $expr: {
+                    $and: [
+                        {
+                            $lte: [
+                                {
+                                    $add: [
+                                        { $multiply: ["$slot.start.hour", 60] },
+                                        "$slot.start.minute",
+                                    ],
+                                },
+                                currentHour * 60 + currentMinute,
+                            ],
+                        },
+                        {
+                            $gt: [
+                                {
+                                    $add: [
+                                        { $multiply: ["$slot.end.hour", 60] },
+                                        "$slot.end.minute",
+                                    ],
+                                },
+                                currentHour * 60 + currentMinute,
+                            ],
+                        },
+                    ],
+                },
+            },
+        )
+            .populate({ path: "room", populate: "building" })
+            .populate("instructor")
+            .lean({ virtuals: true });
+        if (!schedule) {
+            return {
+                status: "error",
+                message:
+                    "There's no active schedule for this classroom right now.",
+            };
+        }
+        const attendanceDate = getAttendanceDateKey(now);
+        const existing = await AttendanceLog.findOne({
+            schedule: schedule._id,
+            user: student._id,
+            attendanceDate,
+        });
+
+        if (existing) {
+            return {
+                status: "error",
+                message:
+                    "You’ve already marked attendance for this schedule today.",
+                schedule,
+            };
+        }
+
+        const log = new AttendanceLog({
+            schedule: schedule._id,
+            user: student._id,
             attendanceDate,
         });
         await log.save();
