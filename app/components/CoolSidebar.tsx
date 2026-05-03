@@ -33,7 +33,8 @@ export function CoolSidebar({
     }, [open]);
 
     useEffect(() => {
-        const _x = (e: UIEvent) => {
+        setScreenWidth(window.innerWidth);
+        const _x = () => {
             setScreenWidth(window.innerWidth);
         };
         window.addEventListener("resize", _x);
