@@ -33,7 +33,7 @@ export function CoolSidebar({
     const handleBurgerClick = () => setOpen((prev) => !prev);
     return (
         <>
-            <div className="text-text-primary bg-green-quarternary border-yellow-secondary fixed inset-x-0 top-0 z-20 flex items-center border-b-2 py-5 text-xl font-bold tracking-widest transition-transform duration-300 md:-translate-y-full">
+            <div className="text-text-primary bg-green-quarternary border-yellow-secondary fixed inset-x-0 top-0 z-20 flex items-center border-b-2 py-5.25 text-xl font-bold tracking-widest transition-transform duration-300 md:-translate-y-full">
                 <button className="absolute left-5" onClick={handleBurgerClick}>
                     {open ? <X size={30} /> : <Menu size={30} />}
                 </button>
@@ -66,7 +66,7 @@ export function CoolSidebar({
             {/* Big Screen Sidebar */}
             <div
                 className={clsx(
-                    "bg-green-quarternary font-poppins text-text-primary fixed inset-y-0 left-0 z-30 flex w-full max-w-xs -translate-x-full flex-col overflow-hidden shadow-xl transition-transform duration-300 md:translate-x-0",
+                    "bg-green-quarternary font-poppins text-text-primary fixed inset-y-0 left-0 z-11 flex w-full max-w-xs -translate-x-full flex-col overflow-hidden shadow-xl transition-transform duration-300 md:translate-x-0",
                 )}
             >
                 <Link
