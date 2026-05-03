@@ -33,11 +33,8 @@ export function CoolSidebar({
     const handleBurgerClick = () => setOpen((prev) => !prev);
     return (
         <>
-            <div className="text-text-primary bg-green-quarternary border-yellow-secondary fixed inset-x-0 top-0 z-20 flex items-center border-b-2 py-5 text-xl font-bold tracking-widest md:hidden">
-                <button
-                    className="absolute left-5 md:hidden"
-                    onClick={handleBurgerClick}
-                >
+            <div className="text-text-primary bg-green-quarternary border-yellow-secondary fixed inset-x-0 top-0 z-20 flex items-center border-b-2 py-5 text-xl font-bold tracking-widest transition-transform duration-300 md:-translate-y-full">
+                <button className="absolute left-5" onClick={handleBurgerClick}>
                     {open ? <X size={30} /> : <Menu size={30} />}
                 </button>
                 <Link
@@ -55,11 +52,11 @@ export function CoolSidebar({
                 </Link>
             </div>
 
-            <div className="flex md:pl-80">
+            <div className="flex transition-all duration-300 md:pl-80">
                 <main
                     inert={open}
                     className={
-                        "font-inter has-[.accountform]:bg-green-secondary m-auto w-full px-5 pt-21 pb-20 sm:has-[.accountform]:bg-transparent md:px-7 md:pt-3"
+                        "font-inter has-[.accountform]:bg-green-secondary m-auto w-full px-5 pt-21 pb-20 transition-all duration-300 sm:has-[.accountform]:bg-transparent md:px-7 md:pt-3"
                     }
                 >
                     {children}
@@ -69,7 +66,7 @@ export function CoolSidebar({
             {/* Big Screen Sidebar */}
             <div
                 className={clsx(
-                    "bg-green-quarternary font-poppins text-text-primary fixed inset-y-0 left-0 z-11 hidden w-full max-w-xs flex-col overflow-hidden transition-transform duration-300 md:flex",
+                    "bg-green-quarternary font-poppins text-text-primary fixed inset-y-0 left-0 z-30 flex w-full max-w-xs -translate-x-full flex-col overflow-hidden shadow-xl transition-transform duration-300 md:translate-x-0",
                 )}
             >
                 <Link
@@ -91,18 +88,20 @@ export function CoolSidebar({
                         inert={pathname === item.href}
                         href={item.href}
                         className={clsx(
-                            "hover:bg-green-quinary active:bg-green-quinary focus-visible:bg-green-quinary flex h-fit w-full items-center gap-4 px-5 py-5 text-xl font-semibold",
+                            "hover:bg-green-quinary group active:bg-green-quinary focus-visible:bg-green-quinary h-fit w-full px-5 py-5 text-xl font-semibold",
                             pathname === item.href &&
                                 "bg-yellow-primary pointer-events-none text-black",
                             item.pushdown && "mt-auto",
                         )}
                         onClick={() => setOpen(false)}
                     >
-                        <span>{item.icon}</span>
-                        <p className="truncate">{item.text}</p>
-                        <span className="ml-auto">
-                            <ChevronRight size={30} />
-                        </span>
+                        <div className="flex items-center gap-4 transition-transform group-hover:translate-x-3 group-active:translate-x-0">
+                            <span>{item.icon}</span>
+                            <p className="truncate">{item.text}</p>
+                            <span className="ml-auto">
+                                <ChevronRight size={30} />
+                            </span>
+                        </div>
                     </Link>
                 ))}
             </div>
@@ -132,18 +131,20 @@ export function CoolSidebar({
                             inert={pathname === item.href}
                             href={item.href}
                             className={clsx(
-                                "hover:bg-green-quinary active:bg-green-quinary focus-visible:bg-green-quinary flex h-fit w-full items-center gap-4 px-5 py-5 text-xl font-semibold",
+                                "hover:bg-green-quinary group active:bg-green-quinary focus-visible:bg-green-quinary h-fit w-full px-5 py-5 text-xl font-semibold",
                                 pathname === item.href &&
                                     "bg-yellow-primary pointer-events-none text-black",
                                 item.pushdown && "mt-auto",
                             )}
                             onClick={() => setOpen(false)}
                         >
-                            <span>{item.icon}</span>
-                            <p className="truncate">{item.text}</p>
-                            <span className="ml-auto">
-                                <ChevronRight size={30} />
-                            </span>
+                            <div className="flex items-center gap-4 transition-transform group-hover:translate-x-3 group-active:translate-x-3">
+                                <span>{item.icon}</span>
+                                <p className="truncate">{item.text}</p>
+                                <span className="ml-auto">
+                                    <ChevronRight size={30} />
+                                </span>
+                            </div>
                         </Link>
                     ))}
                 </div>
