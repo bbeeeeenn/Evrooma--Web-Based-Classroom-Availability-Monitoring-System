@@ -5,7 +5,7 @@ import {
     Schedule,
 } from "../mongoDb/models/schedule";
 import { connectDB } from "../mongoDb/mongodb";
-import { AttendanceLog } from "../mongoDb/models/log";
+import { AttendanceLog, PlainLogDocument } from "../mongoDb/models/log";
 
 export function slotToMinutes(
     value: { hour: number; minute: number } | Date,
@@ -133,7 +133,7 @@ export async function IsInUseSchedule(
     activeSchedule: PopulatedPlainScheduleDocument | PlainScheduleDocument,
 ) {
     const now = new Date(formatPH());
-    const markedInUse = await AttendanceLog.findOne({
+    const markedInUse: PlainLogDocument = await AttendanceLog.findOne({
         schedule: activeSchedule._id,
         user: activeSchedule.instructor,
         attendanceDate: getAttendanceDateKey(now),

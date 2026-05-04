@@ -1,7 +1,15 @@
 import { GetInstructorAuthInfo } from "@/app/actions/InstructorAuthActions";
-import { instructorLoginPage, instructorScanPage } from "@/constants";
+import {
+    instructorLoginPage,
+    instructorRoomsPage,
+    instructorScanPage,
+} from "@/constants";
 import {
     BookText,
+    Check,
+    ChevronRight,
+    Link2,
+    LinkIcon,
     ScanLine,
     Settings2,
     Square,
@@ -80,28 +88,52 @@ async function ScheduleToday() {
                 } = GetTimeComponentsFromScheduleDocument(sched);
 
                 const done = await IsInUseSchedule(sched);
+                const ongoing =
+                    slotToMinutes(now) >= slotToMinutes(sched.slot.start) &&
+                    slotToMinutes(now) < slotToMinutes(sched.slot.end);
+                const passed =
+                    slotToMinutes(now) >= slotToMinutes(sched.slot.end);
 
                 return (
                     <div
                         key={sched._id.toString()}
                         className={clsx(
                             "text-text-primary bg-green-secondary relative my-5 overflow-hidden rounded-md p-4 shadow-md",
-                            slotToMinutes(now) >=
-                                slotToMinutes(sched.slot.end) && "opacity-60",
-                            done && "border-yellow-secondary border-l-2",
+                            ongoing && "border-yellow-secondary border-l-4",
+                            passed && "opacity-60",
                         )}
                     >
-                        <p className="font-poppins text-yellow-primary font-semibold">
+                        <p className="font-poppins flex items-center gap-1 font-semibold">
+                            <span>
+                                <BookText size={15} />
+                            </span>
                             {sched.subject}
                         </p>
-                        <p className="font-roboto-mono text-2xl font-semibold">
+                        <p className="font-roboto-mono text-yellow-primary text-2xl font-semibold">
                             {startHour}:{startMinute}
                             {startMeridiem} - {endHour}:{endMinute}
                             {endMeridiem}
                         </p>
-                        <p className="font-poppins font-semibold">
-                            {sched.room.building.name} - {sched.room.code}
-                        </p>
+                        <Link
+                            tabIndex={-1}
+                            href={`${instructorRoomsPage}/${sched.room._id.toString()}`}
+                            className="font-poppins flex w-fit items-center text-lg font-semibold hover:underline active:underline"
+                        >
+                            <p>
+                                {sched.room.building.name} - {sched.room.code}
+                            </p>
+                            <span>
+                                <ChevronRight size={20} />
+                            </span>
+                        </Link>
+                        {done && (
+                            <p className="flex items-center gap-1 font-semibold text-green-300">
+                                <span>
+                                    <Check size={20} />
+                                </span>
+                                Attended
+                            </p>
+                        )}
                     </div>
                 );
             })}

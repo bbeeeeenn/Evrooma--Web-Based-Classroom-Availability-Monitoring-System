@@ -22,7 +22,8 @@ export function BackButton({
                 onClick={() => router.back()}
                 className="hover:bg-yellow-secondary focus-visible:bg-yellow-secondary active:bg-yellow-secondary bg-yellow-primary mt-2 mb-7 flex w-fit cursor-pointer items-center gap-1 rounded-md px-3 py-1 text-sm font-semibold text-black shadow-md transition-colors active:scale-105"
             >
-                <ArrowLeft size={15} /> {text}
+                <ArrowLeft size={15} />
+                Back
             </button>
         );
 
@@ -31,7 +32,8 @@ export function BackButton({
             href={dest}
             className="hover:bg-yellow-secondary focus-visible:bg-yellow-secondary active:bg-yellow-secondary bg-yellow-primary mt-2 mb-7 flex w-fit cursor-pointer items-center gap-1 rounded-md px-3 py-1 text-sm font-semibold text-black shadow-md transition-colors active:scale-105"
         >
-            <ArrowLeft size={15} /> {text}
+            <ArrowLeft size={15} />
+            {text}
         </Link>
     );
 }

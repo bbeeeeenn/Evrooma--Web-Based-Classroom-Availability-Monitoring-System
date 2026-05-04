@@ -19,7 +19,7 @@ import {
     slotToMinutes,
 } from "@/app/lib/utils";
 import clsx from "clsx";
-import { CalendarDays } from "lucide-react";
+import { CalendarDays, Check, X } from "lucide-react";
 import { Divider } from "@/app/components/Divider";
 import { ClassroomHeader } from "@/app/components/ClassroomComponents";
 import { headers } from "next/headers";
@@ -67,7 +67,7 @@ async function Schedules({ roomId }: { roomId: string }) {
                 return (
                     <React.Fragment key={sched._id.toString()}>
                         <Divide />
-                        <div className="text-text-primary border-yellow-primary bg-green-secondary mt-1 block w-full rounded-md border-l-4 px-5 py-3 text-start shadow-md">
+                        <div className="text-text-primary border-yellow-primary bg-green-secondary mt-3 block w-full rounded-md border-l-4 px-5 py-3 text-start shadow-md">
                             <p className="font-roboto-mono text-2xl font-bold">
                                 {`${startHour}:${startMinute}${startMeridiem}`}{" "}
                                 - {`${endHour}:${endMinute}${endMeridiem}`}
@@ -96,10 +96,11 @@ async function Schedules({ roomId }: { roomId: string }) {
     );
 }
 
-async function CurrentSession({ roomId }: { roomId: string }) {
+async function OngoingSchedule({ roomId }: { roomId: string }) {
     const currentSession = await GetActiveSchedule(roomId);
     if (!currentSession) return null;
     const inUse = !!(await IsInUseSchedule(currentSession));
+
     const {
         startHour,
         startMinute,
@@ -111,7 +112,7 @@ async function CurrentSession({ roomId }: { roomId: string }) {
     return (
         <div className="text-text-primary bg-green-secondary relative my-15 flex rounded-md pt-5 pb-2.5 font-bold shadow-md">
             <div className="bg-yellow-primary absolute top-0 left-0 -translate-y-1/2 rounded-lg rounded-bl-none px-3 py-2 font-semibold text-black">
-                Current Session
+                Now
             </div>
             <div
                 key={currentSession._id.toString()}
@@ -123,7 +124,22 @@ async function CurrentSession({ roomId }: { roomId: string }) {
                     {startMeridiem} - {endHour}:{endMinute}
                     {endMeridiem}
                 </p>
-                <p className="">{currentSession.instructor.fullName}</p>
+                <p>{currentSession.instructor.fullName}</p>
+                {inUse ? (
+                    <p className="flex items-center gap-1 font-semibold text-green-300">
+                        <span>
+                            <Check size={20} />
+                        </span>
+                        Instructor is present
+                    </p>
+                ) : (
+                    <p className="flex items-center gap-1 font-semibold text-red-400">
+                        <span>
+                            <X size={20} />
+                        </span>
+                        Unverified
+                    </p>
+                )}
             </div>
         </div>
     );
@@ -145,10 +161,8 @@ async function TodaysSchedule({ roomId }: { roomId: string }) {
         return (
             schedules.length > 0 && (
                 <>
-                    <div className="bg-green-secondary divide-green-primary relative divide-y-2 rounded-md pt-5 pb-2.5 shadow-md">
-                        <div className="bg-yellow-primary absolute top-0 left-0 -translate-y-1/2 rounded-lg rounded-bl-none px-3 py-2 font-semibold">
-                            Today's Schedule
-                        </div>
+                    <Divider text="Today's Schedule" />
+                    <div className="bg-green-secondary divide-green-primary divide-y-2 rounded-md shadow-md">
                         {schedules.map((sched) => {
                             const {
                                 startMeridiem,
@@ -158,17 +172,25 @@ async function TodaysSchedule({ roomId }: { roomId: string }) {
                                 endHour,
                                 endMinute,
                             } = GetTimeComponentsFromScheduleDocument(sched);
+                            const ongoing =
+                                slotToMinutes(now) >=
+                                    slotToMinutes(sched.slot.start) &&
+                                slotToMinutes(now) <
+                                    slotToMinutes(sched.slot.end);
+                            const passed =
+                                slotToMinutes(now) >=
+                                slotToMinutes(sched.slot.end);
                             return (
                                 <div
                                     key={sched._id.toString()}
-                                    className="text-text-primary px-5 py-2.5 font-semibold"
+                                    className={clsx(
+                                        "text-text-primary px-5 py-2.5 font-semibold",
+                                        ongoing &&
+                                            "border-yellow-primary border-l-3",
+                                    )}
                                 >
                                     <div
-                                        className={clsx(
-                                            slotToMinutes(now) >=
-                                                slotToMinutes(sched.slot.end) &&
-                                                "opacity-50",
-                                        )}
+                                        className={clsx(passed && "opacity-50")}
                                     >
                                         <p className="text-yellow-primary">
                                             {sched.subject}
@@ -227,13 +249,9 @@ async function ClassroomPage({
                 buildingName={classroom.building.name}
                 classroomCode={classroom.code}
             />
-            <Suspense>
-                <CurrentSession roomId={classroom._id.toString()} />
-            </Suspense>
-            <Suspense>
+            <Suspense fallback={<Loading />}>
+                <OngoingSchedule roomId={classroom._id.toString()} />
                 <TodaysSchedule roomId={classroom._id.toString()} />
-            </Suspense>
-            <Suspense>
                 <Schedules roomId={roomId} />
             </Suspense>
         </>
