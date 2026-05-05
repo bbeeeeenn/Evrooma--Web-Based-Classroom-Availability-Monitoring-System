@@ -24,8 +24,10 @@ import {
 export function BuildingNameHeader() {
     const { buildingName } = useBuildingInfo();
     return (
-        <h1 className="text-text-primary flex items-center gap-2 text-4xl font-bold underline">
-            <Building2 size={30} />
+        <h1 className="text-text-primary flex items-center gap-2 text-3xl font-bold">
+            <span>
+                <Building2 size={25} />
+            </span>
             {buildingName}
         </h1>
     );
@@ -318,14 +320,14 @@ export function BuildingSettings() {
             />
             <div className="flex gap-4">
                 <button
-                    className="hover:bg-yellow-secondary focus-visible:bg-yellow-secondary active:bg-yellow-secondary bg-yellow-primary flex min-w-0 grow cursor-pointer items-center justify-center gap-2 rounded-md px-5 py-2 font-semibold shadow-md transition-all sm:max-w-3xs"
+                    className="hover:bg-yellow-secondary focus-visible:bg-yellow-secondary active:bg-yellow-secondary bg-yellow-primary flex min-w-0 grow cursor-pointer items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-semibold shadow-md transition-all sm:max-w-3xs"
                     onClick={() => setOpenedModal("rename")}
                     disabled={openedModal === "rename"}
                 >
                     <Pencil /> Rename
                 </button>
                 <button
-                    className="hover:bg-yellow-secondary focus-visible:bg-yellow-secondary active:bg-yellow-secondary bg-yellow-primary flex min-w-0 grow cursor-pointer items-center justify-center gap-2 rounded-md px-5 py-2 font-semibold shadow-md transition-all sm:max-w-3xs"
+                    className="hover:bg-yellow-secondary focus-visible:bg-yellow-secondary active:bg-yellow-secondary bg-yellow-primary flex min-w-0 grow cursor-pointer items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-semibold shadow-md transition-all sm:max-w-3xs"
                     onClick={() => setOpenedModal("remove")}
                     disabled={openedModal === "remove"}
                 >
@@ -389,7 +391,7 @@ export function AddClassroomComponent() {
     return (
         <>
             <button
-                className="hover:bg-yellow-secondary focus-visible:bg-yellow-secondary active:bg-yellow-secondary bg-yellow-primary mb-5 flex cursor-pointer items-center gap-1 rounded-md px-4 py-2.5 font-semibold shadow-md transition-colors"
+                className="hover:bg-yellow-secondary focus-visible:bg-yellow-secondary active:bg-yellow-secondary bg-yellow-primary mb-5 flex cursor-pointer items-center gap-1 rounded-md px-4 py-2.5 text-sm font-semibold shadow-md transition-colors"
                 onClick={() => setShowModal(true)}
                 disabled={showModal}
             >

@@ -2,14 +2,14 @@ import { adminInstructorsPage, DaysOfWeek } from "@/constants";
 import { BackButton } from "@/app/components/BackButton";
 import { InstructorInfoComponent, ScheduleCard } from "./ClientComponents";
 import { CalendarDays } from "lucide-react";
-import React, { Suspense } from "react";
+import React, { Fragment, Suspense } from "react";
 import {
     PopulatedPlainScheduleDocument,
     Schedule,
 } from "@/app/mongoDb/models/schedule";
 import { connectDB } from "@/app/mongoDb/mongodb";
 import { Divider } from "@/app/components/Divider";
-import { ScheduleCardSkeleton } from "@/app/(site)/ClientComponents";
+import { ScheduleCardSkeleton } from "@/app/(site)/Components";
 
 async function GetSchedule({ instructorId }: { instructorId: string }) {
     let schedules: PopulatedPlainScheduleDocument[] = []; // Populated Schedule Document
@@ -63,7 +63,7 @@ async function GetSchedule({ instructorId }: { instructorId: string }) {
                 };
 
                 return (
-                    <React.Fragment key={sched._id.toString()}>
+                    <Fragment key={sched._id.toString()}>
                         <Divide />
                         <ScheduleCard
                             _id={sched._id.toString()}
@@ -80,7 +80,7 @@ async function GetSchedule({ instructorId }: { instructorId: string }) {
                             startMeridiem={startMeridiem}
                             subject={sched.subject}
                         />
-                    </React.Fragment>
+                    </Fragment>
                 );
             })}
         </>
@@ -102,9 +102,8 @@ export default async function InstructorInfoPage({
             <BackButton dest={adminInstructorsPage} />
             <InstructorInfoComponent />
             <div className="mt-10 flex items-center gap-3 text-white/90">
-                <CalendarDays size={30} className="inline sm:hidden" />
-                <CalendarDays size={40} className="hidden sm:inline" />
-                <h1 className="text-3xl font-bold sm:text-4xl">Schedules</h1>
+                <CalendarDays size={30} className="inline" />
+                <h1 className="text-3xl font-bold">Schedules</h1>
             </div>
             <Suspense fallback={<ScheduleCardSkeleton />}>
                 <GetSchedule instructorId={instructorId} />

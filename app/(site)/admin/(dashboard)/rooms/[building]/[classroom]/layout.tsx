@@ -25,7 +25,6 @@ async function Classroom({ buildingId }: { buildingId: string }) {
             <GenerateQrCode />
             <Divider text="Settings" />
             <ClassroomSettings />
-            <Divider />
         </>
     );
 }

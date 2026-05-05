@@ -6,22 +6,7 @@ import { Suspense } from "react";
 import { User, PlainUserDocument } from "@/app/mongoDb/models/user";
 import { connectDB } from "@/app/mongoDb/mongodb";
 import { connection } from "next/server";
-
-function UserListSkeleton() {
-    return (
-        <ul className="space-y-4 opacity-50">
-            {Array.from({ length: 3 }).map((_, i) => (
-                <li
-                    key={i}
-                    className="bg-green-secondary border-green-tertiary/30 block w-full space-y-2 rounded-md border-b-4 px-5 py-5 shadow-md"
-                >
-                    <div className="h-8 max-w-2xs animate-pulse bg-white/30"></div>
-                    <div className="h-5 max-w-xs animate-pulse bg-white/30"></div>
-                </li>
-            ))}
-        </ul>
-    );
-}
+import { UserListSkeleton } from "@/app/(site)/Components";
 
 async function StudentsList() {
     let students: PlainUserDocument[] = [];
@@ -47,13 +32,13 @@ async function StudentsList() {
                             "hover:bg-green-tertiary active:bg-green-tertiary hover:scale-101 active:scale-100",
                         )}
                     >
-                        <p className="flex items-center gap-2 text-2xl font-bold">
+                        <p className="flex items-center gap-2 text-xl font-bold">
                             <span>
                                 <GraduationCap />
                             </span>
                             {student.fullName}
                         </p>
-                        <p className="truncate font-semibold">
+                        <p className="truncate text-sm font-semibold">
                             {student.email}
                         </p>
                     </Link>
@@ -66,7 +51,7 @@ async function StudentsList() {
 export default function AccountsPage() {
     return (
         <>
-            <h1 className="mt-6 mb-8 text-4xl font-bold text-green-100">
+            <h1 className="mt-6 mb-8 text-2xl font-bold text-green-100">
                 Students
             </h1>
             <Suspense fallback={<UserListSkeleton />}>

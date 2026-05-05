@@ -40,9 +40,9 @@ function BuildingListSkeleton() {
             {Array.from({ length: 3 }).map((_, i) => (
                 <li
                     key={i}
-                    className="font-poppins bg-green-secondary border-green-secondary/50 min-w-3xs grow rounded-lg border-b-4 p-5 font-semibold shadow-md transition-transform sm:max-w-sm"
+                    className="font-poppins bg-green-secondary border-green-secondary/50 min-w-3xs grow rounded-lg border-b-4 px-4 py-3 font-semibold shadow-md transition-transform sm:max-w-sm"
                 >
-                    <p className="mb-1 w-5/6 animate-pulse truncate bg-white/30 text-2xl text-transparent">
+                    <p className="mb-1 w-5/6 animate-pulse truncate bg-white/30 text-xl text-transparent">
                         I Love Spaghetti
                     </p>
                     <p className="w-1/2 animate-pulse truncate bg-white/30 text-sm tracking-wide text-transparent">
@@ -71,11 +71,11 @@ async function BuildingsList() {
             {buildings.map((b) => (
                 <li
                     key={b._id.toString()}
-                    className="font-poppins border-green-quarternary bg-green-secondary focus-within:bg-green-tertiary active:bg-green-tertiary hover:bg-green-tertiary min-w-3xs grow rounded-lg border-b-4 text-3xl font-semibold shadow-md transition-transform hover:-translate-y-0.5 sm:max-w-sm"
+                    className="font-poppins border-green-quarternary bg-green-secondary focus-within:bg-green-tertiary active:bg-green-tertiary hover:bg-green-tertiary min-w-3xs grow rounded-lg border-b-4 text-2xl font-semibold shadow-md transition-transform hover:-translate-y-0.5 sm:max-w-sm"
                 >
                     <Link
                         href={adminRoomsPage + "/" + b._id}
-                        className="block cursor-pointer p-5"
+                        className="block cursor-pointer px-4 py-3"
                     >
                         <p className="flex items-center gap-1 truncate">
                             <Building2 />
@@ -92,19 +92,19 @@ async function BuildingsList() {
 export async function ClassroomsSkeleton() {
     await connection();
     return (
-        <ul className="-z-50">
-            {Array.from({ length: 4 }).map((_, i) => (
+        <ul className="-z-50 space-y-3">
+            {Array.from({ length: 8 }).map((_, i) => (
                 <li
                     key={i}
-                    className="bg-green-secondary mb-4 block space-y-2 rounded-md px-5 py-3 opacity-50 shadow-md"
+                    className="bg-green-secondary block space-y-2 rounded-md px-5 py-3 opacity-50 shadow-md"
                 >
-                    <p className="h-fit w-fit animate-pulse truncate bg-white/30 text-2xl font-bold text-transparent">
+                    <p className="h-fit w-fit animate-pulse truncate bg-white/30 text-xl font-bold text-transparent">
                         DUMMY
                         {Array.from({
                             length: Math.ceil(7 * Math.random()),
                         }).map(() => "#")}
                     </p>
-                    <p className="w-fit animate-pulse bg-white/30 font-semibold text-transparent">
+                    <p className="w-fit animate-pulse bg-white/30 text-sm font-semibold text-transparent">
                         Building.......
                     </p>
                 </li>
@@ -127,41 +127,30 @@ async function Classrooms() {
         return <ErrorFallback error={e} />;
     }
 
-    let currBuilding = "";
-
     return (
-        <ul>
+        <ul className="space-y-3">
             {classrooms.map((classroom) => {
-                // TODO: chain delete all the schedules related to this classroom if the building is already deleted. Do it with server-action
                 if (!classroom.building) {
                     return null;
                 }
-                const BuildingDiv = () => {
-                    if (currBuilding !== classroom.building.name) {
-                        currBuilding = classroom.building.name;
-                        return <Divider text={currBuilding} />;
-                    }
-                    return null;
-                };
                 return (
                     <li key={classroom._id.toString()}>
-                        <BuildingDiv />
                         <Link
                             href={`${adminRoomsPage}/${classroom.building._id}/${classroom._id}`}
                             className={clsx(
-                                "bg-green-secondary focus-visible:bg-green-tertiary active:bg-green-tertiary text-text-primary mb-4 block rounded-md px-5 py-3 shadow-md transition-all",
+                                "bg-green-secondary focus-visible:bg-green-tertiary active:bg-green-tertiary text-text-primary block rounded-md px-5 py-3 shadow-md transition-all",
                                 "hover:bg-green-tertiary active:bg-green-tertiary hover:scale-101 active:scale-100",
                             )}
                         >
                             <div className="flex items-center gap-1">
                                 <span>
-                                    <DoorOpen size={25} />
+                                    <DoorOpen />
                                 </span>
-                                <p className="items-center gap-2 truncate text-4xl font-bold">
+                                <p className="items-center gap-2 truncate text-2xl font-bold">
                                     {classroom.code}
                                 </p>
                             </div>
-                            <p className="text-text-secondary font-semibold">
+                            <p className="text-text-secondary text-sm font-semibold">
                                 {classroom.building.name}
                             </p>
                         </Link>
@@ -176,14 +165,14 @@ export default async function AdminRoomsPage() {
     await connection();
     return (
         <>
-            <h1 className="text-text-primary mb-10 text-4xl font-bold">
+            <h1 className="text-text-primary mb-5 text-2xl font-bold">
                 Buildings
             </h1>
             <AddBuilding />
             <Suspense fallback={<BuildingListSkeleton />}>
                 <BuildingsList />
             </Suspense>
-            <h1 className="text-text-primary my-10 text-4xl font-bold">
+            <h1 className="text-text-primary my-5 text-2xl font-bold">
                 Classrooms
             </h1>
             <Suspense fallback={<ClassroomsSkeleton />}>

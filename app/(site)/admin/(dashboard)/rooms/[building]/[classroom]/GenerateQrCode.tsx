@@ -128,7 +128,7 @@ export default function GenerateQrCode() {
                 </dialog>
             )}
             <button
-                className="bg-yellow-primary my-10 flex w-full max-w-xs items-center justify-center gap-2 rounded-md py-2 font-semibold text-black shadow-md"
+                className="bg-yellow-primary my-10 flex w-full items-center justify-center gap-2 rounded-md px-5 py-2 text-sm font-semibold text-black shadow-md sm:my-5 sm:w-fit"
                 onClick={() => {
                     if (!dialog.current) return;
                     dialog.current.showModal();

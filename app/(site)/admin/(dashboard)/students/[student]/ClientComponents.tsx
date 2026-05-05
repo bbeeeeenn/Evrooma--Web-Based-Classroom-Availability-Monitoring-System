@@ -167,7 +167,7 @@ function DeleteAccount() {
 }
 
 export function StudentInfoComponent() {
-    const { email, fname, lname, userId: instructorId } = useUserInfo();
+    const { email, fname, lname } = useUserInfo();
 
     return (
         <>
@@ -176,8 +176,8 @@ export function StudentInfoComponent() {
                     <GraduationCap size={40} />
                 </div>
                 <div>
-                    <p className="text-2xl font-bold wrap-anywhere sm:text-4xl">{`${fname} ${lname}`}</p>
-                    <p className="text-lg font-semibold wrap-anywhere sm:text-xl">
+                    <p className="text-2xl font-bold wrap-anywhere">{`${fname} ${lname}`}</p>
+                    <p className="text-sm font-semibold wrap-anywhere">
                         {email}
                     </p>
                 </div>

@@ -66,7 +66,7 @@ export function CoolSidebar({
                 </Link>
             </div>
 
-            <div className="flex transition-all duration-300 md:pl-80">
+            <div className="flex transition-all duration-300 md:pl-[min(20rem,calc(33.333%))]">
                 <main
                     inert={open && !isMd}
                     className={
@@ -81,7 +81,7 @@ export function CoolSidebar({
             <div
                 inert={!isMd}
                 className={clsx(
-                    "bg-green-quarternary font-poppins text-text-primary fixed inset-y-0 left-0 z-11 flex w-full max-w-xs -translate-x-full flex-col overflow-x-hidden overflow-y-auto shadow-xl transition-transform duration-300 md:translate-x-0",
+                    "bg-green-quarternary font-poppins text-text-primary fixed inset-y-0 left-0 z-11 flex w-1/3 max-w-xs -translate-x-full flex-col overflow-x-hidden overflow-y-auto shadow-xl transition-transform duration-300 md:translate-x-0",
                 )}
             >
                 <Link

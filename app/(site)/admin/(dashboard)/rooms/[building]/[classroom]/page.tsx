@@ -1,4 +1,4 @@
-import { CalendarDays, Plus } from "lucide-react";
+import { CalendarDays, Lectern, Plus } from "lucide-react";
 import { Divider } from "@/app/components/Divider";
 import { adminRoomsPage, DaysOfWeek } from "@/constants";
 import Link from "next/link";
@@ -8,25 +8,22 @@ import {
     Schedule,
 } from "@/app/mongoDb/models/schedule";
 import { ScheduleCard } from "./ClientComponents";
-import { ScheduleCardSkeleton } from "@/app/(site)/ClientComponents";
-import { Suspense } from "react";
+import { ScheduleCardSkeleton } from "@/app/(site)/Components";
+import { Fragment, Suspense } from "react";
 import ErrorFallback from "@/app/components/ErrorFallback";
 
-async function GetSchedule({
-    classroomId,
-    day,
-}: {
-    classroomId: string;
-    day: string;
-}) {
+async function GetSchedule({ classroomId }: { classroomId: string }) {
     let schedules: PopulatedPlainScheduleDocument[] = []; // Populated Schedule Document
     try {
         await connectDB();
         schedules = await Schedule.find({
             room: classroomId,
-            "slot.dayOfWeek": DaysOfWeek.indexOf(day),
         })
-            .sort({ "slot.start.hour": 1, "slot.start.minute": 1 })
+            .sort({
+                "slot.dayOfWeek": 1,
+                "slot.start.hour": 1,
+                "slot.start.minute": 1,
+            })
             .populate("instructor")
             .populate({ path: "room", populate: "building" })
             .lean({ virtuals: true });
@@ -34,10 +31,12 @@ async function GetSchedule({
         console.error(e);
         return <ErrorFallback error={e} />;
     }
+
+    let currDay = -1;
+
     return (
         schedules.length > 0 && (
             <>
-                <Divider text={day} />
                 {schedules.map((sched) => {
                     const startMeridiem: "AM" | "PM" =
                         sched.slot.start.hour < 12 ? "AM" : "PM";
@@ -53,23 +52,32 @@ async function GetSchedule({
                             ? 12
                             : sched.slot.end.hour % 12;
                     const endMinute = sched.slot.end.minute;
+                    const Divide = () => {
+                        if (currDay !== sched.slot.dayOfWeek) {
+                            currDay = sched.slot.dayOfWeek;
+                            return <Divider text={DaysOfWeek[currDay]} />;
+                        }
+                        return null;
+                    };
                     return (
-                        <ScheduleCard
-                            key={sched._id.toString()}
-                            _id={sched._id.toString()}
-                            building={sched.room.building.name}
-                            room={sched.room.code}
-                            instructorFullName={sched.instructor.fullName}
-                            instructorId={sched.instructor._id.toString()}
-                            subject={sched.subject}
-                            endHour={endHour}
-                            endMinute={endMinute}
-                            endMeridiem={endMeridiem}
-                            startHour={startHour}
-                            startMinute={startMinute}
-                            startMeridiem={startMeridiem}
-                            day={day}
-                        />
+                        <Fragment key={sched._id.toString()}>
+                            <Divide />
+                            <ScheduleCard
+                                _id={sched._id.toString()}
+                                building={sched.room.building.name}
+                                room={sched.room.code}
+                                instructorFullName={sched.instructor.fullName}
+                                instructorId={sched.instructor._id.toString()}
+                                subject={sched.subject}
+                                endHour={endHour}
+                                endMinute={endMinute}
+                                endMeridiem={endMeridiem}
+                                startHour={startHour}
+                                startMinute={startMinute}
+                                startMeridiem={startMeridiem}
+                                day={DaysOfWeek[sched.slot.dayOfWeek]}
+                            />
+                        </Fragment>
                     );
                 })}
             </>
@@ -85,36 +93,18 @@ export default async function AdminClassroomPage({
     const { building: buildingId, classroom: classroomId } = await params;
     return (
         <>
-            <div className="text-text-primary flex items-center gap-3">
-                <CalendarDays size={40} />
-                <h1 className="text-4xl font-bold">Schedules</h1>
+            <div className="text-text-primary mt-10 flex items-center gap-3">
+                <CalendarDays size={30} />
+                <h1 className="text-3xl font-bold">Schedules</h1>
             </div>
             <Link
                 href={`${adminRoomsPage}/${buildingId}/${classroomId}/create-schedule`}
-                className="bg-yellow-primary focus-visible:bg-yellow-secondary active:bg-yellow-secondary hover:bg-yellow-secondary my-7 flex w-fit items-center gap-2 rounded-md px-4 py-2.5 font-semibold shadow-md"
+                className="bg-yellow-primary focus-visible:bg-yellow-secondary active:bg-yellow-secondary hover:bg-yellow-secondary my-7 flex w-fit items-center gap-2 rounded-md px-4 py-2.5 text-sm font-semibold shadow-md"
             >
                 <Plus /> Add Schedule
             </Link>
             <Suspense fallback={<ScheduleCardSkeleton />}>
-                <GetSchedule classroomId={classroomId} day="Sunday" />
-            </Suspense>
-            <Suspense fallback={<ScheduleCardSkeleton />}>
-                <GetSchedule classroomId={classroomId} day="Monday" />
-            </Suspense>
-            <Suspense fallback={<ScheduleCardSkeleton />}>
-                <GetSchedule classroomId={classroomId} day="Tuesday" />
-            </Suspense>
-            <Suspense fallback={<ScheduleCardSkeleton />}>
-                <GetSchedule classroomId={classroomId} day="Wednesday" />
-            </Suspense>
-            <Suspense fallback={<ScheduleCardSkeleton />}>
-                <GetSchedule classroomId={classroomId} day="Thursday" />
-            </Suspense>
-            <Suspense fallback={<ScheduleCardSkeleton />}>
-                <GetSchedule classroomId={classroomId} day="Friday" />
-            </Suspense>
-            <Suspense fallback={<ScheduleCardSkeleton />}>
-                <GetSchedule classroomId={classroomId} day="Saturday" />
+                <GetSchedule classroomId={classroomId} />
             </Suspense>
         </>
     );

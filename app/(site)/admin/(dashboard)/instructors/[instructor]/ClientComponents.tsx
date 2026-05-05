@@ -205,8 +205,8 @@ export function InstructorInfoComponent() {
                     <BookText size={40} />
                 </div>
                 <div>
-                    <p className="text-2xl font-bold wrap-anywhere sm:text-4xl">{`${fname} ${lname}`}</p>
-                    <p className="text-lg font-semibold wrap-anywhere sm:text-xl">
+                    <p className="text-2xl font-bold wrap-anywhere">{`${fname} ${lname}`}</p>
+                    <p className="text-sm font-semibold wrap-anywhere">
                         {email}
                     </p>
                 </div>
@@ -355,7 +355,7 @@ export function ScheduleCard({
                 </div>
             </dialog>
             <button
-                className="text-text-primary focus-visible:bg-green-tertiary active:bg-green-tertiary hover:bg-green-tertiary border-yellow-primary bg-green-secondary mt-5 block w-full rounded-md border-l-4 px-5 py-3 text-start shadow-md"
+                className="text-text-primary focus-visible:bg-green-tertiary active:bg-green-tertiary hover:bg-green-tertiary border-yellow-primary bg-green-secondary mt-3 block w-full rounded-md border-l-4 px-5 py-3 text-start shadow-md"
                 onClick={() => dialog.current?.showModal()}
             >
                 <p className="font-roboto-mono text-xl font-bold sm:text-2xl">

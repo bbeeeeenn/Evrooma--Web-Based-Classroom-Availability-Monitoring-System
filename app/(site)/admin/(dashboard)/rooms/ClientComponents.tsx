@@ -40,7 +40,7 @@ export default function AddBuilding() {
         <>
             <button
                 className={clsx(
-                    "bg-yellow-primary focus-visible:bg-yellow-secondary active:bg-yellow-secondary hover:bg-yellow-secondary mb-5 flex cursor-pointer items-center gap-1 rounded-md p-2 font-semibold text-black shadow-md",
+                    "bg-yellow-primary focus-visible:bg-yellow-secondary active:bg-yellow-secondary hover:bg-yellow-secondary mb-5 flex cursor-pointer items-center gap-1 rounded-md p-2 text-sm font-semibold text-black shadow-md",
                     "hover:bg-green-secondary transition-colors active:scale-105",
                 )}
                 onClick={() => setShowModal(true)}

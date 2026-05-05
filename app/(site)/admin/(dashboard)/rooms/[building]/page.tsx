@@ -12,6 +12,7 @@ import { connectDB } from "@/app/mongoDb/mongodb";
 import { ClassroomsSkeleton } from "../page";
 import { BackButton } from "@/app/components/BackButton";
 import ErrorFallback from "@/app/components/ErrorFallback";
+import { DoorOpen } from "lucide-react";
 
 async function Classrooms({ buildingId }: { buildingId: string }) {
     let classrooms: PopulatedPlainRoomDocument[] = [];
@@ -33,12 +34,15 @@ async function Classrooms({ buildingId }: { buildingId: string }) {
                 <Link
                     key={classroom._id.toString()}
                     href={`${adminRoomsPage}/${buildingId}/${classroom._id}`}
-                    className="bg-green-secondary focus-visible:bg-green-tertiary active:bg-green-tertiary hover:bg-green-tertiary mb-4 block rounded-md px-5 py-3 shadow-md"
+                    className="bg-green-secondary focus-visible:bg-green-tertiary active:bg-green-tertiary hover:bg-green-tertiary mb-3 block rounded-md px-5 py-3 shadow-md"
                 >
-                    <p className="text-text-primary truncate text-4xl font-bold">
+                    <p className="text-text-primary flex items-center gap-1 truncate text-2xl font-bold">
+                        <span>
+                            <DoorOpen />
+                        </span>
                         {classroom.code}
                     </p>
-                    <p className="text-text-secondary font-semibold">
+                    <p className="text-text-secondary text-sm font-semibold">
                         {classroom.building.name}
                     </p>
                 </Link>

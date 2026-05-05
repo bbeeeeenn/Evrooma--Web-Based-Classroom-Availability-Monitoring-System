@@ -33,13 +33,13 @@ export function ClassroomCodeHeader() {
     return (
         <div className="text-text-primary flex items-end gap-2">
             <span>
-                <DoorOpen size={45} />
+                <DoorOpen size={35} />
             </span>
             <div>
-                <p className="text-text-secondary text-lg font-semibold">
+                <p className="text-text-secondary text-md font-semibold">
                     {buildingName}
                 </p>
-                <h1 className="text-4xl font-bold underline">
+                <h1 className="text-3xl font-bold underline">
                     {classroomCode}
                 </h1>
             </div>
@@ -336,14 +336,14 @@ export function ClassroomSettings() {
             />
             <div className="flex gap-4">
                 <button
-                    className="hover:bg-yellow-secondary focus-visible:bg-yellow-secondary active:bg-yellow-secondary bg-yellow-primary flex min-w-0 grow cursor-pointer items-center justify-center gap-2 rounded-md px-5 py-2 font-semibold shadow-md transition-all sm:max-w-3xs"
+                    className="hover:bg-yellow-secondary focus-visible:bg-yellow-secondary active:bg-yellow-secondary bg-yellow-primary flex min-w-0 grow cursor-pointer items-center justify-center gap-2 rounded-md px-5 py-2 text-sm font-semibold shadow-md transition-all sm:max-w-3xs"
                     onClick={() => setOpenedModal("rename")}
                     disabled={openedModal === "rename"}
                 >
                     <Pencil /> Rename
                 </button>
                 <button
-                    className="hover:bg-yellow-secondary focus-visible:bg-yellow-secondary active:bg-yellow-secondary bg-yellow-primary flex min-w-0 grow cursor-pointer items-center justify-center gap-2 rounded-md px-5 py-2 font-semibold shadow-md transition-all sm:max-w-3xs"
+                    className="hover:bg-yellow-secondary focus-visible:bg-yellow-secondary active:bg-yellow-secondary bg-yellow-primary flex min-w-0 grow cursor-pointer items-center justify-center gap-2 rounded-md px-5 py-2 text-sm font-semibold shadow-md transition-all sm:max-w-3xs"
                     onClick={() => setOpenedModal("remove")}
                     disabled={openedModal === "remove"}
                 >
@@ -482,15 +482,15 @@ export function ScheduleCard({
                 </div>
             </dialog>
             <button
-                className="text-text-primary focus-visible:bg-green-tertiary active:bg-green-tertiary hover:bg-green-tertiary border-yellow-primary bg-green-secondary mt-5 block w-full rounded-md border-l-4 px-5 py-3 text-start shadow-md"
+                className="text-text-primary focus-visible:bg-green-tertiary active:bg-green-tertiary hover:bg-green-tertiary border-yellow-primary bg-green-secondary my-3 block w-full rounded-md border-l-4 px-5 py-3 text-start shadow-md"
                 onClick={() => dialog.current?.showModal()}
             >
-                <p className="font-roboto-mono text-2xl font-bold">
+                <p className="font-roboto-mono text-xl font-bold">
                     {`${startHour}:${startMinute < 10 ? "0" + startMinute : startMinute}${startMeridiem}`}{" "}
                     -{" "}
                     {`${endHour}:${endMinute < 10 ? "0" + endMinute : endMinute}${endMeridiem}`}
                 </p>
-                <p className="font-poppins font-semibold">
+                <p className="font-poppins text-sm font-semibold">
                     <span className="text-yellow-primary">
                         {instructorFullName}
                     </span>{" "}
