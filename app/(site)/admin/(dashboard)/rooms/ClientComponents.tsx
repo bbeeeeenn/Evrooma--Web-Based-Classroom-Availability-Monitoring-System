@@ -14,7 +14,6 @@ export default function AddBuilding() {
         const result = await addBuildingAction(_, formData);
 
         if (result.status === "success") {
-            setName("");
             setShowModal(false);
             toast.success(result.message);
         } else if (result.status === "error") {
@@ -22,12 +21,12 @@ export default function AddBuilding() {
         }
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, formAction, isPending] = useActionState(onAction, null);
 
     useEffect(() => {
         if (showModal) {
             inputRef.current?.focus();
-            setName(""); // Refresh input
         }
         const func = (e: KeyboardEvent) => {
             if (showModal && e.key === "Escape") setShowModal(false);
@@ -43,7 +42,10 @@ export default function AddBuilding() {
                     "bg-yellow-primary focus-visible:bg-yellow-secondary active:bg-yellow-secondary hover:bg-yellow-secondary mb-5 flex cursor-pointer items-center gap-1 rounded-md p-2 text-sm font-semibold text-black shadow-md",
                     "hover:bg-green-secondary transition-colors active:scale-105",
                 )}
-                onClick={() => setShowModal(true)}
+                onClick={() => {
+                    setName("");
+                    setShowModal(true);
+                }}
             >
                 <Plus /> Add Building
             </button>

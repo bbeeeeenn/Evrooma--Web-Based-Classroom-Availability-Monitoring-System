@@ -5,7 +5,7 @@ import { studentLoginPage, studentRegisterPage } from "@/constants";
 import clsx from "clsx";
 import { CirclePlus, LoaderCircle, Lock, Mail, User } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useState } from "react";
 import { toast } from "react-toastify";
 
 type Data = {
@@ -59,6 +59,7 @@ export function CreateInstructorForm(): React.ReactNode {
                 render: response.message,
                 autoClose: 3000,
             });
+            setData({ ...defaultData });
             router.replace(studentLoginPage);
         } else {
             toast.update(loadingToast, {
@@ -70,13 +71,8 @@ export function CreateInstructorForm(): React.ReactNode {
         }
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, formAction, isPending] = useActionState(onAction, null);
-
-    useEffect(() => {
-        if (!isPending) {
-            setData({ ...defaultData });
-        }
-    }, [router]);
 
     return (
         <form

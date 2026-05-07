@@ -86,7 +86,7 @@ export default function GenerateQrCode() {
 
             setData(finalCanvas.toDataURL("image/png"));
         })();
-    }, []);
+    });
 
     const dialog = useRef<HTMLDialogElement>(null);
     const handleDialogClick = (e: MouseEvent<HTMLDialogElement>) => {

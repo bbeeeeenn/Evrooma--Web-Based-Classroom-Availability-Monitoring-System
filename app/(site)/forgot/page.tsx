@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import Loading from "../loading";
-import { Done, EmailForm, Error } from "./ClientComponents";
+import { EmailForm } from "./ClientComponents";
 import Image from "next/image";
 import Link from "next/link";
 import { homePage } from "@/constants";

@@ -9,8 +9,7 @@ import {
 import { PlainUserDocument, User } from "@/app/mongoDb/models/user";
 import { connectDB } from "@/app/mongoDb/mongodb";
 import { adminInstructorsPage } from "@/constants";
-import { History, LogsIcon } from "lucide-react";
-import { redirect } from "next/navigation";
+import { History } from "lucide-react";
 import { Suspense } from "react";
 
 async function Logs({ instructorId }: { instructorId: string }) {
@@ -38,7 +37,7 @@ async function Logs({ instructorId }: { instructorId: string }) {
                 <span>
                     <History size={30} />
                 </span>
-                {instructor.lastName}'
+                {instructor.lastName}&apos;
                 {instructor.lastName.charAt(-1) !== "s" && "s"} Logs
             </p>
             {logs.length <= 0 ? (

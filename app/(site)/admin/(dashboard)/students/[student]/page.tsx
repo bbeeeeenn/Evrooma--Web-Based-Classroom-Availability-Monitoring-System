@@ -1,7 +1,6 @@
-import { adminStudentsPage, DaysOfWeek } from "@/constants";
+import { adminStudentsPage } from "@/constants";
 import { BackButton } from "@/app/components/BackButton";
 import { StudentInfoComponent } from "./ClientComponents";
-import { History, LogsIcon } from "lucide-react";
 import ErrorFallback from "@/app/components/ErrorFallback";
 import {
     AttendanceLog,

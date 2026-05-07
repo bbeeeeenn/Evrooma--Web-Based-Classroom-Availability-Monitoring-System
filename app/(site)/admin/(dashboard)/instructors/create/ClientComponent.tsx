@@ -4,7 +4,7 @@ import { adminInstructorsPage, adminCreateInstructorPage } from "@/constants";
 import clsx from "clsx";
 import { CirclePlus, LoaderCircle, Lock, Mail, User } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState } from "react";
 import { toast } from "react-toastify";
 
 type Data = {
@@ -15,20 +15,11 @@ type Data = {
     password2: string;
 };
 
-const defaultData: Data = {
-    fname: "",
-    lname: "",
-    email: "",
-    password: "",
-    password2: "",
-};
-
 export function CreateInstructorForm(): React.ReactNode {
-    const [data, setData] = useState<Data>({ ...defaultData });
     const router = useRouter();
     const pathname = usePathname();
 
-    const onAction = async (_: unknown, formData: FormData): Promise<void> => {
+    const onAction = async (_: unknown, formData: FormData): Promise<Data> => {
         const firstName =
             (formData.get("fname") as string | null)?.trim() ?? "";
         const lastName = (formData.get("lname") as string | null)?.trim() ?? "";
@@ -40,7 +31,13 @@ export function CreateInstructorForm(): React.ReactNode {
 
         if (password !== password2) {
             toast.error("Passwords doesn't match.");
-            return;
+            return {
+                fname: firstName,
+                lname: lastName,
+                email,
+                password,
+                password2,
+            };
         }
 
         const loadingToast = toast.loading("Waiting...");
@@ -66,16 +63,30 @@ export function CreateInstructorForm(): React.ReactNode {
                 render: response.message,
                 autoClose: 3000,
             });
+            return {
+                fname: firstName,
+                lname: lastName,
+                email,
+                password,
+                password2,
+            };
         }
+        return {
+            fname: "",
+            lname: "",
+            email: "",
+            password: "",
+            password2: "",
+        };
     };
 
-    const [_, formAction, isPending] = useActionState(onAction, null);
-
-    useEffect(() => {
-        if (!isPending) {
-            setData({ ...defaultData });
-        }
-    }, [router]);
+    const [data, formAction, isPending] = useActionState(onAction, {
+        email: "",
+        fname: "",
+        lname: "",
+        password: "",
+        password2: "",
+    });
 
     return (
         <form
@@ -97,10 +108,7 @@ export function CreateInstructorForm(): React.ReactNode {
                     id="fname"
                     name="fname"
                     placeholder="First Name"
-                    value={data.fname}
-                    onChange={(e) =>
-                        setData((prev) => ({ ...prev, fname: e.target.value }))
-                    }
+                    defaultValue={data.fname}
                     className="peer w-full border-b-2 border-white/50 text-xl outline-transparent placeholder:text-transparent focus:border-white"
                 />
                 <label
@@ -123,10 +131,7 @@ export function CreateInstructorForm(): React.ReactNode {
                     id="lname"
                     name="lname"
                     placeholder="Last Name"
-                    value={data.lname}
-                    onChange={(e) =>
-                        setData((prev) => ({ ...prev, lname: e.target.value }))
-                    }
+                    defaultValue={data.lname}
                     className="peer w-full border-b-2 border-white/50 text-xl outline-transparent placeholder:text-transparent focus:border-white"
                 />
                 <label
@@ -152,10 +157,7 @@ export function CreateInstructorForm(): React.ReactNode {
                     id="email"
                     name="email"
                     placeholder="Email"
-                    value={data.email}
-                    onChange={(e) =>
-                        setData((prev) => ({ ...prev, email: e.target.value }))
-                    }
+                    defaultValue={data.email}
                     className="peer w-full border-b-2 border-white/50 text-xl outline-transparent placeholder:text-transparent focus:border-white"
                 />
                 <label
@@ -191,13 +193,7 @@ export function CreateInstructorForm(): React.ReactNode {
                     id="password"
                     name="password"
                     placeholder="Password"
-                    value={data.password}
-                    onChange={(e) =>
-                        setData((prev) => ({
-                            ...prev,
-                            password: e.target.value,
-                        }))
-                    }
+                    defaultValue={data.password}
                     className="peer w-full border-b-2 border-white/50 text-xl outline-transparent placeholder:text-transparent focus:border-white"
                 />
                 <label
@@ -220,13 +216,7 @@ export function CreateInstructorForm(): React.ReactNode {
                     id="password2"
                     name="password2"
                     placeholder="Password"
-                    value={data.password2}
-                    onChange={(e) =>
-                        setData((prev) => ({
-                            ...prev,
-                            password2: e.target.value,
-                        }))
-                    }
+                    defaultValue={data.password2}
                     className="peer w-full border-b-2 border-white/50 text-xl outline-transparent placeholder:text-transparent focus:border-white"
                 />
                 <label

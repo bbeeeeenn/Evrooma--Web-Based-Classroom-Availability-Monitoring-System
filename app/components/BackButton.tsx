@@ -9,11 +9,12 @@ export function BackButton({
     text = "Back",
     referer,
 }: Readonly<{ dest?: string; text?: string; referer?: string | null }>) {
-    const [origin, setOrigin] = useState<string | null>(null);
     const router = useRouter();
+    const [origin, setOrigin] = useState<string | null>(null);
 
     useEffect(() => {
-        setOrigin(window.location.origin);
+        const x = () => setOrigin(window.location.origin);
+        x();
     }, []);
 
     if ((referer && origin && referer.includes(origin)) || !dest)

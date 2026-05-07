@@ -10,6 +10,6 @@ export default function AdminLogoutPage() {
 
     useEffect(() => {
         LogoutAdmin().finally(() => router.replace(adminLoginPage));
-    }, []);
+    });
     return <Loading />;
 }

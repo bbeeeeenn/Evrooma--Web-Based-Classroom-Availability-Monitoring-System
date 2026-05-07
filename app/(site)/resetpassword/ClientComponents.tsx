@@ -63,6 +63,7 @@ export function ChangePasswordForm({
             role === "instructor" ? instructorHomePage : studentHomePage,
         );
     };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, formAction, isPending] = useActionState(onAction, null);
 
     return (

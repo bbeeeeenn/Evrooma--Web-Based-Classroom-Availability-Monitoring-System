@@ -81,5 +81,3 @@ export function useAuth() {
 export function useAuthUpdate() {
     return useContext(AuthUpdateContext);
 }
-
-useAuth;

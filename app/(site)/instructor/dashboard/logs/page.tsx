@@ -7,7 +7,7 @@ import {
     PopulatePlainLogDocument,
 } from "@/app/mongoDb/models/log";
 import { connectDB } from "@/app/mongoDb/mongodb";
-import { History, LogsIcon } from "lucide-react";
+import { LogsIcon } from "lucide-react";
 import { Suspense } from "react";
 
 async function Logs() {

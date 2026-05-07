@@ -9,7 +9,7 @@ export default function AdminLogoutPage() {
     const router = useRouter();
     useEffect(() => {
         LogoutInstructor().finally(() => router.replace(instructorLoginPage));
-    }, []);
+    });
 
     return <Loading />;
 }

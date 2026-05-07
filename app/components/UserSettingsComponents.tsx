@@ -47,6 +47,7 @@ export function ChangeName({
         }
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, formAction, isPending] = useActionState(onAction, null);
 
     return (

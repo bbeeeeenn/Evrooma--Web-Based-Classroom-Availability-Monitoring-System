@@ -1,6 +1,6 @@
 "use client";
 import clsx from "clsx";
-import { ChangeEvent, FormEvent, SubmitEvent, useRef, useState } from "react";
+import { ChangeEvent, SubmitEvent, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { CreateSchedule } from "@/app/actions/ScheduleActions";
@@ -9,7 +9,6 @@ import {
     _Instructor,
     DayOfWeek,
     Meridiem,
-    Minute,
     useNewScheduleData,
     useUpdateScheduleData,
 } from "./NewScheduleProvider";

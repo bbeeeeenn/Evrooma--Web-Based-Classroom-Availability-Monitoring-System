@@ -15,33 +15,35 @@ import { connectDB } from "@/app/mongoDb/mongodb";
 
 async function ResetPassword({ token }: { token: string }) {
     await connection();
+    let foundToken: PopulatedPlainResetTokenDocument;
+
     try {
         await connectDB();
-        const foundToken: PopulatedPlainResetTokenDocument =
-            await ResetToken.findOne({ token })
-                .populate("user")
-                .lean({ virtuals: true });
-        if (
-            !foundToken ||
-            foundToken.done ||
-            Date.now() - foundToken.createdAt.getTime() > 1000 * 60 * 15 // Is Expired
-        ) {
-            return <InvalidToken />;
-        }
-
-        return (
-            <ChangePasswordForm
-                key={foundToken.token}
-                fullname={foundToken.user.fullName}
-                role={foundToken.user.type}
-                token={foundToken.token}
-                email={foundToken.user.email}
-            />
-        );
+        foundToken = await ResetToken.findOne({ token })
+            .populate("user")
+            .lean({ virtuals: true });
     } catch (e) {
         console.error(e);
         return <ErrorFallback error={e} />;
     }
+
+    if (
+        !foundToken ||
+        foundToken.done ||
+        new Date().getTime() - foundToken.createdAt.getTime() > 1000 * 60 * 15 // Is Expired
+    ) {
+        return <InvalidToken />;
+    }
+
+    return (
+        <ChangePasswordForm
+            key={foundToken.token}
+            fullname={foundToken.user.fullName}
+            role={foundToken.user.type}
+            token={foundToken.token}
+            email={foundToken.user.email}
+        />
+    );
 }
 
 export default async function Page({

@@ -41,21 +41,16 @@ async function Schedules({ roomId }: { roomId: string }) {
         return <ErrorFallback error={e} />;
     }
 
-    let day = -1;
     return schedules.length > 0 ? (
         <>
             <div className="text-text-primary mt-15 flex items-center gap-3">
                 <CalendarDays size={30} />
                 <h1 className="text-3xl font-bold">Schedules</h1>
             </div>
-            {schedules.map((sched) => {
-                const Divide = () => {
-                    if (day !== sched.slot.dayOfWeek) {
-                        day = sched.slot.dayOfWeek;
-                        return <Divider text={DaysOfWeek[day]} />;
-                    }
-                    return null;
-                };
+            {schedules.map((sched, i) => {
+                const showDivider =
+                    i === 0 ||
+                    sched.slot.dayOfWeek !== schedules[i - 1].slot.dayOfWeek;
                 const {
                     startMeridiem,
                     startHour,
@@ -66,7 +61,9 @@ async function Schedules({ roomId }: { roomId: string }) {
                 } = GetTimeComponentsFromScheduleDocument(sched);
                 return (
                     <React.Fragment key={sched._id.toString()}>
-                        <Divide />
+                        {showDivider && (
+                            <Divider text={DaysOfWeek[sched.slot.dayOfWeek]} />
+                        )}
                         <div className="text-text-primary border-yellow-primary bg-green-secondary mt-3 block w-full rounded-md border-l-4 px-5 py-3 text-start shadow-md">
                             <p className="font-roboto-mono text-2xl font-bold">
                                 {`${startHour}:${startMinute}${startMeridiem}`}{" "}
@@ -150,75 +147,69 @@ async function OngoingSchedule({ roomId }: { roomId: string }) {
 
 async function TodaysSchedule({ roomId }: { roomId: string }) {
     const now = new Date(formatPH());
+    let schedules: PopulatedPlainScheduleDocument[];
     try {
         await connectDB();
-        const schedules: PopulatedPlainScheduleDocument[] = await Schedule.find(
-            {
-                room: roomId,
-                "slot.dayOfWeek": now.getDay(),
-            },
-        )
+        schedules = await Schedule.find({
+            room: roomId,
+            "slot.dayOfWeek": now.getDay(),
+        })
             .sort({ "slot.start.hour": 1, "slot.start.minute": 1 })
             .populate("instructor")
             .lean({ virtuals: true });
-        return (
-            schedules.length > 0 && (
-                <>
-                    <Divider text="Today's Schedule" />
-                    <div className="bg-green-secondary divide-green-primary divide-y-2 rounded-md shadow-md">
-                        {schedules.map((sched) => {
-                            const {
-                                startMeridiem,
-                                startHour,
-                                startMinute,
-                                endMeridiem,
-                                endHour,
-                                endMinute,
-                            } = GetTimeComponentsFromScheduleDocument(sched);
-                            const ongoing =
-                                slotToMinutes(now) >=
-                                    slotToMinutes(sched.slot.start) &&
-                                slotToMinutes(now) <
-                                    slotToMinutes(sched.slot.end);
-                            const passed =
-                                slotToMinutes(now) >=
-                                slotToMinutes(sched.slot.end);
-                            return (
-                                <div
-                                    key={sched._id.toString()}
-                                    className={clsx(
-                                        "text-text-primary px-5 py-2.5 font-semibold",
-                                        ongoing &&
-                                            "border-yellow-primary border-l-3",
-                                    )}
-                                >
-                                    <div
-                                        className={clsx(passed && "opacity-50")}
-                                    >
-                                        <p className="text-yellow-primary">
-                                            {sched.subject}
-                                        </p>
-                                        <p className="font-roboto-mono text-xl">
-                                            {startHour}:{startMinute}
-                                            {startMeridiem} - {endHour}:
-                                            {endMinute}
-                                            {endMeridiem}
-                                        </p>
-                                        <p className="">
-                                            {sched.instructor.fullName}
-                                        </p>
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </>
-            )
-        );
     } catch (e) {
         console.error(e);
         return <ErrorFallback error={e} />;
     }
+    return (
+        schedules.length > 0 && (
+            <>
+                <Divider text="Today's Schedule" />
+                <div className="bg-green-secondary divide-green-primary divide-y-2 rounded-md shadow-md">
+                    {schedules.map((sched) => {
+                        const {
+                            startMeridiem,
+                            startHour,
+                            startMinute,
+                            endMeridiem,
+                            endHour,
+                            endMinute,
+                        } = GetTimeComponentsFromScheduleDocument(sched);
+                        const ongoing =
+                            slotToMinutes(now) >=
+                                slotToMinutes(sched.slot.start) &&
+                            slotToMinutes(now) < slotToMinutes(sched.slot.end);
+                        const passed =
+                            slotToMinutes(now) >= slotToMinutes(sched.slot.end);
+                        return (
+                            <div
+                                key={sched._id.toString()}
+                                className={clsx(
+                                    "text-text-primary px-5 py-2.5 font-semibold",
+                                    ongoing &&
+                                        "border-yellow-primary border-l-3",
+                                )}
+                            >
+                                <div className={clsx(passed && "opacity-50")}>
+                                    <p className="text-yellow-primary">
+                                        {sched.subject}
+                                    </p>
+                                    <p className="font-roboto-mono text-xl">
+                                        {startHour}:{startMinute}
+                                        {startMeridiem} - {endHour}:{endMinute}
+                                        {endMeridiem}
+                                    </p>
+                                    <p className="">
+                                        {sched.instructor.fullName}
+                                    </p>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </>
+        )
+    );
 }
 
 async function ClassroomPage({

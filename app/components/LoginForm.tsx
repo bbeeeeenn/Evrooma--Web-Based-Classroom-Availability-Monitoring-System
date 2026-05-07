@@ -26,13 +26,11 @@ import {
     ShieldUser,
     Square,
     SquareArrowRightEnter,
-    SquareCheck,
     SquarePen,
     Undo2,
     User,
 } from "lucide-react";
 import { StudentAuth } from "../actions/StudentAuthActions";
-import { Divider } from "./Divider";
 
 export default function LoginForm({
     formType,
@@ -49,7 +47,7 @@ export default function LoginForm({
         setRememberMe(
             window.localStorage.getItem(formType + "RememberMe") === "on",
         );
-    }, []);
+    }, [formType]);
 
     const onAction = async (
         _: unknown,
@@ -134,7 +132,6 @@ export default function LoginForm({
                                     ? "admin"
                                     : (state.formData.get("email") as string)
                             }
-                            autoComplete="off"
                             spellCheck={false}
                             className="peer block w-full border-b-2 border-white/50 py-1 placeholder-transparent focus:border-white focus:outline-0"
                         />
@@ -161,7 +158,6 @@ export default function LoginForm({
                                 formType === "admin" ? "123123" : ""
                                 //  (state.formData.get("password") as string)
                             }
-                            autoComplete="off"
                             className="peer min-w-0 grow border-b-2 border-white/50 py-1 placeholder-transparent outline-0 focus:border-white/90"
                         />
 

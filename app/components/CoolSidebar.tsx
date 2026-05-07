@@ -33,12 +33,11 @@ export function CoolSidebar({
     }, [open]);
 
     useEffect(() => {
-        setScreenWidth(window.innerWidth);
-        const _x = () => {
-            setScreenWidth(window.innerWidth);
-        };
-        window.addEventListener("resize", _x);
-        return () => window.removeEventListener("resize", _x);
+        const handleResize = () => setScreenWidth(window.innerWidth);
+        handleResize(); // set initial width
+        window.addEventListener("resize", handleResize);
+
+        return () => window.removeEventListener("resize", handleResize);
     }, []);
 
     const handleBurgerClick = () => setOpen((prev) => !prev);

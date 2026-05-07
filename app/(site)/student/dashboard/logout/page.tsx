@@ -10,7 +10,7 @@ export default function AdminLogoutPage() {
     const router = useRouter();
     useEffect(() => {
         LogoutStudent().finally(() => router.replace(studentLoginPage));
-    }, []);
+    });
 
     return <Loading />;
 }

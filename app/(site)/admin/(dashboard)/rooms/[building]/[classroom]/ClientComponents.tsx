@@ -55,7 +55,6 @@ function RenameClassroomComponent({
     closeModal: () => void;
 }) {
     const { classroomId, classroomCode: originalCode } = useClassroomInfo();
-    const [code, setCode] = useState(originalCode);
     const updateRoomCode = useUpdateClassroomName();
     const onAction = async (_: unknown, formData: FormData): Promise<void> => {
         const newCode =
@@ -85,26 +84,8 @@ function RenameClassroomComponent({
             });
         }
     };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, formAction, isPending] = useActionState(onAction, null);
-
-    const inputRef = useRef<HTMLInputElement>(null);
-    useEffect(() => {
-        if (showModal) {
-            setCode(originalCode); // Refresh input first
-        }
-        const onKeyDown = (e: KeyboardEvent) => {
-            if (e.key === "Escape") closeModal();
-        };
-        window.addEventListener("keydown", onKeyDown);
-        return () => window.removeEventListener("keydown", onKeyDown);
-    }, [showModal]);
-
-    useEffect(() => {
-        if (showModal && inputRef.current) {
-            inputRef.current.focus();
-            inputRef.current.setSelectionRange(code.length, code.length);
-        }
-    }, [showModal]);
 
     return (
         <div
@@ -132,7 +113,8 @@ function RenameClassroomComponent({
                     </span>
                     <div className="relative grow">
                         <input
-                            ref={inputRef}
+                            key={showModal ? originalCode : "closed"}
+                            autoFocus
                             spellCheck={false}
                             autoComplete="off"
                             type="text"
@@ -141,8 +123,7 @@ function RenameClassroomComponent({
                             className="peer w-full border-b-2 border-green-200 py-1 text-xl font-semibold tracking-wide uppercase outline-none placeholder:text-transparent focus:border-green-50"
                             disabled={!showModal}
                             required
-                            value={code}
-                            onChange={(e) => setCode(e.target.value)}
+                            defaultValue={originalCode}
                             placeholder="Classroom Code"
                         />
                         <label
@@ -197,16 +178,7 @@ function RemoveClassroomComponent({
 }) {
     const { classroomId } = useClassroomInfo();
     const { buildingId } = useBuildingInfo();
-    const [code, setCode] = useState("");
-    const inputRef = useRef<HTMLInputElement>(null);
     const router = useRouter();
-
-    useEffect(() => {
-        if (showModal) {
-            setCode(""); // Refresh input first
-            inputRef.current?.focus();
-        }
-    }, [showModal]);
 
     const onAction = async (_: unknown, formData: FormData): Promise<void> => {
         const loadingToast = toast.loading("Waiting...");
@@ -233,6 +205,7 @@ function RemoveClassroomComponent({
             });
         }
     };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, formAction, isPending] = useActionState(onAction, null);
     return (
         <div
@@ -260,7 +233,8 @@ function RemoveClassroomComponent({
                     </span>
                     <div className="relative grow">
                         <input
-                            ref={inputRef}
+                            key={showModal ? "open" : "closed"}
+                            autoFocus
                             spellCheck={false}
                             autoComplete="off"
                             type="text"
@@ -269,15 +243,13 @@ function RemoveClassroomComponent({
                             className="peer w-full border-b-2 border-green-200 py-1 text-xl font-semibold tracking-wide uppercase outline-none placeholder:text-transparent focus:border-green-50"
                             disabled={!showModal}
                             required
-                            value={code}
-                            onChange={(e) => setCode(e.target.value)}
                             placeholder="Building Name"
                         />
                         <label
                             htmlFor="roomCode"
                             className="pointer-events-none absolute -top-5 left-0 w-full truncate text-sm text-green-50 transition-all peer-placeholder-shown:top-1 peer-placeholder-shown:text-xl peer-placeholder-shown:text-green-200 peer-focus:-top-5 peer-focus:text-sm peer-focus:text-green-50"
                         >
-                            Confirm classroom's code
+                            Confirm classroom&apos;s code
                         </label>
                     </div>
                 </div>
@@ -323,6 +295,14 @@ export function ClassroomSettings() {
     const closeModal = () => {
         setOpenedModal("none");
     };
+
+    useEffect(() => {
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "Escape") closeModal();
+        };
+        window.addEventListener("keydown", onKeyDown);
+        return () => window.removeEventListener("keydown", onKeyDown);
+    }, []);
 
     return (
         <>

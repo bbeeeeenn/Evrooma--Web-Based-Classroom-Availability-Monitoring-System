@@ -1,6 +1,5 @@
 import { connectDB } from "@/app/mongoDb/mongodb";
 import AddBuilding from "./ClientComponents";
-import { Divider } from "@/app/components/Divider";
 import { Building, PlainBuildingDocument } from "@/app/mongoDb/models/building";
 import { Suspense } from "react";
 import {
@@ -99,10 +98,7 @@ export async function ClassroomsSkeleton() {
                     className="bg-green-secondary block space-y-2 rounded-md px-5 py-3 opacity-50 shadow-md"
                 >
                     <p className="h-fit w-fit animate-pulse truncate bg-white/30 text-xl font-bold text-transparent">
-                        DUMMY
-                        {Array.from({
-                            length: Math.ceil(7 * Math.random()),
-                        }).map(() => "#")}
+                        DUMMY#####
                     </p>
                     <p className="w-fit animate-pulse bg-white/30 text-sm font-semibold text-transparent">
                         Building.......

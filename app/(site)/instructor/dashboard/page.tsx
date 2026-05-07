@@ -1,20 +1,6 @@
 import { GetInstructorAuthInfo } from "@/app/actions/InstructorAuthActions";
-import {
-    instructorLoginPage,
-    instructorRoomsPage,
-    instructorScanPage,
-} from "@/constants";
-import {
-    BookText,
-    Check,
-    ChevronRight,
-    Link2,
-    LinkIcon,
-    ScanLine,
-    Settings2,
-    Square,
-    SquareCheckBig,
-} from "lucide-react";
+import { instructorLoginPage, instructorRoomsPage } from "@/constants";
+import { BookText, Check, ChevronRight } from "lucide-react";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import Loading from "../../loading";
@@ -140,7 +126,7 @@ async function ScheduleToday() {
         </>
     ) : (
         <div className="text-text-primary bg-green-secondary mt-10 rounded-md p-10 text-center text-xl font-semibold shadow-md">
-            🎉 It's your day off.
+            🎉 It&apos;s your day off.
         </div>
     );
 }

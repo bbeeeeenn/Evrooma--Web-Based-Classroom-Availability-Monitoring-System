@@ -2,7 +2,6 @@ import {
     Button,
     Html,
     Head,
-    Body,
     Container,
     Img,
     Tailwind,

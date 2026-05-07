@@ -43,7 +43,6 @@ function RenameBuildingComponent({
     closeModal: () => void;
 }) {
     const { buildingId, buildingName: originalName } = useBuildingInfo();
-    const [name, setName] = useState(originalName);
     const updateBuildingName = useUpdateBuildingName();
     const onAction = async (_: unknown, formData: FormData): Promise<void> => {
         const newName =
@@ -72,26 +71,8 @@ function RenameBuildingComponent({
             });
         }
     };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, formAction, isPending] = useActionState(onAction, null);
-
-    const inputRef = useRef<HTMLInputElement>(null);
-    useEffect(() => {
-        if (showModal) {
-            setName(originalName); // Refresh input first
-        }
-        const onKeyDown = (e: KeyboardEvent) => {
-            if (e.key === "Escape") closeModal();
-        };
-        window.addEventListener("keydown", onKeyDown);
-        return () => window.removeEventListener("keydown", onKeyDown);
-    }, [showModal]);
-
-    useEffect(() => {
-        if (showModal && inputRef.current) {
-            inputRef.current.focus();
-            inputRef.current.setSelectionRange(name.length, name.length);
-        }
-    }, [showModal]);
 
     return (
         <div
@@ -119,17 +100,17 @@ function RenameBuildingComponent({
                     </span>
                     <div className="relative grow">
                         <input
-                            ref={inputRef}
+                            key={showModal ? "shown" : "hidden"}
                             spellCheck={false}
                             autoComplete="off"
                             type="text"
                             id="newbuilding"
                             name="newName"
+                            autoFocus
                             className="peer w-full border-b-2 border-green-200 py-1 text-xl font-semibold tracking-wide outline-none placeholder:text-transparent focus:border-green-50"
                             disabled={!showModal}
                             required
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            defaultValue={originalName}
                             placeholder="Building Name"
                         />
                         <label
@@ -183,17 +164,7 @@ function RemoveBuildingComponent({
     closeModal: () => void;
 }) {
     const { buildingId } = useBuildingInfo();
-    const [name, setName] = useState("");
-    const inputRef = useRef<HTMLInputElement>(null);
     const router = useRouter();
-
-    useEffect(() => {
-        if (showModal) {
-            setName(""); // Refresh input first
-            inputRef.current?.focus();
-            inputRef.current?.setSelectionRange(0, 0);
-        }
-    }, [showModal]);
 
     const onAction = async (_: unknown, formData: FormData): Promise<void> => {
         const loadingToast = toast.loading("Waiting...");
@@ -218,6 +189,7 @@ function RemoveBuildingComponent({
             });
         }
     };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, formAction, isPending] = useActionState(onAction, null);
     return (
         <div
@@ -245,24 +217,23 @@ function RemoveBuildingComponent({
                     </span>
                     <div className="relative grow">
                         <input
-                            ref={inputRef}
+                            key={showModal ? "shown" : "hidden"}
                             spellCheck={false}
                             autoComplete="off"
                             type="text"
                             id="buildingName"
                             name="nameConfirmation"
+                            autoFocus
                             className="peer w-full border-b-2 border-green-200 py-1 text-xl font-semibold tracking-wide outline-none placeholder:text-transparent focus:border-green-50"
                             disabled={!showModal}
                             required
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
                             placeholder="Building Name"
                         />
                         <label
                             htmlFor="buildingName"
                             className="pointer-events-none absolute -top-5 left-0 w-full truncate text-sm text-green-50 transition-all peer-placeholder-shown:top-1 peer-placeholder-shown:text-xl peer-placeholder-shown:text-green-200 peer-focus:-top-5 peer-focus:text-sm peer-focus:text-green-50"
                         >
-                            Confirm building's name
+                            Confirm building&apos;s name
                         </label>
                     </div>
                 </div>
@@ -307,6 +278,14 @@ export function BuildingSettings() {
     const closeModal = () => {
         setOpenedModal("none");
     };
+
+    useEffect(() => {
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "Escape") closeModal();
+        };
+        window.addEventListener("keydown", onKeyDown);
+        return () => window.removeEventListener("keydown", onKeyDown);
+    }, []);
 
     return (
         <>
@@ -371,12 +350,12 @@ export function AddClassroomComponent() {
         }
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, formAction, isPending] = useActionState(onAction, null);
 
     useEffect(() => {
         if (showModal) {
             inputRef.current?.focus();
-            setCode("");
         }
 
         const onKeydown = (e: KeyboardEvent) => {
@@ -392,7 +371,10 @@ export function AddClassroomComponent() {
         <>
             <button
                 className="hover:bg-yellow-secondary focus-visible:bg-yellow-secondary active:bg-yellow-secondary bg-yellow-primary mb-5 flex cursor-pointer items-center gap-1 rounded-md px-4 py-2.5 text-sm font-semibold shadow-md transition-colors"
-                onClick={() => setShowModal(true)}
+                onClick={() => {
+                    setShowModal(true);
+                    setCode("");
+                }}
                 disabled={showModal}
             >
                 <Plus />

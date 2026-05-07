@@ -5,7 +5,6 @@ import {
     studentLoginPage,
 } from "@/constants";
 import {
-    ArrowDown,
     BookText,
     ChevronRight,
     GraduationCap,

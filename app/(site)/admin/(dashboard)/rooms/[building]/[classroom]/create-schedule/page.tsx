@@ -63,15 +63,15 @@ export default async function CreateSchedulePage({
     const { building: buildingId, classroom: classroomId } = await params;
     return (
         <>
-            <div className="text-text-primary flex items-center gap-3">
+            <div className="text-text-primary mt-10 flex items-center gap-3">
                 <span>
-                    <CalendarDays size={40} />
+                    <CalendarDays size={30} />
                 </span>
                 <h1 className="text-3xl font-bold">New Schedule</h1>
             </div>
             <Link
                 href={`${adminRoomsPage}/${buildingId}/${classroomId}`}
-                className="bg-yellow-primary focus-visible:bg-yellow-secondary active:bg-yellow-secondary hover:bg-yellow-secondary my-7 flex w-fit items-center gap-2 rounded-md px-4 py-2 font-semibold shadow-md"
+                className="bg-yellow-primary focus-visible:bg-yellow-secondary active:bg-yellow-secondary hover:bg-yellow-secondary my-7 flex w-fit items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold shadow-md"
             >
                 <ChevronLeft /> Return
             </Link>

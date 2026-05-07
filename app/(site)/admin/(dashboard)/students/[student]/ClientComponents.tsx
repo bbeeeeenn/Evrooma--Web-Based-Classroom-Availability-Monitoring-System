@@ -6,14 +6,12 @@ import { adminStudentsPage } from "@/constants";
 import clsx from "clsx";
 import {
     GraduationCap,
-    History,
     LoaderCircle,
     Mail,
     Plus,
     Trash2,
     X,
 } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";

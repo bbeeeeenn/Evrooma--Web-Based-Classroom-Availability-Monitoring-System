@@ -10,13 +10,7 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { headers } from "next/headers";
 import { CoolSidebar } from "@/app/components/CoolSidebar";
-import {
-    BookText,
-    DoorClosed,
-    GraduationCap,
-    LogOut,
-    UsersRound,
-} from "lucide-react";
+import { BookText, DoorClosed, GraduationCap, LogOut } from "lucide-react";
 
 async function Authenticate({
     children,

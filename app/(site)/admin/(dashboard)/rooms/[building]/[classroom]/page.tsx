@@ -1,4 +1,4 @@
-import { CalendarDays, Lectern, Plus } from "lucide-react";
+import { CalendarDays, Plus } from "lucide-react";
 import { Divider } from "@/app/components/Divider";
 import { adminRoomsPage, DaysOfWeek } from "@/constants";
 import Link from "next/link";
@@ -32,12 +32,10 @@ async function GetSchedule({ classroomId }: { classroomId: string }) {
         return <ErrorFallback error={e} />;
     }
 
-    let currDay = -1;
-
     return (
         schedules.length > 0 && (
             <>
-                {schedules.map((sched) => {
+                {schedules.map((sched, i) => {
                     const startMeridiem: "AM" | "PM" =
                         sched.slot.start.hour < 12 ? "AM" : "PM";
                     const startHour =
@@ -53,9 +51,16 @@ async function GetSchedule({ classroomId }: { classroomId: string }) {
                             : sched.slot.end.hour % 12;
                     const endMinute = sched.slot.end.minute;
                     const Divide = () => {
-                        if (currDay !== sched.slot.dayOfWeek) {
-                            currDay = sched.slot.dayOfWeek;
-                            return <Divider text={DaysOfWeek[currDay]} />;
+                        if (
+                            i === 0 ||
+                            sched.slot.dayOfWeek !==
+                                schedules[i - 1].slot.dayOfWeek
+                        ) {
+                            return (
+                                <Divider
+                                    text={DaysOfWeek[sched.slot.dayOfWeek]}
+                                />
+                            );
                         }
                         return null;
                     };

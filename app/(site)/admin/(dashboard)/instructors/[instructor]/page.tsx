@@ -2,7 +2,7 @@ import { adminInstructorsPage, DaysOfWeek } from "@/constants";
 import { BackButton } from "@/app/components/BackButton";
 import { InstructorInfoComponent, ScheduleCard } from "./ClientComponents";
 import { CalendarDays } from "lucide-react";
-import React, { Fragment, Suspense } from "react";
+import { Fragment, Suspense } from "react";
 import {
     PopulatedPlainScheduleDocument,
     Schedule,
@@ -34,11 +34,9 @@ async function GetSchedule({ instructorId }: { instructorId: string }) {
         );
     }
 
-    let currentDay = -1;
-
     return schedules.length > 0 ? (
         <>
-            {schedules.map((sched) => {
+            {schedules.map((sched, i) => {
                 const startMeridiem: "AM" | "PM" =
                     sched.slot.start.hour < 12 ? "AM" : "PM";
                 const startHour =
@@ -55,9 +53,13 @@ async function GetSchedule({ instructorId }: { instructorId: string }) {
                 const endMinute = sched.slot.end.minute;
 
                 const Divide = () => {
-                    if (sched.slot.dayOfWeek !== currentDay) {
-                        currentDay = sched.slot.dayOfWeek;
-                        return <Divider text={DaysOfWeek[currentDay]} />;
+                    if (
+                        i === 0 ||
+                        sched.slot.dayOfWeek !== schedules[i - 1].slot.dayOfWeek
+                    ) {
+                        return (
+                            <Divider text={DaysOfWeek[sched.slot.dayOfWeek]} />
+                        );
                     }
                     return null;
                 };
@@ -86,7 +88,7 @@ async function GetSchedule({ instructorId }: { instructorId: string }) {
         </>
     ) : (
         <div className="text-text-primary bg-green-secondary/20 mt-10 rounded-md p-10 text-center text-xl font-semibold shadow-md">
-            There's no set schedule for this instructor yet.
+            There&apos;s no set schedule for this instructor yet.
         </div>
     );
 }

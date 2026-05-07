@@ -2,7 +2,7 @@
 import clsx from "clsx";
 import { Building2, ChevronDown, DoorOpen, Search } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { FocusEvent, SubmitEvent, useState } from "react";
+import { SubmitEvent, useState } from "react";
 
 export type ClassroomFilter = {
     roomCode?: string;
@@ -34,7 +34,7 @@ export function FilterRooms({
             : pathname;
         router.replace(url);
     };
-    const handleInputBlur = (e: FocusEvent<HTMLInputElement>) => {
+    const handleInputBlur = () => {
         const params = new URLSearchParams(searchParams);
         if (filter.roomCode) params.set("r", filter.roomCode);
         else params.delete("r");

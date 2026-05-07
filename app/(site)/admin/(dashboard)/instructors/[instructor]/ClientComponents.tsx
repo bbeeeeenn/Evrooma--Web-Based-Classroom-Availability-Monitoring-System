@@ -9,7 +9,6 @@ import {
     LoaderCircle,
     Mail,
     Plus,
-    SquarePen,
     Trash2,
     X,
 } from "lucide-react";
@@ -22,30 +21,6 @@ import { useRouter } from "next/navigation";
 import { adminInstructorsPage, adminRoomsPage } from "@/constants";
 import { DeleteSchedule } from "@/app/actions/ScheduleActions";
 import Link from "next/link";
-
-function Row({
-    label,
-    content,
-    onClick,
-}: {
-    label: string;
-    content: string;
-    onClick?: () => void;
-}) {
-    return (
-        <tr>
-            <td>{label}:</td>
-            <td className="text-white/80">
-                <p className="flex items-center gap-2 underline">
-                    <span className="break-all">{content}</span>
-                    <button onClick={onClick}>
-                        <SquarePen size={20} className="cursor-pointer" />
-                    </button>
-                </p>
-            </td>
-        </tr>
-    );
-}
 
 function DeleteAccount() {
     const router = useRouter();
