@@ -1,7 +1,6 @@
 "use client";
 
 import { LoginFormActionResponse } from "@/app/actions/_";
-import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
 import Link from "next/link";
 import { AdminAuth } from "../actions/AdminAuthActions";
@@ -39,7 +38,6 @@ export default function LoginForm({
     formType: "admin" | "instructor" | "student";
     redirectPath?: string;
 }) {
-    const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
     const [rememberMe, setRememberMe] = useState<boolean | null>(null);
 
@@ -68,11 +66,6 @@ export default function LoginForm({
                   : formType === "instructor"
                     ? instructorHomePage
                     : studentHomePage;
-            // Use full-page navigation to ensure the session cookie set by the
-            // server action is sent on the next request. This prevents a
-            // race where client-side `router.replace` navigates before the
-            // cookie is available, causing the server to treat the user as
-            // unauthenticated and redirect back to login.
             window.location.replace(target);
             setShowPassword(false);
         }
@@ -132,11 +125,7 @@ export default function LoginForm({
                             id="username"
                             placeholder="Username"
                             required
-                            defaultValue={
-                                formType == "admin"
-                                    ? "admin"
-                                    : (state.formData.get("email") as string)
-                            }
+                            defaultValue={state.formData.get("email") as string}
                             spellCheck={false}
                             className="peer block w-full border-b-2 border-white/50 py-1 placeholder-transparent focus:border-white focus:outline-0"
                         />
@@ -160,8 +149,7 @@ export default function LoginForm({
                             placeholder="Password"
                             required
                             defaultValue={
-                                formType === "admin" ? "123123" : ""
-                                //  (state.formData.get("password") as string)
+                                state.formData.get("password") as string
                             }
                             className="peer min-w-0 grow border-b-2 border-white/50 py-1 placeholder-transparent outline-0 focus:border-white/90"
                         />
