@@ -30,7 +30,6 @@ async function Authenticate({
     const instructor = await GetInstructorAuthInfo();
     if (!instructor) {
         const pathname = (await headers()).get("x-pathname") ?? "";
-        console.log("redirecting to login page");
         redirect(
             `${instructorLoginPage}?redirect=${encodeURIComponent(pathname)}`,
         );
