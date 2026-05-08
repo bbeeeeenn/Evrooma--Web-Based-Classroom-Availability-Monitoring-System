@@ -52,11 +52,6 @@ npm run build
 npm run start
 ```
 
-Notes:
-
-- The application uses httpOnly session cookies for authentication; after login the app performs a full-page navigation to ensure the cookie is included on subsequent server requests.
-- Ensure `MONGODB_URI` is reachable from the environment where the app runs.
-
 ## Technologies used
 
 - Next.js (App Router)
