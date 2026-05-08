@@ -140,8 +140,8 @@ async function OngoingSchedule({ roomId }: { roomId: string }) {
                                 <CircleQuestionMark size={15} />
                                 <span className="bg-green-quarternary border-green-quinary text-text-primary pointer-events-none absolute bottom-[calc(100%+4px)] w-80 -translate-x-3/7 rounded-md border-2 px-3 py-2 text-center text-sm font-normal opacity-0 shadow-md transition-all group-hover:opacity-100 group-active:opacity-100">
                                     <strong>Unverified</strong>: The instructor
-                                    for this schedule haven&apos;t scanned the
-                                    QRCode in this classroom
+                                    for this schedule has not scanned the QR
+                                    code in this classroom.
                                 </span>
                             </span>
                         </>
