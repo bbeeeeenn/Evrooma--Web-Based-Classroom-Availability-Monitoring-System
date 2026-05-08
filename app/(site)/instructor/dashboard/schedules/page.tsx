@@ -1,6 +1,7 @@
 import Loading from "@/app/(site)/loading";
 import { GetInstructorAuthInfo } from "@/app/actions/InstructorAuthActions";
 import { Divider } from "@/app/components/Divider";
+import EmptyFallback from "@/app/components/EmptyFallback";
 import {
     PopulatedPlainScheduleDocument,
     Schedule,
@@ -87,9 +88,7 @@ async function GetSchedule({ instructorId }: { instructorId: string }) {
             })}
         </>
     ) : (
-        <div className="text-text-primary bg-green-secondary/20 mt-10 rounded-md p-10 text-center text-xl font-semibold shadow-md">
-            There&apos;s no set schedule for you.
-        </div>
+        <EmptyFallback text="There's no set schedule for you." />
     );
 }
 

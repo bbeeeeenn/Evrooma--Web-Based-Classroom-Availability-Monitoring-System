@@ -1,6 +1,7 @@
 import { LogCard } from "@/app/(site)/Components";
 import Loading from "@/app/(site)/loading";
 import { GetStudentAuthInfo } from "@/app/actions/StudentAuthActions";
+import EmptyFallback from "@/app/components/EmptyFallback";
 import ErrorFallback from "@/app/components/ErrorFallback";
 import {
     AttendanceLog,
@@ -27,12 +28,7 @@ async function Logs() {
         return <ErrorFallback error={e} />;
     }
 
-    if (logs.length <= 0)
-        return (
-            <div className="text-text-primary bg-green-secondary/20 mt-10 rounded-md p-10 text-center text-xl font-semibold shadow-md">
-                Empty
-            </div>
-        );
+    if (logs.length <= 0) return <EmptyFallback text="Empty" />;
 
     return logs.map((log) => <LogCard key={log._id.toString()} log={log} />);
 }

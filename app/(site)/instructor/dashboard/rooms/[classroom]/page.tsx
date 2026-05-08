@@ -19,7 +19,7 @@ import {
     slotToMinutes,
 } from "@/app/lib/utils";
 import clsx from "clsx";
-import { CalendarDays, Check, X } from "lucide-react";
+import { CalendarDays, Check, CircleQuestionMark, X } from "lucide-react";
 import { Divider } from "@/app/components/Divider";
 import { ClassroomHeader } from "@/app/components/ClassroomComponents";
 import { headers } from "next/headers";
@@ -64,12 +64,12 @@ async function Schedules({ roomId }: { roomId: string }) {
                         {showDivider && (
                             <Divider text={DaysOfWeek[sched.slot.dayOfWeek]} />
                         )}
-                        <div className="text-text-primary border-yellow-primary bg-green-secondary mt-3 block w-full rounded-md border-l-4 px-5 py-3 text-start shadow-md">
-                            <p className="font-roboto-mono text-2xl font-bold">
+                        <div className="text-text-primary bg-green-secondary mt-3 block w-full rounded-md px-5 py-3 text-start shadow-md">
+                            <p className="font-roboto-mono text-xl font-bold">
                                 {`${startHour}:${startMinute}${startMeridiem}`}{" "}
                                 - {`${endHour}:${endMinute}${endMeridiem}`}
                             </p>
-                            <p className="font-poppins font-semibold">
+                            <p className="font-poppins text-sm font-semibold">
                                 <span className="text-yellow-primary">
                                     {sched.instructor.fullName}
                                 </span>{" "}
@@ -136,10 +136,17 @@ async function OngoingSchedule({ roomId }: { roomId: string }) {
                                 <X size={20} />
                             </span>
                             Unverified
+                            <span className="group relative ml-1 cursor-pointer">
+                                <CircleQuestionMark size={15} />
+                                <span className="bg-green-quarternary border-green-quinary text-text-primary pointer-events-none absolute bottom-[calc(100%+4px)] w-80 -translate-x-3/7 rounded-md border-2 px-3 py-2 text-center text-sm font-normal opacity-0 shadow-md transition-all group-hover:opacity-100 group-active:opacity-100">
+                                    <strong>Unverified</strong>: The instructor
+                                    for this schedule haven&apos;t scanned the
+                                    QRCode in this classroom
+                                </span>
+                            </span>
                         </>
                     )}
                 </p>
-                <p className="flex items-center gap-1 font-semibold text-red-400"></p>
             </div>
         </div>
     );
@@ -187,7 +194,7 @@ async function TodaysSchedule({ roomId }: { roomId: string }) {
                                 className={clsx(
                                     "text-text-primary px-5 py-2.5 font-semibold",
                                     ongoing &&
-                                        "border-yellow-primary border-l-3",
+                                        "border-l-yellow-primary border-l-3",
                                 )}
                             >
                                 <div className={clsx(passed && "opacity-50")}>

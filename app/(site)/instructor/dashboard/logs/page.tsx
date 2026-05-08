@@ -1,6 +1,7 @@
 import { LogCard } from "@/app/(site)/Components";
 import Loading from "@/app/(site)/loading";
 import { GetInstructorAuthInfo } from "@/app/actions/InstructorAuthActions";
+import EmptyFallback from "@/app/components/EmptyFallback";
 import ErrorFallback from "@/app/components/ErrorFallback";
 import {
     AttendanceLog,
@@ -26,6 +27,9 @@ async function Logs() {
         console.error(e);
         return <ErrorFallback error={e} />;
     }
+
+    if (logs.length <= 0) return <EmptyFallback text="Empty" />;
+
     return logs.map((log) => <LogCard key={log._id.toString()} log={log} />);
 }
 

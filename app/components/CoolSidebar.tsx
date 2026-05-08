@@ -69,7 +69,7 @@ export function CoolSidebar({
                 <main
                     inert={open && !isMd}
                     className={
-                        "font-inter has-[.accountform]:bg-green-secondary m-auto w-full px-5 pt-21 pb-20 transition-all duration-300 sm:has-[.accountform]:bg-transparent md:px-7 md:pt-3"
+                        "font-inter has-[.accountform]:bg-green-secondary m-auto w-full overflow-hidden px-5 pt-21 pb-20 transition-all duration-300 sm:has-[.accountform]:bg-transparent md:px-7 md:pt-3"
                     }
                 >
                     {children}
