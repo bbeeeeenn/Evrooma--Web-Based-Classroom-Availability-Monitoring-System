@@ -59,7 +59,7 @@ async function Authenticate({
                 },
                 {
                     icon: <Settings2 size={30} />,
-                    text: "Settings",
+                    text: "Account",
                     href: studentSettingsPage,
                     pushdown: true,
                 },
