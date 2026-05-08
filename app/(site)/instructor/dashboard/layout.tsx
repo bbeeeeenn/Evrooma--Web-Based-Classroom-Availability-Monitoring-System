@@ -28,9 +28,9 @@ async function Authenticate({
     children,
 }: Readonly<{ children: React.ReactNode }>) {
     const instructor = await GetInstructorAuthInfo();
-
     if (!instructor) {
         const pathname = (await headers()).get("x-pathname") ?? "";
+        console.log("redirecting to login page");
         redirect(
             `${instructorLoginPage}?redirect=${encodeURIComponent(pathname)}`,
         );

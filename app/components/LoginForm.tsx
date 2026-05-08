@@ -60,6 +60,7 @@ export default function LoginForm({
                   ? await InstructorAuth(formData)
                   : await StudentAuth(formData);
         if (res.status === "success") {
+            console.log("redirecting to dashboard");
             router.replace(
                 redirectPath?.startsWith("/")
                     ? redirectPath

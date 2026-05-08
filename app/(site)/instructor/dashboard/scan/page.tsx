@@ -8,6 +8,7 @@ import { ChevronLeft, CircleAlert, CircleCheckBig } from "lucide-react";
 import clsx from "clsx";
 import { instructorScanPage } from "@/constants";
 import Link from "next/link";
+import { GetInstructorAuthInfo } from "@/app/actions/InstructorAuthActions";
 
 function ScheduleCard({
     schedule,
@@ -52,8 +53,12 @@ function ScheduleCard({
 async function Process({ roomid }: { roomid: string }) {
     const { status, message, schedule } =
         await ProcessInstructorSchedule(roomid);
+
+    console.log("Processing");
+    console.log({ status, message, schedule });
+
     return (
-        <div className="fixed inset-x-5 inset-y-0 m-auto h-fit max-w-5xl">
+        <div className="m-auto mt-20 h-fit max-w-5xl">
             {schedule && <ScheduleCard schedule={schedule} />}
             <div
                 className={clsx(
