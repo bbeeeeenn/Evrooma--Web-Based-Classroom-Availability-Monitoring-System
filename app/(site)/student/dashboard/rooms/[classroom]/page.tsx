@@ -19,7 +19,7 @@ import {
     slotToMinutes,
 } from "@/app/lib/utils";
 import clsx from "clsx";
-import { CalendarDays, Check, X } from "lucide-react";
+import { CalendarDays, Check, CircleQuestionMark, X } from "lucide-react";
 import { Divider } from "@/app/components/Divider";
 import { ClassroomHeader } from "@/app/components/ClassroomComponents";
 import { headers } from "next/headers";
@@ -136,6 +136,14 @@ async function OngoingSchedule({ roomId }: { roomId: string }) {
                                 <X size={20} />
                             </span>
                             Unverified
+                            <span className="group relative ml-1 cursor-pointer">
+                                <CircleQuestionMark size={15} />
+                                <span className="bg-green-quarternary border-green-quinary text-text-primary pointer-events-none absolute bottom-[calc(100%+4px)] w-80 -translate-x-3/7 rounded-md border-2 px-3 py-2 text-center text-sm font-normal opacity-0 shadow-md transition-all group-hover:opacity-100 group-active:opacity-100">
+                                    <strong>Unverified</strong>: The instructor
+                                    for this schedule haven&apos;t scanned the
+                                    QRCode in this classroom
+                                </span>
+                            </span>
                         </>
                     )}
                 </p>
