@@ -125,7 +125,10 @@ export default function LoginForm({
                             id="username"
                             placeholder="Username"
                             required
-                            defaultValue={state.formData.get("email") as string}
+                            defaultValue={
+                                (state.formData.get("email") ||
+                                    state.formData.get("username")) as string
+                            }
                             spellCheck={false}
                             className="peer block w-full border-b-2 border-white/50 py-1 placeholder-transparent focus:border-white focus:outline-0"
                         />
