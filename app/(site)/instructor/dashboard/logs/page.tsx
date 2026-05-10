@@ -5,7 +5,7 @@ import EmptyFallback from "@/app/components/EmptyFallback";
 import ErrorFallback from "@/app/components/ErrorFallback";
 import {
     AttendanceLog,
-    PopulatePlainLogDocument,
+    PopulatedPlainLogDocument,
 } from "@/app/mongoDb/models/log";
 import { connectDB } from "@/app/mongoDb/mongodb";
 import { LogsIcon } from "lucide-react";
@@ -13,7 +13,7 @@ import { Suspense } from "react";
 
 async function Logs() {
     const instructor = await GetInstructorAuthInfo();
-    let logs: PopulatePlainLogDocument[];
+    let logs: PopulatedPlainLogDocument[];
     try {
         await connectDB();
         logs = await AttendanceLog.find({ user: instructor?._id })

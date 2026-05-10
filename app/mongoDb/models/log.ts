@@ -13,7 +13,7 @@ export type PlainLogDocument = {
     updatedAt: Date;
 };
 
-export type PopulatePlainLogDocument = Omit<
+export type PopulatedPlainLogDocument = Omit<
     PlainLogDocument,
     "schedule" | "user"
 > & {

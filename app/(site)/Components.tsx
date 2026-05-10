@@ -1,6 +1,9 @@
 import Link from "next/link";
 import ErrorFallback from "../components/ErrorFallback";
-import { AttendanceLog, PopulatePlainLogDocument } from "../mongoDb/models/log";
+import {
+    AttendanceLog,
+    PopulatedPlainLogDocument,
+} from "../mongoDb/models/log";
 import { PopulatedPlainRoomDocument, Room } from "../mongoDb/models/room";
 import { connectDB } from "../mongoDb/mongodb";
 import { DoorOpen } from "lucide-react";
@@ -40,7 +43,7 @@ export function UserListSkeleton() {
 export function LogCard({
     log,
 }: {
-    log: PopulatePlainLogDocument;
+    log: PopulatedPlainLogDocument;
 }): React.ReactNode {
     if (!log.schedule) {
         return null;
@@ -115,7 +118,7 @@ async function ClassroomAvailability({ roomid }: { roomid: string }) {
                     markedInUsed ? "bg-red-500" : "bg-green-400",
                 )}
             ></span>
-            {markedInUsed ? "In Use" : "Available"}
+            {markedInUsed ? "Occupied" : "Available"}
         </>
     );
 }

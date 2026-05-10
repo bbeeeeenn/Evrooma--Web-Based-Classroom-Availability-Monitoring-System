@@ -4,7 +4,7 @@ import { BackButton } from "@/app/components/BackButton";
 import ErrorFallback from "@/app/components/ErrorFallback";
 import {
     AttendanceLog,
-    PopulatePlainLogDocument,
+    PopulatedPlainLogDocument,
 } from "@/app/mongoDb/models/log";
 import { PlainUserDocument, User } from "@/app/mongoDb/models/user";
 import { connectDB } from "@/app/mongoDb/mongodb";
@@ -13,7 +13,7 @@ import { History } from "lucide-react";
 import { Suspense } from "react";
 
 async function Logs({ instructorId }: { instructorId: string }) {
-    let logs: PopulatePlainLogDocument[];
+    let logs: PopulatedPlainLogDocument[];
     let instructor: PlainUserDocument;
     try {
         await connectDB();

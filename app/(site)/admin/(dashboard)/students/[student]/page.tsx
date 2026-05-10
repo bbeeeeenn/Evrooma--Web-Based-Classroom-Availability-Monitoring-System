@@ -4,7 +4,7 @@ import { StudentInfoComponent } from "./ClientComponents";
 import ErrorFallback from "@/app/components/ErrorFallback";
 import {
     AttendanceLog,
-    PopulatePlainLogDocument,
+    PopulatedPlainLogDocument,
 } from "@/app/mongoDb/models/log";
 import { connectDB } from "@/app/mongoDb/mongodb";
 import { PlainUserDocument, User } from "@/app/mongoDb/models/user";
@@ -12,7 +12,7 @@ import { Divider } from "@/app/components/Divider";
 import { LogCard } from "@/app/(site)/Components";
 
 async function Logs({ studentId }: { studentId: string }) {
-    let logs: PopulatePlainLogDocument[];
+    let logs: PopulatedPlainLogDocument[];
     let student: PlainUserDocument;
     try {
         await connectDB();
