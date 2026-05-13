@@ -10,7 +10,7 @@ import {
     Heading,
 } from "react-email";
 
-export default function Email({ href }: { href: string }) {
+export default function ResetPasswordEmail({ href }: { href: string }) {
     return (
         <Html>
             <Tailwind
@@ -33,7 +33,7 @@ export default function Email({ href }: { href: string }) {
                     height={75}
                     className="m-auto mt-10 rounded-full bg-black p-1.5"
                 />
-                <Heading className="text-md text-center font-sans font-semibold">
+                <Heading className="text-md text-center font-sans font-bold">
                     Password Reset
                 </Heading>
                 <Text className="text-md text-center font-sans font-semibold">

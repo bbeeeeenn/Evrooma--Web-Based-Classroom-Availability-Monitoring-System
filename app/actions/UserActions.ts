@@ -6,25 +6,29 @@ import { PlainUserDocument, User } from "@/app/mongoDb/models/user";
 import { encrypt } from "@/app/lib/bcrypt";
 import { AuthenticateAdmin } from "./AdminAuthActions";
 import { revalidatePath } from "next/cache";
-import { adminInstructorsPage } from "@/constants";
+import { adminInstructorsPage, RESEND_API_KEY } from "@/constants";
 import { isValidObjectId } from "mongoose";
-import { NormalizeName } from "../lib/utils";
+import { NormalizeName, generateSimplePassword } from "../lib/utils";
 import { Schedule } from "../mongoDb/models/schedule";
 import { AttendanceLog } from "../mongoDb/models/log";
+import { Resend } from "resend";
+import NewInstructorEmail from "../emails/NewInstructor";
 
-export type RawUserData = Omit<PlainUserDocument, "fullName" | "_id">;
+const resend = new Resend(RESEND_API_KEY);
 
-export async function CreateUser(
-    data: RawUserData,
+export type RawStudentData = Omit<
+    PlainUserDocument,
+    "fullName" | "_id" | "type"
+>;
+export type RawInstructorData = Omit<
+    PlainUserDocument,
+    "fullName" | "_id" | "password" | "type"
+>;
+
+export async function CreateStudent(
+    data: RawStudentData,
 ): Promise<ServerActionResponse & { userId?: string }> {
-    const { firstName, lastName, email, password, type } = data;
-
-    if (type === "instructor" && !(await AuthenticateAdmin())) {
-        return {
-            status: "error",
-            message: "Unauthorized.",
-        };
-    }
+    const { firstName, lastName, email, password } = data;
 
     const normalizedFirstname = firstName
         .trim()
@@ -53,8 +57,7 @@ export async function CreateUser(
         !normalizedFirstname ||
         !normalizedLastname ||
         !normalizedEmail ||
-        !normalizedPassword ||
-        (type !== "instructor" && type !== "student")
+        !normalizedPassword
     ) {
         return {
             status: "error",
@@ -92,17 +95,128 @@ export async function CreateUser(
             email: normalizedEmail,
             username: normalizedEmail,
             password: hashedPassword,
-            type,
+            type: "student",
         });
         revalidatePath(adminInstructorsPage);
 
         return {
             status: "success",
-            message: `${type === "instructor" ? "Instructor" : "Student"} created successfully.`,
+            message: "Student created successfully.",
             userId: newUser._id.toString(),
         };
     } catch (e) {
         console.error("[CreateUser]", e);
+        return {
+            status: "error",
+            message: "Something went wrong. Please try again later.",
+        };
+    }
+}
+
+export async function CreateInstructor(
+    data: RawInstructorData,
+): Promise<ServerActionResponse & { userId?: string; password?: string }> {
+    const { firstName, lastName, email } = data;
+
+    if (!(await AuthenticateAdmin())) {
+        return {
+            status: "error",
+            message: "Unauthorized.",
+        };
+    }
+
+    const normalizedFirstname = firstName
+        .trim()
+        .replace(/\s+/g, " ")
+        .replace(/[^a-zA-Z\s'-]/g, "")
+        .split(" ")
+        .map(
+            (word) =>
+                word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+        )
+        .join(" ");
+    const normalizedLastname = lastName
+        .trim()
+        .replace(/\s+/g, " ")
+        .replace(/[^a-zA-Z\s'-]/g, "")
+        .split(" ")
+        .map(
+            (word) =>
+                word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+        )
+        .join(" ");
+    const normalizedEmail = email.trim().toLowerCase();
+
+    if (!normalizedFirstname || !normalizedLastname || !normalizedEmail) {
+        return {
+            status: "error",
+            message: "Please complete all required fields.",
+        };
+    }
+
+    const emailRegex = /^\S+@\S+\.\S+$/; // i need to study about regex >.<
+    if (!emailRegex.test(normalizedEmail)) {
+        return {
+            status: "error",
+            message: "Please provide a valid email address.",
+        };
+    }
+
+    try {
+        await connectDB();
+
+        const existingUser = await User.findOne({
+            email: normalizedEmail,
+        }).lean();
+
+        if (existingUser) {
+            return {
+                status: "error",
+                message: "User with such email already exists.",
+            };
+        }
+        const generatedPassword = generateSimplePassword(8);
+        const hashedPassword = await encrypt(generatedPassword);
+
+        const newUser = await User.create({
+            firstName: normalizedFirstname,
+            lastName: normalizedLastname,
+            email: normalizedEmail,
+            username: normalizedEmail,
+            password: hashedPassword,
+            type: "instructor",
+        });
+        revalidatePath(adminInstructorsPage);
+
+        try {
+            await resend.emails.send({
+                from: "Evrooma <intergalacticbeing@evrooma.online>",
+                to: newUser.email,
+                subject: "New Instructor",
+                react: NewInstructorEmail({
+                    email: newUser.email,
+                    password: generatedPassword,
+                }),
+            });
+        } catch (e) {
+            console.error("[CreateInstructor]", e);
+            return {
+                status: "warning",
+                message:
+                    "Instructor created successfully but email failed to send.",
+                userId: newUser._id.toString(),
+                password: generatedPassword,
+            };
+        }
+
+        return {
+            status: "success",
+            message: "Instructor created successfully.",
+            userId: newUser._id.toString(),
+            password: generatedPassword,
+        };
+    } catch (e) {
+        console.error("[CreateInstructor]", e);
         return {
             status: "error",
             message: "Something went wrong. Please try again later.",

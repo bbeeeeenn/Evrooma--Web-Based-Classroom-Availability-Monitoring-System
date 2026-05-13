@@ -1,8 +1,8 @@
 "use client";
-import { CreateUser } from "@/app/actions/UserActions";
+import { CreateInstructor } from "@/app/actions/UserActions";
 import { adminInstructorsPage, adminCreateInstructorPage } from "@/constants";
 import clsx from "clsx";
-import { CirclePlus, LoaderCircle, Lock, Mail, User } from "lucide-react";
+import { CirclePlus, LoaderCircle, Mail, User } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useActionState } from "react";
 import { toast } from "react-toastify";
@@ -11,8 +11,6 @@ type Data = {
     fname: string;
     lname: string;
     email: string;
-    password: string;
-    password2: string;
 };
 
 export function CreateInstructorForm(): React.ReactNode {
@@ -24,29 +22,12 @@ export function CreateInstructorForm(): React.ReactNode {
             (formData.get("fname") as string | null)?.trim() ?? "";
         const lastName = (formData.get("lname") as string | null)?.trim() ?? "";
         const email = (formData.get("email") as string | null)?.trim() ?? "";
-        const password =
-            (formData.get("password") as string | null)?.trim() ?? "";
-        const password2 =
-            (formData.get("password2") as string | null)?.trim() ?? "";
-
-        if (password !== password2) {
-            toast.error("Passwords doesn't match.");
-            return {
-                fname: firstName,
-                lname: lastName,
-                email,
-                password,
-                password2,
-            };
-        }
 
         const loadingToast = toast.loading("Waiting...");
-        const response = await CreateUser({
+        const response = await CreateInstructor({
             firstName,
             lastName,
             email,
-            password,
-            type: "instructor",
         });
         if (response.status === "success") {
             toast.update(loadingToast, {
@@ -61,22 +42,18 @@ export function CreateInstructorForm(): React.ReactNode {
                 isLoading: false,
                 type: "error",
                 render: response.message,
-                autoClose: 3000,
+                autoClose: 6000,
             });
             return {
                 fname: firstName,
                 lname: lastName,
                 email,
-                password,
-                password2,
             };
         }
         return {
             fname: "",
             lname: "",
             email: "",
-            password: "",
-            password2: "",
         };
     };
 
@@ -84,8 +61,6 @@ export function CreateInstructorForm(): React.ReactNode {
         email: "",
         fname: "",
         lname: "",
-        password: "",
-        password2: "",
     });
 
     return (
@@ -179,55 +154,6 @@ export function CreateInstructorForm(): React.ReactNode {
                     )}
                 >
                     Email
-                </label>
-            </div>
-            <p className="mt-10 flex items-center gap-2 text-lg font-semibold">
-                <Lock size={20} /> Password
-            </p>
-            <div className="relative mt-7">
-                <input
-                    required
-                    type="password"
-                    autoComplete="off"
-                    spellCheck={false}
-                    id="password"
-                    name="password"
-                    placeholder="Password"
-                    defaultValue={data.password}
-                    className="peer w-full border-b-2 border-white/50 text-xl outline-transparent placeholder:text-transparent focus:border-white"
-                />
-                <label
-                    htmlFor="password"
-                    className={clsx(
-                        "pointer-events-none absolute -top-5 left-0 w-full truncate text-sm text-white transition-all",
-                        "peer-placeholder-shown:top-0 peer-placeholder-shown:text-xl peer-placeholder-shown:text-white/50",
-                        "peer-focus:-top-5 peer-focus:text-sm peer-focus:text-white",
-                    )}
-                >
-                    Password
-                </label>
-            </div>{" "}
-            <div className="relative mt-10">
-                <input
-                    required
-                    type="password"
-                    autoComplete="off"
-                    spellCheck={false}
-                    id="password2"
-                    name="password2"
-                    placeholder="Password"
-                    defaultValue={data.password2}
-                    className="peer w-full border-b-2 border-white/50 text-xl outline-transparent placeholder:text-transparent focus:border-white"
-                />
-                <label
-                    htmlFor="password2"
-                    className={clsx(
-                        "pointer-events-none absolute -top-5 left-0 w-full truncate text-sm text-white transition-all",
-                        "peer-placeholder-shown:top-0 peer-placeholder-shown:text-xl peer-placeholder-shown:text-white/50",
-                        "peer-focus:-top-5 peer-focus:text-sm peer-focus:text-white",
-                    )}
-                >
-                    Confirm Password
                 </label>
             </div>
             <button

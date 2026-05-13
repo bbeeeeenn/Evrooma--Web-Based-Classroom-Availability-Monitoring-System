@@ -1,6 +1,6 @@
 "use client";
 
-import { CreateUser } from "@/app/actions/UserActions";
+import { CreateStudent } from "@/app/actions/UserActions";
 import { studentLoginPage, studentRegisterPage } from "@/constants";
 import clsx from "clsx";
 import { CirclePlus, LoaderCircle, Lock, Mail, User } from "lucide-react";
@@ -45,7 +45,7 @@ export function CreateInstructorForm(): React.ReactNode {
         }
 
         const loadingToast = toast.loading("Waiting...");
-        const response = await CreateUser({
+        const response = await CreateStudent({
             firstName,
             lastName,
             email,

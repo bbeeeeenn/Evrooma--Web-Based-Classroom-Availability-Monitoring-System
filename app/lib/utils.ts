@@ -6,6 +6,7 @@ import {
 } from "../mongoDb/models/schedule";
 import { connectDB } from "../mongoDb/mongodb";
 import { AttendanceLog, PlainLogDocument } from "../mongoDb/models/log";
+import crypto from "crypto";
 
 export function slotToMinutes(
     value: { hour: number; minute: number } | Date,
@@ -152,4 +153,35 @@ export function NormalizeName(name: string): string {
                 word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
         )
         .join(" ");
+}
+
+export function generateSimplePassword(length = 8): string {
+    // AI GENERATED FUNCTION
+    const charset = "ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
+    let result = "";
+    const hasWebCrypto =
+        typeof globalThis !== "undefined" &&
+        typeof globalThis.crypto !== "undefined" &&
+        typeof globalThis.crypto.getRandomValues === "function";
+    const hasNodeCrypto =
+        typeof crypto !== "undefined" &&
+        typeof crypto.randomBytes === "function";
+    if (hasWebCrypto) {
+        const cryptoObj = globalThis.crypto;
+        const arr = new Uint32Array(length);
+        cryptoObj.getRandomValues(arr);
+        for (let i = 0; i < length; i++) {
+            result += charset[arr[i] % charset.length];
+        }
+    } else if (hasNodeCrypto) {
+        const buf = crypto.randomBytes(length);
+        for (let i = 0; i < length; i++) {
+            result += charset[buf[i] % charset.length];
+        }
+    } else {
+        for (let i = 0; i < length; i++) {
+            result += charset[Math.floor(Math.random() * charset.length)];
+        }
+    }
+    return result;
 }

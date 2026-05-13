@@ -6,7 +6,7 @@ import { User } from "../mongoDb/models/user";
 import { connectDB } from "../mongoDb/mongodb";
 import { ServerActionResponse } from "./_";
 import { RESEND_API_KEY, resetPasswordPage } from "@/constants";
-import Email from "../emails/ResetPassword";
+import ResetPasswordEmail from "../emails/ResetPassword";
 import { headers } from "next/headers";
 import { AuthenticateStudent } from "./StudentAuthActions";
 import { encrypt } from "../lib/bcrypt";
@@ -43,7 +43,7 @@ export async function SendToken(email: string): Promise<ServerActionResponse> {
             from: "Evrooma <intergalacticbeing@evrooma.online>",
             to: user.email,
             subject: "Reset Password",
-            react: Email({
+            react: ResetPasswordEmail({
                 href: `${origin}${resetPasswordPage}?token=${token.token}`,
             }),
         });

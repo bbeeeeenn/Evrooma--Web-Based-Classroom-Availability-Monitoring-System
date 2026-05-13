@@ -1,5 +1,5 @@
 export type ServerActionResponse = {
-    status: "success" | "error" | "initial";
+    status: "success" | "warning" | "error" | "initial";
     message: string;
 };
 
