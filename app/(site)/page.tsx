@@ -68,7 +68,7 @@ export default function Home() {
             </section>
             <section
                 ref={roleRef}
-                className="bg-green-primary h-dvh snap-start overflow-y-auto p-7 sm:p-10"
+                className="bg-green-primary m-h-dvh snap-start overflow-y-auto p-7 sm:p-10"
             >
                 <p className="text-text-primary flex items-center gap-2 text-3xl font-semibold sm:text-5xl">
                     <span>
