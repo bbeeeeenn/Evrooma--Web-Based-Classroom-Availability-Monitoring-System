@@ -1,4 +1,4 @@
-import { Fragment, Suspense } from "react";
+import { Suspense } from "react";
 import Loading from "../../loading";
 import { GetStudentAuthInfo } from "@/app/actions/StudentAuthActions";
 import { redirect } from "next/navigation";
@@ -57,63 +57,70 @@ async function ClassesAttended({ student }: { student: PlainUserDocument }) {
         return <ErrorFallback error={e} />;
     }
 
-    if (attendanceLogs.length <= 0) {
-        return <EmptyFallback text="You haven't gone to any classes today." />;
-    }
-
-    return attendanceLogs.map((log) => {
-        const {
-            startHour,
-            startMinute,
-            startMeridiem,
-            endHour,
-            endMinute,
-            endMeridiem,
-        } = GetTimeComponentsFromScheduleDocument(log.schedule);
-        const ongoing =
-            slotToMinutes(now) >= slotToMinutes(log.schedule.slot.start) &&
-            slotToMinutes(now) < slotToMinutes(log.schedule.slot.end);
-        return (
-            <div
-                key={log._id.toString()}
-                className={clsx(
-                    "text-text-primary bg-green-secondary relative my-5 overflow-hidden rounded-md p-4 shadow-md",
-                    ongoing && "border-yellow-secondary border-l-4",
-                )}
-            >
-                <p className="font-poppins flex items-center gap-1 font-semibold">
-                    <span>
-                        <BookText size={15} />
-                    </span>
-                    {log.schedule.subject} - {log.schedule.instructor.fullName}
-                </p>
-                <p className="font-roboto-mono text-yellow-primary text-2xl font-semibold">
-                    {startHour}:{startMinute}
-                    {startMeridiem} - {endHour}:{endMinute}
-                    {endMeridiem}
-                </p>
-                <Link
-                    tabIndex={-1}
-                    href={`${studentRoomsPage}/${log.schedule.room._id.toString()}`}
-                    className="font-poppins flex w-fit items-center text-lg font-semibold hover:underline active:underline"
-                >
-                    <p>
-                        {log.schedule.room.building.name} -{" "}
-                        {log.schedule.room.code}
-                    </p>
-                    <span>
-                        <ChevronRight size={20} />
-                    </span>
-                </Link>
-                <p className="flex items-center gap-1 font-semibold text-green-300">
-                    <span>
-                        <Check size={20} />
-                    </span>
-                    Attended
-                </p>
-            </div>
-        );
-    });
+    return (
+        <div>
+            {attendanceLogs.length > 0 ? (
+                attendanceLogs.map((log) => {
+                    const {
+                        startHour,
+                        startMinute,
+                        startMeridiem,
+                        endHour,
+                        endMinute,
+                        endMeridiem,
+                    } = GetTimeComponentsFromScheduleDocument(log.schedule);
+                    const ongoing =
+                        slotToMinutes(now) >=
+                            slotToMinutes(log.schedule.slot.start) &&
+                        slotToMinutes(now) <
+                            slotToMinutes(log.schedule.slot.end);
+                    return (
+                        <div
+                            key={log._id.toString()}
+                            className={clsx(
+                                "text-text-primary bg-green-secondary relative my-5 overflow-hidden rounded-md p-4 shadow-md",
+                                ongoing && "border-yellow-secondary border-l-4",
+                            )}
+                        >
+                            <p className="font-poppins flex items-center gap-1 font-semibold">
+                                <span>
+                                    <BookText size={15} />
+                                </span>
+                                {log.schedule.subject} -{" "}
+                                {log.schedule.instructor.fullName}
+                            </p>
+                            <p className="font-roboto-mono text-yellow-primary text-2xl font-semibold">
+                                {startHour}:{startMinute}
+                                {startMeridiem} - {endHour}:{endMinute}
+                                {endMeridiem}
+                            </p>
+                            <Link
+                                tabIndex={-1}
+                                href={`${studentRoomsPage}/${log.schedule.room._id.toString()}`}
+                                className="font-poppins flex w-fit items-center text-lg font-semibold hover:underline active:underline"
+                            >
+                                <p>
+                                    {log.schedule.room.building.name} -{" "}
+                                    {log.schedule.room.code}
+                                </p>
+                                <span>
+                                    <ChevronRight size={20} />
+                                </span>
+                            </Link>
+                            <p className="flex items-center gap-1 font-semibold text-green-300">
+                                <span>
+                                    <Check size={20} />
+                                </span>
+                                Attended
+                            </p>
+                        </div>
+                    );
+                })
+            ) : (
+                <EmptyFallback text="You haven't gone to any classes today." />
+            )}
+        </div>
+    );
 }
 
 async function Suspended() {
@@ -133,10 +140,8 @@ async function Suspended() {
 
 export default function StudentPage() {
     return (
-        <>
-            <Suspense fallback={<Loading />}>
-                <Suspended />
-            </Suspense>
-        </>
+        <Suspense fallback={<Loading />}>
+            <Suspended />
+        </Suspense>
     );
 }

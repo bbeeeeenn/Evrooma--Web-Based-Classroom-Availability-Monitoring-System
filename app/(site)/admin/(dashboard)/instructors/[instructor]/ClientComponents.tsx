@@ -7,9 +7,8 @@ import {
     History,
     LinkIcon,
     LoaderCircle,
-    Mail,
-    Plus,
     Trash2,
+    TriangleAlert,
     X,
 } from "lucide-react";
 import { Divider } from "@/app/components/Divider";
@@ -38,8 +37,7 @@ function DeleteAccount() {
         email: string;
     }> => {
         const loadingToast = toast.loading("Waiting...");
-        const email =
-            (formData.get("email") as string)?.trim().toLowerCase() || "";
+        const email = (formData.get("email") as string)?.trim() || "";
         if (!email) {
             toast.update(loadingToast, {
                 isLoading: false,
@@ -89,7 +87,7 @@ function DeleteAccount() {
         <>
             <dialog
                 ref={dialog}
-                className="bg-green-secondary text-text-primary border-green-quarternary m-auto w-[calc(100%-1.5rem)] max-w-md overflow-hidden rounded-md border-b-4 px-6 pt-10 pb-7 select-none backdrop:bg-black/30"
+                className="bg-green-secondary text-text-primary border-green-quarternary m-auto w-[calc(100%-1.5rem)] max-w-md overflow-hidden rounded-md border-b-4 px-6 pt-5 pb-7 select-none backdrop:bg-black/30"
                 onClick={(e) => {
                     if (!dialog.current) return;
                     const { top, bottom, left, right } =
@@ -103,32 +101,33 @@ function DeleteAccount() {
                         dialog.current.close();
                 }}
             >
+                <p className="mb-4 flex items-center justify-center gap-2 text-2xl font-semibold">
+                    <span>
+                        <TriangleAlert size={25} />
+                    </span>
+                    Delete User
+                </p>
                 <form action={formAction}>
-                    <div className="flex items-center gap-2">
-                        <span>
-                            <Mail />
-                        </span>
-                        <div className="relative grow">
-                            <input
-                                spellCheck={false}
-                                autoComplete="off"
-                                type="email"
-                                id="email"
-                                name="email"
-                                defaultValue={state.email}
-                                className="peer w-full border-b-2 border-green-200 py-1 text-xl font-semibold tracking-wide lowercase outline-none placeholder:text-transparent focus:border-green-50"
-                                required
-                                placeholder="Confirm Email"
-                            />
-                            <label
-                                htmlFor="email"
-                                className="pointer-events-none absolute -top-5 left-0 text-sm text-green-50 transition-all peer-placeholder-shown:top-1 peer-placeholder-shown:text-xl peer-placeholder-shown:text-green-200 peer-focus:-top-5 peer-focus:text-sm peer-focus:text-green-50"
-                            >
-                                Confirm Email
-                            </label>
-                        </div>
-                    </div>
-                    <div className="flex gap-2">
+                    <label
+                        htmlFor="email"
+                        className="font-poppins mb-2 block text-sm"
+                    >
+                        To confirm, type{" "}
+                        <span className="bg-white/10">{instructorEmail}</span>{" "}
+                        in the box below
+                    </label>
+                    <input
+                        spellCheck={false}
+                        autoComplete="off"
+                        type="text"
+                        id="email"
+                        name="email"
+                        defaultValue={state.email}
+                        className="peer w-full rounded-md border-2 border-white/25 bg-white/10 px-2 py-1 text-xl font-semibold tracking-wide outline-none"
+                        required
+                        placeholder="Confirm Email"
+                    />
+                    <div className="flex gap-2 font-semibold">
                         <button
                             type="button"
                             className={clsx(
@@ -153,7 +152,7 @@ function DeleteAccount() {
                                 </>
                             ) : (
                                 <>
-                                    <Plus /> Delete
+                                    <Trash2 /> Delete
                                 </>
                             )}
                         </button>
@@ -161,7 +160,7 @@ function DeleteAccount() {
                 </form>
             </dialog>
             <button
-                className="font-poppins hover:bg-yellow-secondary bg-yellow-primary mt-5 flex cursor-pointer items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-semibold shadow-md transition-colors sm:text-base"
+                className="font-poppins hover:bg-yellow-secondary bg-yellow-primary flex cursor-pointer items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-semibold shadow-md transition-colors sm:text-base"
                 onClick={() => dialog.current?.showModal()}
             >
                 <Trash2 size={20} /> Delete Account
@@ -188,13 +187,15 @@ export function InstructorInfoComponent() {
             </div>
 
             <Divider text="Account" />
-            <Link
-                href={`${instructorId}/logs`}
-                className="font-poppins hover:bg-yellow-secondary bg-yellow-primary mt-5 mr-3 flex w-fit cursor-pointer items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-semibold shadow-md transition-colors sm:text-base"
-            >
-                <History size={20} /> Logs
-            </Link>
-            <DeleteAccount />
+            <div className="flex">
+                <Link
+                    href={`${instructorId}/logs`}
+                    className="font-poppins hover:bg-yellow-secondary bg-yellow-primary mr-3 flex w-fit cursor-pointer items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-semibold shadow-md transition-colors sm:text-base"
+                >
+                    <History size={20} /> Logs
+                </Link>
+                <DeleteAccount />
+            </div>
         </>
     );
 }
