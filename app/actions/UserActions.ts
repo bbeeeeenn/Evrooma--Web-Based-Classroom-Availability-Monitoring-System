@@ -451,6 +451,13 @@ export async function ChangeUserEmail(
 export async function DeleteUser(
     userId: string,
 ): Promise<ServerActionResponse> {
+    if (!(await AuthenticateAdmin())) {
+        return {
+            status: "error",
+            message: "Unauthorized.",
+        };
+    }
+
     if (!isValidObjectId(userId))
         return {
             status: "error",

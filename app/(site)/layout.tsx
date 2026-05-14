@@ -121,7 +121,7 @@ export default async function RootLayout({
     return (
         <html
             lang="en"
-            className="snap-y snap-mandatory scroll-smooth"
+            className="scrollbar-track-green-quarternary scrollbar-thumb-yellow-primary/75 scrollbar-thin scroll-smooth"
             data-scroll-behavior="smooth"
         >
             <body

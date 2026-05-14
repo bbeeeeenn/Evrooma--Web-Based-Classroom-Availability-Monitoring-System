@@ -1,4 +1,4 @@
-import { CalendarDays, Plus } from "lucide-react";
+import { CalendarDays, CalendarPlus } from "lucide-react";
 import { Divider } from "@/app/components/Divider";
 import { adminRoomsPage, DaysOfWeek } from "@/constants";
 import Link from "next/link";
@@ -104,9 +104,9 @@ export default async function AdminClassroomPage({
             </div>
             <Link
                 href={`${adminRoomsPage}/${buildingId}/${classroomId}/create-schedule`}
-                className="bg-yellow-primary focus-visible:bg-yellow-secondary active:bg-yellow-secondary hover:bg-yellow-secondary my-7 flex w-fit items-center gap-2 rounded-md px-4 py-2.5 text-sm font-semibold shadow-md"
+                className="bg-yellow-primary focus-visible:bg-yellow-secondary active:bg-yellow-secondary hover:bg-yellow-secondary fixed right-5 bottom-5 z-10 flex w-fit items-center gap-2 rounded-md px-4 py-2.5 text-sm font-semibold shadow-md md:right-11 md:bottom-11"
             >
-                <Plus /> Add Schedule
+                <CalendarPlus /> Create Schedule
             </Link>
             <Suspense fallback={<ScheduleCardSkeleton />}>
                 <GetSchedule classroomId={classroomId} />

@@ -10,23 +10,23 @@
         "email:dev": "email dev --dir app/emails"
     },
     "dependencies": {
-        "@yudiel/react-qr-scanner": "^2.5.1",
+        "@yudiel/react-qr-scanner": "^2.6.0",
         "bcrypt": "^6.0.0",
         "clsx": "^2.1.1",
         "iron-session": "^8.0.4",
-        "lucide-react": "^1.11.0",
-        "mongoose": "^9.5.0",
+        "lucide-react": "^1.16.0",
+        "mongoose": "^9.6.2",
         "mongoose-lean-virtuals": "^2.1.0",
-        "next": "^16.2.4",
+        "next": "^16.2.6",
         "qrcode": "^1.5.4",
-        "react": "19.2.5",
-        "react-dom": "19.2.5",
-        "react-email": "6.0.8",
+        "react": "19.2.6",
+        "react-dom": "19.2.6",
+        "react-email": "6.1.4",
         "react-toastify": "^11.1.0",
         "resend": "^6.12.2"
     },
     "devDependencies": {
-        "@react-email/ui": "6.0.8",
+        "@react-email/ui": "6.1.4",
         "@tailwindcss/postcss": "^4.2.4",
         "@types/bcrypt": "^6.0.0",
         "@types/node": "^25.6.0",
@@ -37,7 +37,8 @@
         "eslint-config-next": "16.2.4",
         "prettier": "^3.8.3",
         "prettier-plugin-tailwindcss": "^0.8.0",
-        "tailwindcss": "^4.2.4",
+        "tailwind-scrollbar": "^4.0.2",
+        "tailwindcss": "^4.3.0",
         "typescript": "^6.0.3"
     }
 }

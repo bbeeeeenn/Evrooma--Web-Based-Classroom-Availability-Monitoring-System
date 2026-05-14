@@ -30,7 +30,13 @@ async function Logs() {
 
     if (logs.length <= 0) return <EmptyFallback text="Empty" />;
 
-    return logs.map((log) => <LogCard key={log._id.toString()} log={log} />);
+    return (
+        <>
+            {logs.map((log) => (
+                <LogCard key={log._id.toString()} log={log} />
+            ))}
+        </>
+    );
 }
 
 export default function Page() {
