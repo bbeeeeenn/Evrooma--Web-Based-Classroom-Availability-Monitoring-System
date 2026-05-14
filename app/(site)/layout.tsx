@@ -121,7 +121,7 @@ export default async function RootLayout({
     return (
         <html
             lang="en"
-            className="scrollbar-track-green-quarternary scrollbar-thumb-yellow-primary/75 scrollbar-thin scroll-smooth"
+            className="scrollbar-track-green-quarternary sm:scrollbar-thumb-yellow-primary/75 scrollbar-thumb-green-secondary scrollbar-thin scroll-smooth"
             data-scroll-behavior="smooth"
         >
             <body
