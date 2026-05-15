@@ -58,8 +58,8 @@ export default function Home() {
                 </p>
                 <button
                     className={clsx(
-                        "text-text-primary group mt-8 flex items-center justify-center gap-2 rounded-lg border border-white/50 px-5 py-2 text-xl font-semibold shadow-md sm:w-fit",
-                        "hover:border-yellow-primary focus-visible:border-yellow-primary active:border-yellow-primary hover:text-yellow-primary focus-visible:text-yellow-primary active:text-yellow-primary hover:bg-yellow-primary/10 focus-visible:bg-yellow-primary/10 active:bg-yellow-primary/10",
+                        "text-text-primary group bg-green-secondary mt-8 flex items-center justify-center gap-2 rounded-lg border border-transparent px-8 py-2 text-xl font-semibold shadow-md sm:w-fit",
+                        "active:border-yellow-primary focus-visible:border-yellow-primary hover:scale-101",
                     )}
                     onClick={() =>
                         roleRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -110,7 +110,7 @@ export default function Home() {
                     <div className="my-5 flex flex-wrap gap-5">
                         <Link
                             href={instructorLoginPage}
-                            className="border-yellow-primary/30 hover:bg-yellow-primary/10 focus-visible:bg-yellow-primary/10 flex grow items-center gap-2 rounded-xl border bg-white/5 p-5 text-white/60 transition-colors sm:flex-col sm:items-start"
+                            className="bg-green-secondary active:border-yellow-primary focus-visible:border-yellow-primary flex grow items-center gap-2 rounded-xl border border-transparent p-5 text-white/60 shadow-md transition-transform hover:scale-101 sm:flex-col sm:items-start"
                         >
                             <span className="text-yellow-primary bg-yellow-primary/10 rounded-lg p-2">
                                 <BookText size={30} />
@@ -129,7 +129,7 @@ export default function Home() {
                         </Link>
                         <Link
                             href={studentLoginPage}
-                            className="border-yellow-primary/30 hover:bg-yellow-primary/10 focus-visible:bg-yellow-primary/10 flex grow items-center gap-2 rounded-xl border bg-white/5 p-5 text-white/60 transition-colors sm:flex-col sm:items-start"
+                            className="bg-green-secondary active:border-yellow-primary focus-visible:border-yellow-primary flex grow items-center gap-2 rounded-xl border border-transparent p-5 text-white/60 shadow-md transition-transform hover:scale-101 sm:flex-col sm:items-start"
                         >
                             <span className="text-yellow-primary bg-yellow-primary/10 rounded-lg p-2">
                                 <GraduationCap size={30} />
@@ -156,9 +156,9 @@ export default function Home() {
                     </div>
                     <Link
                         href={adminLoginPage}
-                        className="border-yellow-primary/30 hover:bg-yellow-primary/10 focus-visible:bg-yellow-primary/10 flex grow items-center gap-2 rounded-xl border bg-white/5 p-5 text-white/60 transition-colors"
+                        className="bg-green-secondary active:border-yellow-primary focus-visible:border-yellow-primary flex grow items-center gap-2 rounded-xl border border-transparent p-5 text-white/60 shadow-md transition-transform hover:scale-101"
                     >
-                        <span className="rounded-lg p-2">
+                        <span className="text-text-primary rounded-lg p-2">
                             <ShieldUser size={30} />
                         </span>
                         <div className="grow">
@@ -172,10 +172,10 @@ export default function Home() {
                         </span>
                     </Link>
                 </section>
+                {/* <footer className="font-inter bg-yellow-primary snap-start py-1 text-center text-xs text-black">
+                        © 2026 EVROOMA. All rights reserved.
+                    </footer> */}
             </div>
-            {/* <footer className="font-inter bg-yellow-primary snap-start py-1 text-center text-xs text-black">
-                © 2026 EVROOMA. All rights reserved.
-            </footer> */}
         </div>
     );
 }
