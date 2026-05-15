@@ -175,6 +175,10 @@ export function CreateInstructorForm(): React.ReactNode {
                     Email
                 </label>
             </div>
+            <p className="text-text-primary/90 mt-3 text-sm">
+                Note: Please ensure this email address is active and accessible,
+                as it will be used for account recovery.
+            </p>
             <p className="mt-10 flex items-center gap-2 text-lg font-semibold">
                 <Lock size={20} /> Password
             </p>

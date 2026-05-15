@@ -111,7 +111,8 @@ export default function LoginForm({
             <form
                 action={formAction}
                 className={clsx(
-                    "text-md font-poppins bg-green-secondary relative w-full max-w-md space-y-10 rounded-xl px-[7vw] pt-14 pb-12 text-white sm:px-12 sm:shadow-lg",
+                    "text-md font-poppins relative w-full max-w-md space-y-10 rounded-xl px-[7vw] pt-14 pb-12 text-white sm:px-12 sm:shadow-lg",
+                    "bg-green-secondary",
                 )}
             >
                 <div className="flex items-center gap-3">
@@ -237,7 +238,7 @@ export default function LoginForm({
                         <div className="relative my-10 flex items-center justify-center font-semibold">
                             <div className="absolute inset-0 m-auto h-px rounded-full bg-green-100"></div>
                             <p className="bg-green-secondary text-md absolute w-fit px-2 text-center tracking-wide text-green-100 sm:text-lg">
-                                OR
+                                or
                             </p>
                         </div>
                         <Link
@@ -253,16 +254,16 @@ export default function LoginForm({
                         </Link>
                     </>
                 )}
-                {!isPending && (
-                    <Link
-                        href={homePage}
-                        type="button"
-                        className="bg-yellow-primary absolute inset-x-0 top-full m-auto size-fit translate-y-1/2 cursor-pointer rounded-full p-2 text-black shadow-md hover:scale-105 focus-visible:scale-105"
-                    >
-                        <Undo2 />
-                    </Link>
-                )}
             </form>
+            {!isPending && (
+                <Link
+                    href={homePage}
+                    type="button"
+                    className="bg-yellow-primary mt-5 size-fit cursor-pointer rounded-full p-2 text-black shadow-md hover:scale-105 focus-visible:scale-105"
+                >
+                    <Undo2 />
+                </Link>
+            )}
         </>
     );
 }
