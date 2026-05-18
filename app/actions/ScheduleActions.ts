@@ -171,7 +171,8 @@ export async function GetNextScheduleForTheDay(
             },
         })
             .sort({ "slot.start.hour": 1, "slot.start.minute": 1 })
-            .lean();
+            .populate("instructor")
+            .lean({ virtuals: true });
 
         return nextSchedule;
     } catch (e) {

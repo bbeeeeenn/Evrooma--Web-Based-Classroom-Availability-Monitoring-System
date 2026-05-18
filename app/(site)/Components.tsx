@@ -9,7 +9,6 @@ import {
     Calendar1,
     CalendarOff,
     Clock,
-    DoorOpen,
     User,
     UserCheck,
     UserX,
@@ -108,17 +107,17 @@ export function LogCard({
 
 const IconStatusMap = {
     free: (
-        <span className="size-fit rounded-md bg-green-400/20 p-3 text-green-400">
+        <span className="size-fit rounded-md bg-green-400/15 p-3 text-green-400">
             <BadgeCheck size={20} />
         </span>
     ),
     occupied: (
-        <span className="size-fit rounded-md bg-red-400/20 p-3 text-red-400">
-            <UserCheck />
+        <span className="size-fit rounded-md bg-red-400/15 p-3 text-red-400">
+            <UserCheck size={20} />
         </span>
     ),
     absent: (
-        <span className="size-fit rounded-md bg-orange-300/20 p-3 text-orange-300">
+        <span className="size-fit rounded-md bg-orange-300/15 p-3 text-orange-300">
             <UserX size={20} />
         </span>
     ),
@@ -126,17 +125,17 @@ const IconStatusMap = {
 
 const StatusMap = {
     free: (
-        <div className="font-dm-sans flex items-center gap-2 rounded-sm bg-green-400/20 px-2 py-1 text-sm font-semibold text-green-400">
+        <div className="font-dm-sans flex items-center gap-2 rounded-sm bg-green-400/15 px-2 py-1 text-sm font-semibold text-green-400">
             <span className="size-2 rounded-full bg-green-400"></span>Available
         </div>
     ),
     occupied: (
-        <div className="font-dm-sans flex items-center gap-2 rounded-sm bg-red-400/20 px-2 py-1 text-sm font-semibold text-red-400">
+        <div className="font-dm-sans flex items-center gap-2 rounded-sm bg-red-400/15 px-2 py-1 text-sm font-semibold text-red-400">
             <span className="size-2 rounded-full bg-red-400"></span>Occupied
         </div>
     ),
     absent: (
-        <div className="font-dm-sans flex items-center gap-2 rounded-sm bg-orange-300/20 px-2 py-1 text-sm font-semibold text-orange-300">
+        <div className="font-dm-sans flex items-center gap-2 rounded-sm bg-orange-300/15 px-2 py-1 text-sm font-semibold text-orange-300">
             <span className="size-2 rounded-full bg-orange-300"></span>Absent
         </div>
     ),
@@ -189,7 +188,7 @@ export async function Classrooms({
                             href={`${roomsUrl}/${classroom._id.toString()}`}
                             key={classroom._id.toString()}
                             className={clsx(
-                                "text-text-primary/50 bg-green-secondary block w-full rounded-xl p-4",
+                                "text-text-primary/50 bg-green-secondary block w-full rounded-xl p-4 shadow-md",
                                 "transition-all hover:-translate-y-px hover:brightness-110",
                                 status.classroomStatus === "absent" &&
                                     "border border-orange-300/30",
@@ -198,11 +197,7 @@ export async function Classrooms({
                             )}
                         >
                             <div className="flex items-center gap-2 border-b border-white/20 pb-3">
-                                {
-                                    IconStatusMap[
-                                        status.classroomStatus ?? "free"
-                                    ]
-                                }
+                                {IconStatusMap[status.classroomStatus]}
                                 <div className="grow">
                                     <p className="text-text-primary font-semibold">
                                         {classroom.code}
@@ -211,7 +206,7 @@ export async function Classrooms({
                                         {classroom.building.name}
                                     </p>
                                 </div>
-                                {StatusMap[status.classroomStatus ?? "free"]}
+                                {StatusMap[status.classroomStatus]}
                             </div>
                             <div className="mt-2 space-y-2">
                                 {status.classroomStatus !== "free" ? (
