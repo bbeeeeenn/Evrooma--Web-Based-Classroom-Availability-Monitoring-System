@@ -12,8 +12,8 @@ import {
 } from "@/app/mongoDb/models/schedule";
 import ErrorFallback from "@/app/components/ErrorFallback";
 import {
-    formatPH,
     GetActiveSchedule,
+    getPHDateTime,
     GetTimeComponentsFromScheduleDocument,
     IsInUseSchedule,
     slotToMinutes,
@@ -96,7 +96,7 @@ async function Schedules({ roomId }: { roomId: string }) {
 async function OngoingSchedule({ roomId }: { roomId: string }) {
     const currentSession = await GetActiveSchedule(roomId);
     if (!currentSession) return null;
-    const inUse = !!(await IsInUseSchedule(currentSession));
+    const inUse = await IsInUseSchedule(currentSession);
 
     const {
         startHour,
@@ -154,13 +154,15 @@ async function OngoingSchedule({ roomId }: { roomId: string }) {
 }
 
 async function TodaysSchedule({ roomId }: { roomId: string }) {
-    const now = new Date(formatPH());
+    const { hour, minute, weekday } = getPHDateTime();
+    const currentSlot = { hour, minute };
+
     let schedules: PopulatedPlainScheduleDocument[];
     try {
         await connectDB();
         schedules = await Schedule.find({
             room: roomId,
-            "slot.dayOfWeek": now.getDay(),
+            "slot.dayOfWeek": weekday,
         })
             .sort({ "slot.start.hour": 1, "slot.start.minute": 1 })
             .populate("instructor")
@@ -184,11 +186,13 @@ async function TodaysSchedule({ roomId }: { roomId: string }) {
                             endMinute,
                         } = GetTimeComponentsFromScheduleDocument(sched);
                         const ongoing =
-                            slotToMinutes(now) >=
+                            slotToMinutes(currentSlot) >=
                                 slotToMinutes(sched.slot.start) &&
-                            slotToMinutes(now) < slotToMinutes(sched.slot.end);
+                            slotToMinutes(currentSlot) <
+                                slotToMinutes(sched.slot.end);
                         const passed =
-                            slotToMinutes(now) >= slotToMinutes(sched.slot.end);
+                            slotToMinutes(currentSlot) >=
+                            slotToMinutes(sched.slot.end);
                         return (
                             <div
                                 key={sched._id.toString()}

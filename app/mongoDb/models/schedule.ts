@@ -16,6 +16,14 @@ export type PlainScheduleDocument = {
     };
 };
 
+export type PopulatedPlainScheduleDocument = Omit<
+    PlainScheduleDocument,
+    "room" | "instructor"
+> & {
+    room: PopulatedPlainRoomDocument;
+    instructor: PlainUserDocument;
+};
+
 const timeSchema = new Schema(
     {
         hour: { type: Number, min: 0, max: 23, required: true },
@@ -37,14 +45,6 @@ const slotSchema = new Schema(
     },
     { _id: false },
 );
-
-export type PopulatedPlainScheduleDocument = Omit<
-    PlainScheduleDocument,
-    "room" | "instructor"
-> & {
-    room: PopulatedPlainRoomDocument;
-    instructor: PlainUserDocument;
-};
 
 const scheduleSchema = new Schema({
     room: {

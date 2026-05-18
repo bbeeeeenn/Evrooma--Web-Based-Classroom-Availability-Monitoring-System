@@ -13,10 +13,10 @@ import {
 import ErrorFallback from "@/app/components/ErrorFallback";
 import { connectDB } from "@/app/mongoDb/mongodb";
 import {
-    formatPH,
-    getAttendanceDateKey,
     GetTimeComponentsFromScheduleDocument,
     slotToMinutes,
+    formatPHDateKey,
+    getPHDateTime,
 } from "@/app/lib/utils";
 import EmptyFallback from "@/app/components/EmptyFallback";
 import clsx from "clsx";
@@ -35,13 +35,14 @@ async function Profile({ student }: { student: PlainUserDocument }) {
 }
 
 async function ClassesAttended({ student }: { student: PlainUserDocument }) {
+    const { hour, minute } = getPHDateTime();
+    const currentSlot = { hour, minute };
     let attendanceLogs: PopulatedPlainLogDocument[];
-    const now = new Date(formatPH());
     try {
         await connectDB();
         attendanceLogs = await AttendanceLog.find({
             user: student._id,
-            attendanceDate: getAttendanceDateKey(now),
+            attendanceDate: formatPHDateKey(),
         })
             .sort({ createdAt: 1 })
             .populate({
@@ -70,9 +71,9 @@ async function ClassesAttended({ student }: { student: PlainUserDocument }) {
                         endMeridiem,
                     } = GetTimeComponentsFromScheduleDocument(log.schedule);
                     const ongoing =
-                        slotToMinutes(now) >=
+                        slotToMinutes(currentSlot) >=
                             slotToMinutes(log.schedule.slot.start) &&
-                        slotToMinutes(now) <
+                        slotToMinutes(currentSlot) <
                             slotToMinutes(log.schedule.slot.end);
                     return (
                         <div

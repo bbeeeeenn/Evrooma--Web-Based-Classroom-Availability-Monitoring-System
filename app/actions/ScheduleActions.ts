@@ -25,12 +25,15 @@ import type {
 } from "../(site)/admin/(dashboard)/rooms/[building]/[classroom]/create-schedule/NewScheduleProvider";
 import { GetInstructorAuthInfo } from "./InstructorAuthActions";
 import { AttendanceLog } from "../mongoDb/models/log";
-import { formatPH, getAttendanceDateKey } from "../lib/utils";
+import { formatPHDateKey, getPHDateTime } from "../lib/utils";
 import { GetStudentAuthInfo } from "./StudentAuthActions";
+import { GetActiveSchedule } from "../lib/utils";
 
 export type NewScheduleInput = Omit<NewSchedule, "day"> & {
     day: DayOfWeek[];
 };
+
+export type ClassroomStatus = "free" | "occupied" | "absent";
 
 const dayOrder: DayOfWeek[] = ["mon", "tue", "wed", "thu", "fri", "sat"];
 
@@ -78,6 +81,102 @@ function dayLabel(day: DayOfWeek): number {
             return 6;
         default:
             return 0;
+    }
+}
+
+export async function GetClassroomStatus(roomId: string): Promise<
+    ServerActionResponse & {
+        classroomStatus: ClassroomStatus;
+        schedule?: PopulatedPlainScheduleDocument;
+    }
+> {
+    if (!isValidObjectId(roomId)) {
+        return {
+            status: "error",
+            message: "Invalid room ID.",
+            classroomStatus: "free",
+        };
+    }
+
+    try {
+        await connectDB();
+        const activeSchedule = await GetActiveSchedule(roomId);
+
+        if (!activeSchedule) {
+            return {
+                status: "success",
+                message: "Classroom is free.",
+                classroomStatus: "free",
+            };
+        }
+
+        const attendanceDate = formatPHDateKey();
+        const existing = await AttendanceLog.findOne({
+            schedule: activeSchedule._id,
+            user: activeSchedule.instructor,
+            attendanceDate,
+        }).lean();
+
+        if (existing) {
+            return {
+                status: "success",
+                message: "Classroom is occupied.",
+                classroomStatus: "occupied",
+                schedule: activeSchedule,
+            };
+        }
+
+        return {
+            status: "success",
+            message: "Instructor has not scanned the room yet.",
+            classroomStatus: "absent",
+            schedule: activeSchedule,
+        };
+    } catch (e) {
+        console.error("[GetClassroomStatus]", e);
+        return {
+            status: "error",
+            message: "Unable to get classroom status right now.",
+            classroomStatus: "free",
+        };
+    }
+}
+
+export async function GetNextScheduleForTheDay(
+    roomId: string,
+): Promise<PopulatedPlainScheduleDocument | null> {
+    if (!isValidObjectId(roomId)) {
+        return null;
+    }
+
+    try {
+        await connectDB();
+
+        const { hour, minute, weekday } = getPHDateTime();
+        const currentMinutes = hour * 60 + minute;
+
+        const nextSchedule = await Schedule.findOne({
+            room: roomId,
+            "slot.dayOfWeek": weekday,
+            $expr: {
+                $gt: [
+                    {
+                        $add: [
+                            { $multiply: ["$slot.start.hour", 60] },
+                            "$slot.start.minute",
+                        ],
+                    },
+                    currentMinutes,
+                ],
+            },
+        })
+            .sort({ "slot.start.hour": 1, "slot.start.minute": 1 })
+            .lean();
+
+        return nextSchedule;
+    } catch (e) {
+        console.error("[GetNextScheduleForTheDay]", e);
+        return null;
     }
 }
 
@@ -329,15 +428,12 @@ export async function ProcessInstructorSchedule(
 
     try {
         await connectDB();
-        const now = new Date(formatPH());
-        const currentDay = now.getDay();
-        const currentHour = now.getHours();
-        const currentMinute = now.getMinutes();
+        const { weekday, hour, minute } = getPHDateTime();
         const schedule: PopulatedPlainScheduleDocument = await Schedule.findOne(
             {
                 room: roomId,
                 instructor: instructor._id,
-                "slot.dayOfWeek": currentDay,
+                "slot.dayOfWeek": weekday,
                 $expr: {
                     $and: [
                         {
@@ -348,7 +444,7 @@ export async function ProcessInstructorSchedule(
                                         "$slot.start.minute",
                                     ],
                                 },
-                                currentHour * 60 + currentMinute,
+                                hour * 60 + minute,
                             ],
                         },
                         {
@@ -359,7 +455,7 @@ export async function ProcessInstructorSchedule(
                                         "$slot.end.minute",
                                     ],
                                 },
-                                currentHour * 60 + currentMinute,
+                                hour * 60 + minute,
                             ],
                         },
                     ],
@@ -376,7 +472,7 @@ export async function ProcessInstructorSchedule(
                     "You have no active schedule for this classroom right now.",
             };
         }
-        const attendanceDate = getAttendanceDateKey(now);
+        const attendanceDate = formatPHDateKey();
         const existing = await AttendanceLog.findOne({
             schedule: schedule._id,
             user: instructor._id,
@@ -438,14 +534,11 @@ export async function ProcessStudentSchedule(
 
     try {
         await connectDB();
-        const now = new Date(formatPH());
-        const currentDay = now.getDay();
-        const currentHour = now.getHours();
-        const currentMinute = now.getMinutes();
+        const { hour, minute, weekday } = getPHDateTime();
         const schedule: PopulatedPlainScheduleDocument = await Schedule.findOne(
             {
                 room: roomId,
-                "slot.dayOfWeek": currentDay,
+                "slot.dayOfWeek": weekday,
                 $expr: {
                     $and: [
                         {
@@ -456,7 +549,7 @@ export async function ProcessStudentSchedule(
                                         "$slot.start.minute",
                                     ],
                                 },
-                                currentHour * 60 + currentMinute,
+                                hour * 60 + minute,
                             ],
                         },
                         {
@@ -467,7 +560,7 @@ export async function ProcessStudentSchedule(
                                         "$slot.end.minute",
                                     ],
                                 },
-                                currentHour * 60 + currentMinute,
+                                hour * 60 + minute,
                             ],
                         },
                     ],
@@ -484,7 +577,7 @@ export async function ProcessStudentSchedule(
                     "There's no active schedule for this classroom right now.",
             };
         }
-        const attendanceDate = getAttendanceDateKey(now);
+        const attendanceDate = formatPHDateKey();
         const existing = await AttendanceLog.findOne({
             schedule: schedule._id,
             user: student._id,

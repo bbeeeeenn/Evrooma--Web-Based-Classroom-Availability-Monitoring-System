@@ -15,7 +15,7 @@ import { connectDB } from "@/app/mongoDb/mongodb";
 import { type PlainUserDocument } from "@/app/mongoDb/models/user";
 import clsx from "clsx";
 import {
-    formatPH,
+    getPHDateTime,
     GetTimeComponentsFromScheduleDocument,
     IsInUseSchedule,
     slotToMinutes,
@@ -38,8 +38,9 @@ async function Profile() {
 
 async function ScheduleToday() {
     await connection();
-    const now = new Date(formatPH());
-    const day = now.getDay();
+    const { hour, minute, weekday } = getPHDateTime();
+    const currentSlot = { hour, minute };
+
     let schedToday: PopulatedPlainScheduleDocument[];
     let instructor: PlainUserDocument | null;
     try {
@@ -49,7 +50,7 @@ async function ScheduleToday() {
         await connectDB();
         schedToday = await Schedule.find({
             instructor: instructor._id,
-            "slot.dayOfWeek": day,
+            "slot.dayOfWeek": weekday,
         })
             .sort({ "slot.start.hour": 1, "slot.start.minute": 1 })
             .populate({ path: "room", populate: "building" })
@@ -75,10 +76,11 @@ async function ScheduleToday() {
 
                 const done = await IsInUseSchedule(sched);
                 const ongoing =
-                    slotToMinutes(now) >= slotToMinutes(sched.slot.start) &&
-                    slotToMinutes(now) < slotToMinutes(sched.slot.end);
+                    slotToMinutes(currentSlot) >=
+                        slotToMinutes(sched.slot.start) &&
+                    slotToMinutes(currentSlot) < slotToMinutes(sched.slot.end);
                 const passed =
-                    slotToMinutes(now) >= slotToMinutes(sched.slot.end);
+                    slotToMinutes(currentSlot) >= slotToMinutes(sched.slot.end);
 
                 return (
                     <div

@@ -1,18 +1,29 @@
 import Link from "next/link";
 import ErrorFallback from "../components/ErrorFallback";
-import {
-    AttendanceLog,
-    PopulatedPlainLogDocument,
-} from "../mongoDb/models/log";
+import { PopulatedPlainLogDocument } from "../mongoDb/models/log";
 import { PopulatedPlainRoomDocument, Room } from "../mongoDb/models/room";
 import { connectDB } from "../mongoDb/mongodb";
-import { DoorOpen } from "lucide-react";
+import {
+    BadgeCheck,
+    BookOpen,
+    Calendar1,
+    CalendarOff,
+    Clock,
+    DoorOpen,
+    User,
+    UserCheck,
+    UserX,
+} from "lucide-react";
 import clsx from "clsx";
 import { isValidObjectId } from "mongoose";
 import {
-    formatPH,
-    GetActiveSchedule,
-    getAttendanceDateKey,
+    GetClassroomStatus,
+    GetNextScheduleForTheDay,
+} from "../actions/ScheduleActions";
+import {
+    getPHDateTime,
+    GetTimeComponentsFromScheduleDocument,
+    slotToMinutes,
 } from "../lib/utils";
 
 export function ScheduleCardSkeleton() {
@@ -91,37 +102,45 @@ export function LogCard({
     );
 }
 
-async function ClassroomAvailability({ roomid }: { roomid: string }) {
-    if (!isValidObjectId(roomid)) return null;
-    const now = new Date(formatPH());
+// ###################################################
+// Classroom Status
+// ###################################################
 
-    const activeSchedule = await GetActiveSchedule(roomid);
-    if (!activeSchedule)
-        return (
-            <>
-                <span className="size-2.5 rounded-full bg-green-400 text-xs"></span>
-                Available
-            </>
-        );
+const IconStatusMap = {
+    free: (
+        <span className="size-fit rounded-md bg-green-400/20 p-3 text-green-400">
+            <BadgeCheck size={20} />
+        </span>
+    ),
+    occupied: (
+        <span className="size-fit rounded-md bg-red-400/20 p-3 text-red-400">
+            <UserCheck />
+        </span>
+    ),
+    absent: (
+        <span className="size-fit rounded-md bg-orange-300/20 p-3 text-orange-300">
+            <UserX size={20} />
+        </span>
+    ),
+};
 
-    const markedInUsed = await AttendanceLog.findOne({
-        schedule: activeSchedule._id,
-        user: activeSchedule.instructor,
-        attendanceDate: getAttendanceDateKey(now),
-    }).lean();
-
-    return (
-        <>
-            <span
-                className={clsx(
-                    "size-2.5 rounded-full text-xs",
-                    markedInUsed ? "bg-red-500" : "bg-green-400",
-                )}
-            ></span>
-            {markedInUsed ? "Occupied" : "Available"}
-        </>
-    );
-}
+const StatusMap = {
+    free: (
+        <div className="font-dm-sans flex items-center gap-2 rounded-sm bg-green-400/20 px-2 py-1 text-sm font-semibold text-green-400">
+            <span className="size-2 rounded-full bg-green-400"></span>Available
+        </div>
+    ),
+    occupied: (
+        <div className="font-dm-sans flex items-center gap-2 rounded-sm bg-red-400/20 px-2 py-1 text-sm font-semibold text-red-400">
+            <span className="size-2 rounded-full bg-red-400"></span>Occupied
+        </div>
+    ),
+    absent: (
+        <div className="font-dm-sans flex items-center gap-2 rounded-sm bg-orange-300/20 px-2 py-1 text-sm font-semibold text-orange-300">
+            <span className="size-2 rounded-full bg-orange-300"></span>Absent
+        </div>
+    ),
+};
 
 export async function Classrooms({
     searchParams,
@@ -132,6 +151,7 @@ export async function Classrooms({
 }) {
     const { b, r } = searchParams;
     let classrooms: PopulatedPlainRoomDocument[];
+
     try {
         await connectDB();
         classrooms = await Room.find({
@@ -144,36 +164,155 @@ export async function Classrooms({
         console.error(e);
         return <ErrorFallback error={e} />;
     }
-    return classrooms.map(
-        (classroom) =>
-            classroom.building && (
-                <Link
-                    href={`${roomsUrl}/${classroom._id.toString()}`}
-                    key={classroom._id.toString()}
-                    className="group text-text-primary block w-full space-y-1 transition-all hover:-translate-y-0.5 active:scale-101"
-                >
-                    <div className="bg-green-secondary group-focus-visible:bg-green-tertiary group-active:bg-green-tertiary group-hover:bg-green-tertiary mt-4 w-full rounded-md px-5 py-2 shadow-md">
-                        <div className="flex items-center gap-1.5 text-xl font-bold">
-                            <span>
-                                <DoorOpen />
-                            </span>
-                            <p className="truncate">{classroom.code}</p>
-                        </div>
-                        <p className="text-text-secondary text-start text-sm font-semibold">
-                            {classroom.building.name}
-                        </p>
-                    </div>
-                    <div
-                        className={clsx(
-                            "bg-green-secondary flex items-center justify-center gap-2 rounded-md py-1 shadow-md",
-                            "group-active:bg-green-tertiary group-focus-visible:bg-green-tertiary group-hover:bg-green-tertiary",
-                        )}
-                    >
-                        <ClassroomAvailability
-                            roomid={classroom._id.toString()}
-                        />
-                    </div>
-                </Link>
-            ),
+
+    return (
+        <div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
+            {classrooms.map(async (classroom) => {
+                const status = await GetClassroomStatus(
+                    classroom._id.toString(),
+                );
+                const time = status.schedule
+                    ? GetTimeComponentsFromScheduleDocument(status.schedule)
+                    : null;
+                const now = getPHDateTime();
+                const timeLeft = status.schedule
+                    ? slotToMinutes(status.schedule.slot.end) -
+                      slotToMinutes({ hour: now.hour, minute: now.minute })
+                    : null;
+                const hourLeft = timeLeft ? Math.floor(timeLeft / 60) : null;
+                const minuteLeft = timeLeft ? timeLeft % 60 : null;
+                const timeLeftString = `${hourLeft && hourLeft > 0 ? hourLeft + "h" : ""} ${minuteLeft && minuteLeft > 0 ? minuteLeft + "m" : ""} left`;
+
+                return (
+                    classroom.building && (
+                        <Link
+                            href={`${roomsUrl}/${classroom._id.toString()}`}
+                            key={classroom._id.toString()}
+                            className={clsx(
+                                "text-text-primary/50 bg-green-secondary block w-full rounded-xl p-4",
+                                "transition-all hover:-translate-y-px hover:brightness-110",
+                                status.classroomStatus === "absent" &&
+                                    "border border-orange-300/30",
+                                status.classroomStatus === "occupied" &&
+                                    "border border-red-400/30",
+                            )}
+                        >
+                            <div className="flex items-center gap-2 border-b border-white/20 pb-3">
+                                {
+                                    IconStatusMap[
+                                        status.classroomStatus ?? "free"
+                                    ]
+                                }
+                                <div className="grow">
+                                    <p className="text-text-primary font-semibold">
+                                        {classroom.code}
+                                    </p>
+                                    <p className="text-sm">
+                                        {classroom.building.name}
+                                    </p>
+                                </div>
+                                {StatusMap[status.classroomStatus ?? "free"]}
+                            </div>
+                            <div className="mt-2 space-y-2">
+                                {status.classroomStatus !== "free" ? (
+                                    <>
+                                        <div className="font-dm-sans flex items-center gap-2 text-sm">
+                                            <span>
+                                                <BookOpen size={15} />
+                                            </span>
+                                            <p className="text-text-primary">
+                                                {status.schedule?.subject}
+                                            </p>
+                                        </div>
+                                        <div className="font-dm-sans flex items-center gap-2 text-sm">
+                                            <span>
+                                                <User size={15} />
+                                            </span>
+
+                                            {status.classroomStatus ===
+                                            "absent" ? (
+                                                <p className="text-orange-300">
+                                                    Instructor absent - room is
+                                                    free to use
+                                                </p>
+                                            ) : (
+                                                <p className="text-text-primary">
+                                                    {
+                                                        status.schedule
+                                                            ?.instructor
+                                                            .fullName
+                                                    }
+                                                </p>
+                                            )}
+                                        </div>
+                                        <div className="font-dm-sans flex items-center gap-2 text-sm">
+                                            <span>
+                                                <Clock size={15} />
+                                            </span>
+                                            {status.classroomStatus ===
+                                            "absent" ? (
+                                                <>
+                                                    Scheduled {time?.startHour}:
+                                                    {time?.startMinute}
+                                                    {time?.startMeridiem}-
+                                                    {time?.endHour}:
+                                                    {time?.endMinute}
+                                                    {time?.endMeridiem}
+                                                </>
+                                            ) : (
+                                                <>
+                                                    {time?.startHour}:
+                                                    {time?.startMinute}
+                                                    {time?.startMeridiem}-
+                                                    {time?.endHour}:
+                                                    {time?.endMinute}
+                                                    {time?.endMeridiem}{" "}
+                                                    <p className="text-text-primary">
+                                                        {timeLeftString}
+                                                    </p>
+                                                </>
+                                            )}
+                                        </div>
+                                    </>
+                                ) : (
+                                    <NextSchedule
+                                        classroomId={classroom._id.toString()}
+                                    />
+                                )}
+                            </div>
+                        </Link>
+                    )
+                );
+            })}
+        </div>
+    );
+}
+
+async function NextSchedule({ classroomId }: { classroomId: string }) {
+    if (!isValidObjectId(classroomId)) return null;
+    const nextSchedule = await GetNextScheduleForTheDay(classroomId);
+    const slot = nextSchedule
+        ? GetTimeComponentsFromScheduleDocument(nextSchedule)
+        : null;
+    return (
+        <div className="font-dm-sans flex items-center gap-2 text-sm">
+            <span>
+                {nextSchedule ? (
+                    <Calendar1 size={15} />
+                ) : (
+                    <CalendarOff size={15} />
+                )}
+            </span>
+            {nextSchedule ? (
+                <>
+                    Next:{" "}
+                    <p className="text-text-primary">{nextSchedule.subject}</p>{" "}
+                    @ {slot?.startHour}:{slot?.startMinute}{" "}
+                    {slot?.startMeridiem}
+                </>
+            ) : (
+                <>No more classes today</>
+            )}
+        </div>
     );
 }

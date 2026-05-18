@@ -8,6 +8,49 @@ import { connectDB } from "../mongoDb/mongodb";
 import { AttendanceLog, PlainLogDocument } from "../mongoDb/models/log";
 import crypto from "crypto";
 
+export function getPHDateTime(date = new Date()): {
+    hour: number;
+    minute: number;
+    day: number;
+    month: number;
+    year: number;
+    weekday: number; // 0 = Sunday, 6 = Saturday
+} {
+    const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: "Asia/Manila",
+        hour: "numeric",
+        minute: "numeric",
+        day: "numeric",
+        month: "numeric",
+        year: "numeric",
+        weekday: "long",
+        hour12: false,
+    }).formatToParts(date);
+
+    const get = (type: Intl.DateTimeFormatPartTypes) =>
+        parseInt(parts.find((p) => p.type === type)!.value, 10);
+
+    const weekdays = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+    ];
+    const weekdayName = parts.find((p) => p.type === "weekday")!.value;
+
+    return {
+        hour: get("hour"),
+        minute: get("minute"),
+        day: get("day"),
+        month: get("month"),
+        year: get("year"),
+        weekday: weekdays.indexOf(weekdayName),
+    };
+}
+
 export function slotToMinutes(
     value: { hour: number; minute: number } | Date,
 ): number {
@@ -18,47 +61,22 @@ export function slotToMinutes(
     return value.hour * 60 + value.minute;
 }
 
-export function formatPH(date = new Date()): string {
-    return date.toLocaleString("en-PH", {
-        timeZone: "Asia/Manila",
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-    });
-}
-
 export function formatPHDateKey(date = new Date()): string {
-    const parts = new Intl.DateTimeFormat("en-CA", {
-        timeZone: "Asia/Manila",
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-    }).formatToParts(date);
+    const { year, month, day } = getPHDateTime(date);
 
-    const year = parts.find((part) => part.type === "year")?.value;
-    const month = parts.find((part) => part.type === "month")?.value;
-    const day = parts.find((part) => part.type === "day")?.value;
-
-    if (!year || !month || !day) {
-        throw new Error("Unable to format PH date key.");
-    }
-
-    return `${year}-${month}-${day}`;
-}
-
-export function getAttendanceDateKey(date: Date): string {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
 }
 
 export function GetTimeComponentsFromScheduleDocument(
     sched: PlainScheduleDocument | PopulatedPlainScheduleDocument,
-) {
+): {
+    startMeridiem: "AM" | "PM";
+    startHour: number;
+    startMinute: string;
+    endMeridiem: "AM" | "PM";
+    endHour: number;
+    endMinute: string;
+} {
     const startMeridiem: "AM" | "PM" = sched.slot.start.hour < 12 ? "AM" : "PM";
     const startHour =
         sched.slot.start.hour % 12 === 0 ? 12 : sched.slot.start.hour % 12;
@@ -81,12 +99,13 @@ export async function GetActiveSchedule(
     roomId: string,
 ): Promise<PopulatedPlainScheduleDocument | null> {
     if (!isValidObjectId(roomId)) return null;
-    const now = new Date(formatPH());
+    const { hour, minute, weekday } = getPHDateTime();
+
     try {
         await connectDB();
         const activeSchedule = await Schedule.findOne({
             room: roomId,
-            "slot.dayOfWeek": now.getDay(),
+            "slot.dayOfWeek": weekday,
             $expr: {
                 $and: [
                     {
@@ -99,7 +118,7 @@ export async function GetActiveSchedule(
                                     "$slot.start.minute",
                                 ],
                             },
-                            now.getHours() * 60 + now.getMinutes(),
+                            hour * 60 + minute,
                         ],
                     },
                     {
@@ -110,7 +129,7 @@ export async function GetActiveSchedule(
                                     "$slot.end.minute",
                                 ],
                             },
-                            now.getHours() * 60 + now.getMinutes(),
+                            hour * 60 + minute,
                         ],
                     },
                 ],
@@ -132,15 +151,14 @@ export async function GetActiveSchedule(
  */
 export async function IsInUseSchedule(
     activeSchedule: PopulatedPlainScheduleDocument | PlainScheduleDocument,
-) {
-    const now = new Date(formatPH());
+): Promise<boolean> {
     const markedInUse: PlainLogDocument = await AttendanceLog.findOne({
         schedule: activeSchedule._id,
         user: activeSchedule.instructor,
-        attendanceDate: getAttendanceDateKey(now),
+        attendanceDate: formatPHDateKey(),
     }).lean();
 
-    return markedInUse;
+    return !!markedInUse;
 }
 
 export function NormalizeName(name: string): string {

@@ -52,7 +52,7 @@ export function QRScanner({ scanUrl }: { scanUrl: string }) {
             <Scanner
                 classNames={{
                     container: clsx(
-                        "rounded-xl shadow-md max-w-md m-auto bg-green-secondary",
+                        "rounded-xl shadow-md max-w-md mt-3.5 m-auto bg-green-secondary",
                     ),
                 }}
                 onScan={handleScan}
