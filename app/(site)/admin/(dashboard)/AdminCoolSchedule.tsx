@@ -15,12 +15,12 @@ export function AdminCoolSchedules({
     groupedSchedules: { [key: number]: PopulatedPlainScheduleDocument[] };
     type: "instructor" | "room";
 }) {
-    const [day, setDay] = useState<0 | 1 | 2 | 3 | 4 | 5 | 6>(1);
+    const [day, setDay] = useState<1 | 2 | 3 | 4 | 5 | 6>(1);
     const schedules = groupedSchedules[day] ? groupedSchedules[day] : null;
     return (
         <>
             <Divider text="Weekly Schedule" />
-            <div className="mb-4 flex gap-1.5">
+            <div className="mb-6 flex flex-wrap gap-1.5">
                 <SchedTabButton
                     index={1}
                     text="Mon"
@@ -120,9 +120,9 @@ function SchedTabButton({
     setDay,
 }: {
     text: string;
-    index: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+    index: 1 | 2 | 3 | 4 | 5 | 6;
     day: number;
-    setDay: Dispatch<SetStateAction<0 | 1 | 2 | 3 | 4 | 5 | 6>>;
+    setDay: Dispatch<SetStateAction<1 | 2 | 3 | 4 | 5 | 6>>;
 }) {
     return (
         <button

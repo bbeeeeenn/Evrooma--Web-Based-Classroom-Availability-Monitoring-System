@@ -100,7 +100,7 @@ async function TodaysSchedule({ roomId }: { roomId: string }) {
         schedules.length > 0 && (
             <>
                 <Divider text="Today's Schedule" />
-                {schedules.map(async (sched) => {
+                {schedules.map((sched) => {
                     const {
                         startMeridiem,
                         startHour,

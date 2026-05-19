@@ -90,7 +90,8 @@ function Time({ type }: { type: "start" | "end" }) {
     const newScheduleData = useNewScheduleData();
     const updateNewSchedule = useUpdateScheduleData();
 
-    const dialog = useRef<HTMLDialogElement>(null);
+    const hourDialog = useRef<HTMLDialogElement>(null);
+    const minuteDialog = useRef<HTMLDialogElement>(null);
     const hour =
         type === "start"
             ? newScheduleData.startTime.hour
@@ -113,15 +114,14 @@ function Time({ type }: { type: "start" | "end" }) {
         type === "start"
             ? newScheduleData.startTime.minute
             : newScheduleData.endTime.minute;
-    const updateMinute = () => {
+    const updateMinute = (m: 0 | 30) => {
         updateNewSchedule(
             type === "start"
                 ? {
                       ...newScheduleData,
                       startTime: {
                           ...newScheduleData.startTime,
-                          minute:
-                              newScheduleData.startTime.minute === 0 ? 30 : 0,
+                          minute: m,
                       },
                   }
                 : {
@@ -161,28 +161,92 @@ function Time({ type }: { type: "start" | "end" }) {
     };
     return (
         <>
-            <div className="flex items-center gap-2">
+            <div className="flex items-start gap-4">
+                <div className="max-w-50 grow">
+                    <button
+                        type="button"
+                        className="bg-green-secondary hover:bg-green-tertiary active:bg-green-tertiary focus-visible:bg-green-tertiary text-text-primary font-roboto w-full cursor-pointer appearance-none rounded-md px-5 py-2 text-center text-2xl shadow-md sm:text-4xl"
+                        onClick={() => {
+                            if (hourDialog.current?.open)
+                                hourDialog.current.close();
+                            else hourDialog.current?.show();
+                        }}
+                    >
+                        {hour < 10 ? "0" + hour : hour}
+                    </button>
+                    <dialog
+                        ref={hourDialog}
+                        className="text-text-primary sm:scrollbar-thumb-yellow-secondary static mt-2 max-h-50 w-full scrollbar-none space-y-2 overflow-y-auto bg-transparent sm:scrollbar-thin"
+                    >
+                        {Array.from(
+                            { length: meridiem === "am" ? 7 : 9 },
+                            (_, i) =>
+                                meridiem === "am" ? i + 5 : i === 0 ? 12 : i,
+                        ).map((n) => {
+                            const selected = hour === n;
+                            return (
+                                <button
+                                    key={n}
+                                    type="button"
+                                    className={clsx(
+                                        "block w-full max-w-50 min-w-17 rounded-md py-2 font-semibold tracking-wider shadow-md",
+                                        selected
+                                            ? "bg-yellow-primary hover:bg-yellow-secondary active:bg-yellow-secondary focus-visible:bg-yellow-secondary text-black"
+                                            : "bg-green-secondary hover:bg-green-tertiary active:bg-green-tertiary focus-visible:bg-green-tertiary",
+                                    )}
+                                    onClick={() => {
+                                        updateHour(n);
+                                        hourDialog.current?.close();
+                                    }}
+                                >
+                                    {n < 10 ? "0" + n : n}
+                                </button>
+                            );
+                        })}
+                    </dialog>
+                </div>
+                <div className="max-w-50 grow">
+                    <button
+                        type="button"
+                        className="bg-green-secondary hover:bg-green-tertiary active:bg-green-tertiary focus-visible:bg-green-tertiary text-text-primary font-roboto w-full appearance-none rounded-md px-5 py-2 text-center text-2xl shadow-md sm:text-4xl"
+                        onClick={() => {
+                            if (minuteDialog.current?.open)
+                                minuteDialog.current.close();
+                            else minuteDialog.current?.show();
+                        }}
+                    >
+                        {minute === 0 ? "00" : "30"}
+                    </button>
+                    <dialog
+                        ref={minuteDialog}
+                        className="text-text-primary static mt-2 w-full space-y-2 bg-transparent"
+                    >
+                        {([0, 30] as (0 | 30)[]).map((n) => {
+                            const selected = minute === n;
+                            return (
+                                <button
+                                    key={n}
+                                    type="button"
+                                    className={clsx(
+                                        "block w-full max-w-50 min-w-17 rounded-md py-2 font-semibold tracking-wider shadow-md",
+                                        selected
+                                            ? "bg-yellow-primary hover:bg-yellow-secondary active:bg-yellow-secondary focus-visible:bg-yellow-secondary text-black"
+                                            : "bg-green-secondary hover:bg-green-tertiary active:bg-green-tertiary focus-visible:bg-green-tertiary",
+                                    )}
+                                    onClick={() => {
+                                        updateMinute(n);
+                                        minuteDialog.current?.close();
+                                    }}
+                                >
+                                    {n < 10 ? "0" + n : n}
+                                </button>
+                            );
+                        })}
+                    </dialog>
+                </div>
                 <button
                     type="button"
-                    className="bg-green-secondary hover:bg-green-tertiary active:bg-green-tertiary focus-visible:bg-green-tertiary text-text-primary font-roboto max-w-50 grow cursor-pointer appearance-none rounded-md px-5 py-2 text-center text-2xl shadow-md sm:text-4xl"
-                    onClick={() => {
-                        if (dialog.current?.open) dialog.current.close();
-                        else dialog.current?.show();
-                    }}
-                >
-                    {hour < 10 ? "0" + hour : hour}
-                </button>
-                <p className="text-text-primary text-2xl sm:text-4xl">:</p>
-                <button
-                    type="button"
-                    className="bg-green-secondary hover:bg-green-tertiary active:bg-green-tertiary focus-visible:bg-green-tertiary text-text-primary font-roboto max-w-50 grow appearance-none rounded-md px-5 py-2 text-center text-2xl shadow-md sm:text-4xl"
-                    onClick={updateMinute}
-                >
-                    {minute === 0 ? "00" : "30"}
-                </button>
-                <button
-                    type="button"
-                    className="bg-green-secondary hover:bg-green-tertiary active:bg-green-tertiary focus-visible:bg-green-tertiary text-text-primary font-roboto ml-2 appearance-none rounded-md px-5 py-2 text-center text-2xl shadow-md sm:text-4xl"
+                    className="bg-green-secondary hover:bg-green-tertiary active:bg-green-tertiary focus-visible:bg-green-tertiary text-text-primary font-roboto appearance-none rounded-md px-5 py-2 text-center text-2xl shadow-md sm:text-4xl"
                     onClick={() =>
                         updateMeridiem(meridiem === "am" ? "pm" : "am")
                     }
@@ -190,34 +254,6 @@ function Time({ type }: { type: "start" | "end" }) {
                     {meridiem === "am" ? "AM" : "PM"}
                 </button>
             </div>
-            <dialog
-                ref={dialog}
-                className="text-text-primary static mt-2 w-full space-y-2 bg-transparent"
-            >
-                {Array.from({ length: meridiem === "am" ? 7 : 9 }, (_, i) =>
-                    meridiem === "am" ? i + 5 : i === 0 ? 12 : i,
-                ).map((n) => {
-                    const selected = hour === n;
-                    return (
-                        <button
-                            key={n}
-                            type="button"
-                            className={clsx(
-                                "block w-1/3 max-w-50 min-w-17 rounded-md py-2 font-semibold tracking-wider shadow-md",
-                                selected
-                                    ? "bg-yellow-primary hover:bg-yellow-secondary active:bg-yellow-secondary focus-visible:bg-yellow-secondary text-black"
-                                    : "bg-green-secondary hover:bg-green-tertiary active:bg-green-tertiary focus-visible:bg-green-tertiary",
-                            )}
-                            onClick={() => {
-                                updateHour(n);
-                                dialog.current?.close();
-                            }}
-                        >
-                            {n < 10 ? "0" + n : n}
-                        </button>
-                    );
-                })}
-            </dialog>
         </>
     );
 }

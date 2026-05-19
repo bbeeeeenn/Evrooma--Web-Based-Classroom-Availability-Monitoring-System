@@ -1,5 +1,6 @@
 import Loading from "@/app/(site)/loading";
 import { GetInstructorAuthInfo } from "@/app/actions/InstructorAuthActions";
+import { CoolSchedules } from "@/app/components/CoolSchedule";
 import { Divider } from "@/app/components/Divider";
 import EmptyFallback from "@/app/components/EmptyFallback";
 import {
@@ -35,66 +36,21 @@ async function GetSchedule({ instructorId }: { instructorId: string }) {
         );
     }
 
-    return schedules.length > 0 ? (
-        <>
-            {schedules.map((sched, i) => {
-                const startMeridiem: "AM" | "PM" =
-                    sched.slot.start.hour < 12 ? "AM" : "PM";
-                const startHour =
-                    sched.slot.start.hour % 12 === 0
-                        ? 12
-                        : sched.slot.start.hour % 12;
-                const startMinute = sched.slot.start.minute;
-                const endMeridiem: "AM" | "PM" =
-                    sched.slot.start.hour < 12 ? "AM" : "PM";
-                const endHour =
-                    sched.slot.end.hour % 12 === 0
-                        ? 12
-                        : sched.slot.end.hour % 12;
-                const endMinute = sched.slot.end.minute;
-
-                const Divide = () => {
-                    if (
-                        i === 0 ||
-                        sched.slot.dayOfWeek !== schedules[i - 1].slot.dayOfWeek
-                    ) {
-                        return (
-                            <Divider text={DaysOfWeek[sched.slot.dayOfWeek]} />
-                        );
-                    }
-                    return null;
-                };
-
-                return (
-                    <React.Fragment key={sched._id.toString()}>
-                        <Divide />
-                        <div
-                            className={clsx(
-                                "text-text-primary border-yellow-primary bg-green-secondary/75 block w-full border-l-2 px-5 py-4 text-start",
-                            )}
-                        >
-                            <p className="font-roboto-mono text-2xl font-bold">
-                                {`${startHour}:${startMinute < 10 ? "0" + startMinute : startMinute}${startMeridiem}`}{" "}
-                                -{" "}
-                                {`${endHour}:${endMinute < 10 ? "0" + endMinute : endMinute}${endMeridiem}`}
-                            </p>
-                            <p className="font-poppins font-semibold">
-                                <span className="text-yellow-primary">
-                                    {sched.room.building.name} -{" "}
-                                </span>
-                                <span className="text-yellow-primary">
-                                    {sched.room.code}
-                                </span>{" "}
-                                - {sched.subject}
-                            </p>
-                        </div>
-                    </React.Fragment>
-                );
-            })}
-        </>
-    ) : (
-        <EmptyFallback text="There's no set schedule for you." />
+    const grouped = schedules.reduce(
+        (acc, curr) => {
+            const key = curr.slot.dayOfWeek;
+            if (!acc[key]) acc[key] = [];
+            acc[key].push(curr);
+            return acc;
+        },
+        {} as { [key: number]: PopulatedPlainScheduleDocument[] },
     );
+
+    const groupedSchedules = JSON.parse(
+        JSON.stringify(grouped),
+    ) as typeof grouped;
+
+    return <CoolSchedules groupedSchedules={groupedSchedules} type="room" />;
 }
 
 async function Schedules() {
