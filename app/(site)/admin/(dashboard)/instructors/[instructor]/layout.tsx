@@ -41,6 +41,7 @@ async function VerifyInstructor({
                 email: instructor.email,
                 fname: instructor.firstName,
                 lname: instructor.lastName,
+                createdAt: instructor.createdAt,
             }}
         >
             {children}

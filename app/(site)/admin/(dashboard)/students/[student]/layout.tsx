@@ -41,6 +41,7 @@ async function VerifyStudent({
                 email: student.email,
                 fname: student.firstName,
                 lname: student.lastName,
+                createdAt: student.createdAt,
             }}
         >
             {children}

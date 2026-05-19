@@ -2,7 +2,8 @@
 import { DeleteUser } from "@/app/actions/UserActions";
 import { Divider } from "@/app/components/Divider";
 import { useUserInfo } from "@/app/contexts/UserInfoProvider";
-import { adminStudentsPage } from "@/constants";
+import { getPHDateTime } from "@/app/lib/clientUtils";
+import { adminStudentsPage, Months } from "@/constants";
 import clsx from "clsx";
 import {
     GraduationCap,
@@ -165,13 +166,15 @@ function DeleteAccount() {
 }
 
 export function StudentInfoComponent() {
-    const { email, fname, lname } = useUserInfo();
+    const { email, fname, lname, createdAt } = useUserInfo();
+
+    const dateCreated = getPHDateTime(createdAt ?? new Date());
 
     return (
         <>
             <div className="flex w-full items-center gap-2 text-white/90">
-                <div>
-                    <GraduationCap size={40} />
+                <div className="rounded-md border border-white/15 bg-white/10 p-2">
+                    <GraduationCap size={30} />
                 </div>
                 <div>
                     <p className="text-2xl font-bold wrap-anywhere">{`${fname} ${lname}`}</p>
@@ -182,6 +185,13 @@ export function StudentInfoComponent() {
             </div>
 
             <Divider text="Account" />
+            {createdAt && (
+                <p className="font-dm-sans text-text-primary mb-6">
+                    <span className="text-text-primary/70">Date created:</span>{" "}
+                    {Months[dateCreated.month]} {dateCreated.day},{" "}
+                    {dateCreated.year}
+                </p>
+            )}
             <DeleteAccount />
         </>
     );

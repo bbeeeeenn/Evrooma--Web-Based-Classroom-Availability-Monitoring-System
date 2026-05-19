@@ -14,7 +14,8 @@ import { connection } from "next/server";
 import { connectDB } from "@/app/mongoDb/mongodb";
 import { type PlainUserDocument } from "@/app/mongoDb/models/user";
 import clsx from "clsx";
-import { getPHDateTime, IsInUseSchedule, slotToMinutes } from "@/app/lib/utils";
+import { IsInUseSchedule, slotToMinutes } from "@/app/lib/utils";
+import { getPHDateTime } from "@/app/lib/clientUtils";
 import { GetTimeComponentsFromScheduleDocument } from "@/app/lib/clientUtils";
 import { ProfileHeader } from "@/app/components/ProfileHeader";
 

@@ -1,5 +1,5 @@
 import { BookText, Calendar1, Clock, GraduationCap } from "lucide-react";
-import { getPHDateTime } from "../lib/utils";
+import { getPHDateTime } from "../lib/clientUtils";
 import { PlainUserDocument } from "../mongoDb/models/user";
 import { DaysOfWeek, Months } from "@/constants";
 

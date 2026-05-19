@@ -25,7 +25,8 @@ import type {
 } from "../(site)/admin/(dashboard)/rooms/[building]/[classroom]/create-schedule/NewScheduleProvider";
 import { GetInstructorAuthInfo } from "./InstructorAuthActions";
 import { AttendanceLog } from "../mongoDb/models/log";
-import { formatPHDateKey, getPHDateTime } from "../lib/utils";
+import { formatPHDateKey } from "../lib/utils";
+import { getPHDateTime } from "../lib/clientUtils";
 import { GetStudentAuthInfo } from "./StudentAuthActions";
 import { GetActiveSchedule } from "../lib/utils";
 

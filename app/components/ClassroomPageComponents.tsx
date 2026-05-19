@@ -5,7 +5,8 @@ import {
 } from "../mongoDb/models/schedule";
 import { connectDB } from "../mongoDb/mongodb";
 import ErrorFallback from "./ErrorFallback";
-import { getPHDateTime, slotToMinutes } from "../lib/utils";
+import { slotToMinutes } from "../lib/utils";
+import { getPHDateTime } from "../lib/clientUtils";
 import { GetTimeComponentsFromScheduleDocument } from "../lib/clientUtils";
 import { Divider } from "./Divider";
 import { instructorRoomsPage } from "@/constants";

@@ -17,9 +17,10 @@ import clsx from "clsx";
 import { toast } from "react-toastify";
 import { DeleteUser } from "@/app/actions/UserActions";
 import { useRouter } from "next/navigation";
-import { adminInstructorsPage, adminRoomsPage } from "@/constants";
+import { adminInstructorsPage, adminRoomsPage, Months } from "@/constants";
 import { DeleteSchedule } from "@/app/actions/ScheduleActions";
 import Link from "next/link";
+import { getPHDateTime } from "@/app/lib/clientUtils";
 
 function DeleteAccount() {
     const router = useRouter();
@@ -170,13 +171,21 @@ function DeleteAccount() {
 }
 
 export function InstructorInfoComponent() {
-    const { email, fname, lname, userId: instructorId } = useUserInfo();
+    const {
+        email,
+        fname,
+        lname,
+        userId: instructorId,
+        createdAt,
+    } = useUserInfo();
+
+    const dateCreated = getPHDateTime(createdAt ?? new Date());
 
     return (
         <>
             <div className="flex w-full items-center gap-2 text-white/90">
-                <div>
-                    <BookText size={40} />
+                <div className="rounded-md border border-white/15 bg-white/10 p-2">
+                    <BookText size={30} />
                 </div>
                 <div>
                     <p className="text-2xl font-bold wrap-anywhere">{`${fname} ${lname}`}</p>
@@ -187,6 +196,13 @@ export function InstructorInfoComponent() {
             </div>
 
             <Divider text="Account" />
+            {createdAt && (
+                <p className="font-dm-sans text-text-primary mb-6">
+                    <span className="text-text-primary/70">Date created:</span>{" "}
+                    {Months[dateCreated.month]} {dateCreated.day},{" "}
+                    {dateCreated.year}
+                </p>
+            )}
             <div className="flex">
                 <Link
                     href={`${instructorId}/logs`}

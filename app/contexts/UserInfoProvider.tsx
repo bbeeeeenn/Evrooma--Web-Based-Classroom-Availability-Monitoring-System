@@ -6,6 +6,7 @@ type UserContextData = {
     email: string;
     fname: string;
     lname: string;
+    createdAt: Date | null;
 };
 
 const UserContext = React.createContext<UserContextData>({
@@ -13,6 +14,7 @@ const UserContext = React.createContext<UserContextData>({
     email: "",
     fname: "",
     lname: "",
+    createdAt: null,
 });
 const UpdateUserContext = React.createContext<(data: UserContextData) => void>(
     () => {},

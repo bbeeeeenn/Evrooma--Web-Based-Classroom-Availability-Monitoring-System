@@ -9,6 +9,7 @@ export type PlainUserDocument = {
     password: string;
     fullName: string;
     type: "student" | "instructor";
+    createdAt: Date;
 };
 
 const userSchema = new Schema(
