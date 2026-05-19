@@ -1,17 +1,13 @@
 import Loading from "@/app/(site)/loading";
 import { GetInstructorAuthInfo } from "@/app/actions/InstructorAuthActions";
 import { CoolSchedules } from "@/app/components/CoolSchedule";
-import { Divider } from "@/app/components/Divider";
-import EmptyFallback from "@/app/components/EmptyFallback";
 import {
     PopulatedPlainScheduleDocument,
     Schedule,
 } from "@/app/mongoDb/models/schedule";
 import { connectDB } from "@/app/mongoDb/mongodb";
-import { DaysOfWeek } from "@/constants";
-import clsx from "clsx";
 import { CalendarDays } from "lucide-react";
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 
 async function GetSchedule({ instructorId }: { instructorId: string }) {
     let schedules: PopulatedPlainScheduleDocument[] = []; // Populated Schedule Document

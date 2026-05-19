@@ -61,9 +61,9 @@ export function CoolSchedules({
                     return (
                         <div
                             key={sched._id.toString()}
-                            className="border-l-yellow-primary font-dm-sans bg-green-secondary text-text-primary border-yellow-primary/20 mb-2 flex items-center gap-4 border border-l-2 px-4 py-2 text-sm font-semibold sm:text-base"
+                            className="font-dm-sans bg-green-secondary text-text-primary border-yellow-primary/20 mb-2 flex items-center gap-4 border px-4 py-2 text-sm font-semibold sm:text-base"
                         >
-                            <p className="font-roboto-mono">
+                            <p className="font-roboto-mono text-yellow-primary">
                                 {slot.startHour}:{slot.startMinute}
                                 {slot.startMeridiem}-{slot.endHour}:
                                 {slot.endMinute}

@@ -1,6 +1,6 @@
 import { GetInstructorAuthInfo } from "@/app/actions/InstructorAuthActions";
 import { instructorLoginPage, instructorRoomsPage } from "@/constants";
-import { BookText, Check, ChevronRight } from "lucide-react";
+import { BookOpen, Check, ChevronRight } from "lucide-react";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import Loading from "../../loading";
@@ -16,20 +16,13 @@ import { type PlainUserDocument } from "@/app/mongoDb/models/user";
 import clsx from "clsx";
 import { getPHDateTime, IsInUseSchedule, slotToMinutes } from "@/app/lib/utils";
 import { GetTimeComponentsFromScheduleDocument } from "@/app/lib/clientUtils";
+import { ProfileHeader } from "@/app/components/ProfileHeader";
 
 async function Profile() {
     const instructor = await GetInstructorAuthInfo();
     if (!instructor) redirect(instructorLoginPage);
 
-    return (
-        <div className="text-text-primary flex items-center gap-2">
-            <BookText size={45} />
-            <div>
-                <p className="text-text-secondary font-semibold">Welcome,</p>
-                <p className="text-2xl font-bold">{instructor.fullName}</p>
-            </div>
-        </div>
-    );
+    return <ProfileHeader user={instructor} type="instructor" />;
 }
 
 async function ScheduleToday() {
@@ -87,13 +80,13 @@ async function ScheduleToday() {
                             passed && "opacity-60",
                         )}
                     >
-                        <p className="font-poppins flex items-center gap-1 font-semibold">
+                        <p className="font-poppins flex items-center gap-1 text-sm font-semibold">
                             <span>
-                                <BookText size={15} />
+                                <BookOpen size={15} />
                             </span>
                             {sched.subject}
                         </p>
-                        <p className="font-roboto-mono text-yellow-primary text-2xl font-semibold">
+                        <p className="font-roboto-mono text-yellow-primary text-xl font-semibold">
                             {startHour}:{startMinute}
                             {startMeridiem} - {endHour}:{endMinute}
                             {endMeridiem}
@@ -101,7 +94,7 @@ async function ScheduleToday() {
                         <Link
                             tabIndex={-1}
                             href={`${instructorRoomsPage}/${sched.room._id.toString()}`}
-                            className="font-poppins flex w-fit items-center text-lg font-semibold hover:underline active:underline"
+                            className="font-poppins flex w-fit items-center font-semibold hover:underline active:underline"
                         >
                             <p>
                                 {sched.room.building.name} - {sched.room.code}

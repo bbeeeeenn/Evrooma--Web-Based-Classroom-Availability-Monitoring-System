@@ -3,7 +3,7 @@ import Loading from "../../loading";
 import { GetStudentAuthInfo } from "@/app/actions/StudentAuthActions";
 import { redirect } from "next/navigation";
 import { studentLoginPage, studentRoomsPage } from "@/constants";
-import { BookText, Check, ChevronRight, GraduationCap } from "lucide-react";
+import { BookOpen, Check, ChevronRight, User } from "lucide-react";
 import { Divider } from "@/app/components/Divider";
 import { PlainUserDocument } from "@/app/mongoDb/models/user";
 import {
@@ -17,18 +17,7 @@ import { GetTimeComponentsFromScheduleDocument } from "@/app/lib/clientUtils";
 import EmptyFallback from "@/app/components/EmptyFallback";
 import clsx from "clsx";
 import Link from "next/link";
-
-async function Profile({ student }: { student: PlainUserDocument }) {
-    return (
-        <div className="text-text-primary flex items-center gap-2">
-            <GraduationCap size={45} />
-            <div>
-                <p className="text-text-secondary font-semibold">Welcome,</p>
-                <p className="text-2xl font-bold">{student.fullName}</p>
-            </div>
-        </div>
-    );
-}
+import { ProfileHeader } from "@/app/components/ProfileHeader";
 
 async function ClassesAttended({ student }: { student: PlainUserDocument }) {
     const { hour, minute } = getPHDateTime();
@@ -79,14 +68,17 @@ async function ClassesAttended({ student }: { student: PlainUserDocument }) {
                                 ongoing && "border-yellow-secondary border-l-4",
                             )}
                         >
-                            <p className="font-poppins flex items-center gap-1 font-semibold">
+                            <p className="font-poppins flex items-center gap-1 text-sm font-semibold">
                                 <span>
-                                    <BookText size={15} />
+                                    <BookOpen size={15} />
                                 </span>
-                                {log.schedule.subject} -{" "}
+                                {log.schedule.subject}
+                                <span className="ml-2">
+                                    <User size={15} />
+                                </span>
                                 {log.schedule.instructor.fullName}
                             </p>
-                            <p className="font-roboto-mono text-yellow-primary text-2xl font-semibold">
+                            <p className="font-roboto-mono text-yellow-primary text-xl font-semibold">
                                 {startHour}:{startMinute}
                                 {startMeridiem} - {endHour}:{endMinute}
                                 {endMeridiem}
@@ -94,7 +86,7 @@ async function ClassesAttended({ student }: { student: PlainUserDocument }) {
                             <Link
                                 tabIndex={-1}
                                 href={`${studentRoomsPage}/${log.schedule.room._id.toString()}`}
-                                className="font-poppins flex w-fit items-center text-lg font-semibold hover:underline active:underline"
+                                className="font-poppins flex w-fit items-center font-semibold hover:underline active:underline"
                             >
                                 <p>
                                     {log.schedule.room.building.name} -{" "}
@@ -126,7 +118,7 @@ async function Suspended() {
 
     return (
         <>
-            <Profile student={student} />
+            <ProfileHeader user={student} type="student" />
             <Divider text="Classes attended" />
             <Suspense fallback={<Loading />}>
                 <ClassesAttended student={student} />
