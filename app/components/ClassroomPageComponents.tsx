@@ -1,26 +1,14 @@
-import {
-    CalendarDays,
-    CheckCircle,
-    Clock,
-    DoorOpen,
-    Hourglass,
-    User,
-    X,
-} from "lucide-react";
+import { CheckCircle, Clock, DoorOpen, Hourglass, User, X } from "lucide-react";
 import {
     PopulatedPlainScheduleDocument,
     Schedule,
 } from "../mongoDb/models/schedule";
 import { connectDB } from "../mongoDb/mongodb";
 import ErrorFallback from "./ErrorFallback";
-import {
-    getPHDateTime,
-    GetTimeComponentsFromScheduleDocument,
-    slotToMinutes,
-} from "../lib/utils";
+import { getPHDateTime, slotToMinutes } from "../lib/utils";
+import { GetTimeComponentsFromScheduleDocument } from "../lib/clientUtils";
 import { Divider } from "./Divider";
-import { Fragment } from "react/jsx-runtime";
-import { DaysOfWeek, instructorRoomsPage } from "@/constants";
+import { instructorRoomsPage } from "@/constants";
 import clsx from "clsx";
 import { redirect } from "next/navigation";
 import { isValidObjectId } from "mongoose";
@@ -33,6 +21,7 @@ import {
 import { Suspense } from "react";
 import Loading from "../(site)/loading";
 import { ServerActionResponse } from "../actions/_";
+import { CoolSchedules } from "./CoolSchedule";
 
 const StatusMapRounded = {
     free: (
@@ -69,55 +58,24 @@ async function Schedules({ roomId }: { roomId: string }) {
         return <ErrorFallback error={e} />;
     }
 
-    return schedules.length > 0 ? (
-        <>
-            <div className="text-text-primary mt-15 flex items-center gap-3">
-                <CalendarDays size={30} />
-                <h1 className="text-3xl font-bold">Schedules</h1>
-            </div>
-            {schedules.map((sched, i) => {
-                const showDivider =
-                    i === 0 ||
-                    sched.slot.dayOfWeek !== schedules[i - 1].slot.dayOfWeek;
-                const {
-                    startMeridiem,
-                    startHour,
-                    startMinute,
-                    endMeridiem,
-                    endHour,
-                    endMinute,
-                } = GetTimeComponentsFromScheduleDocument(sched);
-                return (
-                    <Fragment key={sched._id.toString()}>
-                        {showDivider && (
-                            <Divider text={DaysOfWeek[sched.slot.dayOfWeek]} />
-                        )}
-                        <div className="text-text-primary bg-green-secondary mt-3 block w-full rounded-md px-5 py-3 text-start shadow-md">
-                            <p className="font-roboto-mono text-xl font-bold">
-                                {`${startHour}:${startMinute}${startMeridiem}`}{" "}
-                                - {`${endHour}:${endMinute}${endMeridiem}`}
-                            </p>
-                            <p className="font-poppins text-sm font-semibold">
-                                <span className="text-yellow-primary">
-                                    {sched.instructor.fullName}
-                                </span>{" "}
-                                - {sched.subject}
-                            </p>
-                        </div>
-                    </Fragment>
-                );
-            })}
-        </>
-    ) : (
-        <div className="bg-yellow-primary rounded-md p-4 shadow-md">
-            <p className="font-poppins text-center text-xl font-semibold text-black">
-                No Schedules
-            </p>
-            <p className="text-center text-black/80">
-                This classroom has no scheduled time slots at the moment;
-                therefore, it is currently marked available at all times.
-            </p>
-        </div>
+    const grouped = schedules.reduce(
+        (acc, curr) => {
+            const key = curr.slot.dayOfWeek;
+            if (!acc[key]) {
+                acc[key] = [];
+            }
+            acc[key].push(curr);
+            return acc;
+        },
+        {} as { [key: number]: PopulatedPlainScheduleDocument[] },
+    );
+
+    const groupedSchedules = JSON.parse(
+        JSON.stringify(grouped),
+    ) as typeof grouped;
+
+    return (
+        <CoolSchedules groupedSchedules={groupedSchedules} type="instructor" />
     );
 }
 

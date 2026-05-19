@@ -19,11 +19,8 @@ import {
     GetClassroomStatus,
     GetNextScheduleForTheDay,
 } from "../actions/ScheduleActions";
-import {
-    getPHDateTime,
-    GetTimeComponentsFromScheduleDocument,
-    slotToMinutes,
-} from "../lib/utils";
+import { getPHDateTime, slotToMinutes } from "../lib/utils";
+import { GetTimeComponentsFromScheduleDocument } from "../lib/clientUtils";
 
 export function ScheduleCardSkeleton() {
     return (

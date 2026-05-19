@@ -1,6 +1,6 @@
 "use client";
 import clsx from "clsx";
-import { Building2, ChevronDown, DoorOpen, Search } from "lucide-react";
+import { Building2, ChevronDown, Search } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { SubmitEvent, useState } from "react";
 
