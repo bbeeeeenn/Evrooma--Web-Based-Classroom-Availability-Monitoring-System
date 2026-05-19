@@ -14,12 +14,8 @@ import { connection } from "next/server";
 import { connectDB } from "@/app/mongoDb/mongodb";
 import { type PlainUserDocument } from "@/app/mongoDb/models/user";
 import clsx from "clsx";
-import {
-    getPHDateTime,
-    GetTimeComponentsFromScheduleDocument,
-    IsInUseSchedule,
-    slotToMinutes,
-} from "@/app/lib/utils";
+import { getPHDateTime, IsInUseSchedule, slotToMinutes } from "@/app/lib/utils";
+import { GetTimeComponentsFromScheduleDocument } from "@/app/lib/clientUtils";
 
 async function Profile() {
     const instructor = await GetInstructorAuthInfo();

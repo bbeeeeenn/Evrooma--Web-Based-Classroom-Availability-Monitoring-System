@@ -334,7 +334,7 @@ export function ClassroomSettings() {
     );
 }
 
-export function ScheduleCard({
+export function RoomScheduleCard({
     _id,
     building,
     room,
@@ -356,10 +356,10 @@ export function ScheduleCard({
     instructorId: string;
     subject: string;
     startHour: number;
-    startMinute: number;
+    startMinute: string;
     startMeridiem: string;
     endHour: number;
-    endMinute: number;
+    endMinute: string;
     endMeridiem: string;
     day: string;
 }) {
@@ -466,9 +466,8 @@ export function ScheduleCard({
                 onClick={() => dialog.current?.showModal()}
             >
                 <p className="font-roboto-mono text-xl font-bold">
-                    {`${startHour}:${startMinute < 10 ? "0" + startMinute : startMinute}${startMeridiem}`}{" "}
-                    -{" "}
-                    {`${endHour}:${endMinute < 10 ? "0" + endMinute : endMinute}${endMeridiem}`}
+                    {`${startHour}:${startMinute}${startMeridiem}`} -{" "}
+                    {`${endHour}:${endMinute}${endMeridiem}`}
                 </p>
                 <p className="font-poppins text-sm font-semibold">
                     <span className="text-yellow-primary">

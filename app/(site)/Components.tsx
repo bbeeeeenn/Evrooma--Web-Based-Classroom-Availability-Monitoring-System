@@ -19,11 +19,8 @@ import {
     GetClassroomStatus,
     GetNextScheduleForTheDay,
 } from "../actions/ScheduleActions";
-import {
-    getPHDateTime,
-    GetTimeComponentsFromScheduleDocument,
-    slotToMinutes,
-} from "../lib/utils";
+import { getPHDateTime, slotToMinutes } from "../lib/utils";
+import { GetTimeComponentsFromScheduleDocument } from "../lib/clientUtils";
 
 export function ScheduleCardSkeleton() {
     return (
@@ -112,7 +109,7 @@ const IconStatusMap = {
         </span>
     ),
     occupied: (
-        <span className="size-fit rounded-md bg-red-400/15 p-3 text-red-400">
+        <span className="size-fit rounded-md bg-red-400/20 p-3 text-red-400">
             <UserCheck size={20} />
         </span>
     ),
@@ -130,7 +127,7 @@ const StatusMap = {
         </div>
     ),
     occupied: (
-        <div className="font-dm-sans flex items-center gap-2 rounded-sm bg-red-400/15 px-2 py-1 text-sm font-semibold text-red-400">
+        <div className="font-dm-sans flex items-center gap-2 rounded-sm bg-red-400/20 px-2 py-1 text-sm font-semibold text-red-400">
             <span className="size-2 rounded-full bg-red-400"></span>Occupied
         </div>
     ),

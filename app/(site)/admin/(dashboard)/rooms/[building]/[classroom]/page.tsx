@@ -1,16 +1,15 @@
 import { CalendarDays, CalendarPlus } from "lucide-react";
-import { Divider } from "@/app/components/Divider";
-import { adminRoomsPage, DaysOfWeek } from "@/constants";
+import { adminRoomsPage } from "@/constants";
 import Link from "next/link";
 import { connectDB } from "@/app/mongoDb/mongodb";
 import {
     PopulatedPlainScheduleDocument,
     Schedule,
 } from "@/app/mongoDb/models/schedule";
-import { ScheduleCard } from "./ClientComponents";
 import { ScheduleCardSkeleton } from "@/app/(site)/Components";
-import { Fragment, Suspense } from "react";
+import { Suspense } from "react";
 import ErrorFallback from "@/app/components/ErrorFallback";
+import { AdminCoolSchedules } from "@/app/(site)/admin/(dashboard)/AdminCoolSchedule";
 
 async function GetSchedule({ classroomId }: { classroomId: string }) {
     let schedules: PopulatedPlainScheduleDocument[] = []; // Populated Schedule Document
@@ -32,61 +31,27 @@ async function GetSchedule({ classroomId }: { classroomId: string }) {
         return <ErrorFallback error={e} />;
     }
 
+    const grouped = schedules.reduce(
+        (acc, curr) => {
+            const key = curr.slot.dayOfWeek;
+            if (!acc[key]) acc[key] = [];
+            acc[key].push(curr);
+            return acc;
+        },
+        {} as { [key: number]: PopulatedPlainScheduleDocument[] },
+    );
+
+    const groupedSchedules = JSON.parse(
+        JSON.stringify(grouped),
+    ) as typeof grouped;
+
     return (
-        schedules.length > 0 && (
-            <>
-                {schedules.map((sched, i) => {
-                    const startMeridiem: "AM" | "PM" =
-                        sched.slot.start.hour < 12 ? "AM" : "PM";
-                    const startHour =
-                        sched.slot.start.hour % 12 === 0
-                            ? 12
-                            : sched.slot.start.hour % 12;
-                    const startMinute = sched.slot.start.minute;
-                    const endMeridiem: "AM" | "PM" =
-                        sched.slot.end.hour < 12 ? "AM" : "PM";
-                    const endHour =
-                        sched.slot.end.hour % 12 === 0
-                            ? 12
-                            : sched.slot.end.hour % 12;
-                    const endMinute = sched.slot.end.minute;
-                    const Divide = () => {
-                        if (
-                            i === 0 ||
-                            sched.slot.dayOfWeek !==
-                                schedules[i - 1].slot.dayOfWeek
-                        ) {
-                            return (
-                                <Divider
-                                    text={DaysOfWeek[sched.slot.dayOfWeek]}
-                                />
-                            );
-                        }
-                        return null;
-                    };
-                    return (
-                        <Fragment key={sched._id.toString()}>
-                            <Divide />
-                            <ScheduleCard
-                                _id={sched._id.toString()}
-                                building={sched.room.building.name}
-                                room={sched.room.code}
-                                instructorFullName={sched.instructor.fullName}
-                                instructorId={sched.instructor._id.toString()}
-                                subject={sched.subject}
-                                endHour={endHour}
-                                endMinute={endMinute}
-                                endMeridiem={endMeridiem}
-                                startHour={startHour}
-                                startMinute={startMinute}
-                                startMeridiem={startMeridiem}
-                                day={DaysOfWeek[sched.slot.dayOfWeek]}
-                            />
-                        </Fragment>
-                    );
-                })}
-            </>
-        )
+        <>
+            <AdminCoolSchedules
+                groupedSchedules={groupedSchedules}
+                type="room"
+            />
+        </>
     );
 }
 

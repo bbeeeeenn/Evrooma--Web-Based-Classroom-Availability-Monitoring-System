@@ -12,12 +12,8 @@ import {
 } from "@/app/mongoDb/models/log";
 import ErrorFallback from "@/app/components/ErrorFallback";
 import { connectDB } from "@/app/mongoDb/mongodb";
-import {
-    GetTimeComponentsFromScheduleDocument,
-    slotToMinutes,
-    formatPHDateKey,
-    getPHDateTime,
-} from "@/app/lib/utils";
+import { slotToMinutes, formatPHDateKey, getPHDateTime } from "@/app/lib/utils";
+import { GetTimeComponentsFromScheduleDocument } from "@/app/lib/clientUtils";
 import EmptyFallback from "@/app/components/EmptyFallback";
 import clsx from "clsx";
 import Link from "next/link";

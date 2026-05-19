@@ -200,7 +200,7 @@ export function InstructorInfoComponent() {
     );
 }
 
-export function ScheduleCard({
+export function InstructorScheduleCard({
     _id,
     building,
     buildingId,
@@ -222,10 +222,10 @@ export function ScheduleCard({
     roomId: string;
     subject: string;
     startHour: number;
-    startMinute: number;
+    startMinute: string;
     startMeridiem: string;
     endHour: number;
-    endMinute: number;
+    endMinute: string;
     endMeridiem: string;
     day: string;
 }) {
@@ -335,9 +335,8 @@ export function ScheduleCard({
                 onClick={() => dialog.current?.showModal()}
             >
                 <p className="font-roboto-mono text-xl font-bold sm:text-2xl">
-                    {`${startHour}:${startMinute < 10 ? "0" + startMinute : startMinute}${startMeridiem}`}{" "}
-                    -{" "}
-                    {`${endHour}:${endMinute < 10 ? "0" + endMinute : endMinute}${endMeridiem}`}
+                    {`${startHour}:${startMinute}${startMeridiem}`} -{" "}
+                    {`${endHour}:${endMinute}${endMeridiem}`}
                 </p>
                 <p className="font-poppins text-sm font-semibold sm:text-base">
                     <span className="text-yellow-primary">{building} - </span>
