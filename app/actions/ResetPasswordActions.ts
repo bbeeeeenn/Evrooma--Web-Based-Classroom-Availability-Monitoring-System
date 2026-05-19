@@ -70,6 +70,13 @@ export async function ResetPassword(
         };
     }
 
+    if (normalizedPassword.length < 8) {
+        return {
+            status: "error",
+            message: "Your new password must be at least 8 characters long.",
+        };
+    }
+
     try {
         await connectDB();
         const foundToken = await ResetToken.findOne({ token: token.trim() });
