@@ -18,11 +18,11 @@ const resend = new Resend(RESEND_API_KEY);
 
 export type RawStudentData = Omit<
     PlainUserDocument,
-    "fullName" | "_id" | "type"
+    "fullName" | "_id" | "type" | "createdAt"
 >;
 export type RawInstructorData = Omit<
     PlainUserDocument,
-    "fullName" | "_id" | "password" | "type"
+    "fullName" | "_id" | "password" | "type" | "createdAt"
 >;
 
 export async function CreateStudent(
