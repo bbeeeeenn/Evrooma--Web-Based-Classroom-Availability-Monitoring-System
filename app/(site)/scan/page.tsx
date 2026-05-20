@@ -59,8 +59,8 @@ async function Suspended({
                 <p className="group-focus-visible:hidden">EVROOMA</p>
                 <p className="hidden group-focus-visible:block">Home</p>
             </Link>
-            <div className="text-text-primary flex items-center gap-3 rounded-lg border border-white/10 bg-green-200/5 p-5">
-                <span className="rounded-md border border-white/10 bg-green-200/15 p-3 text-white">
+            <div className="text-text-primary bg-green-secondary flex items-center gap-3 rounded-lg border border-white/10 p-5">
+                <span className="rounded-md border border-white/10 bg-green-200/10 p-3 text-white">
                     <DoorOpen size={25} />
                 </span>
                 <div>
@@ -79,13 +79,13 @@ async function Suspended({
                         "hover:border-yellow-primary/50 focus-visible:border-yellow-primary/50 transition",
                     )}
                 >
-                    <span className="rounded-md border border-green-200/10 bg-green-200/15 p-2">
-                        <BookText size={30} />
+                    <span className="text-yellow-primary rounded-md border border-green-200/10 bg-green-200/15 p-3">
+                        <BookText size={25} />
                     </span>
                     <div className="grow">
                         <p className="text-xl font-semibold">Instructor</p>
                         <p className="text-text-primary/70 text-sm">
-                            Check in to your schedule.
+                            Check in to your class.
                         </p>
                     </div>
                     <span>
@@ -99,8 +99,8 @@ async function Suspended({
                         "hover:border-yellow-primary/50 focus-visible:border-yellow-primary/50 transition",
                     )}
                 >
-                    <span className="rounded-md border border-green-200/10 bg-green-200/15 p-2">
-                        <GraduationCap size={30} />
+                    <span className="text-yellow-primary rounded-md border border-green-200/10 bg-green-200/15 p-3">
+                        <GraduationCap size={25} />
                     </span>
                     <div className="grow">
                         <p className="text-xl font-semibold">Student</p>
