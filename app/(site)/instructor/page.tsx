@@ -5,8 +5,11 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import Loading from "../loading";
 
-async function Login({ redirectPath }: { redirectPath?: string }) {
+async function Login({ params }: { params: Promise<{ redirect?: string }> }) {
+    const { redirect: redirectPath } = await params;
+
     const instructor = await GetInstructorAuthInfo();
+
     if (instructor) {
         redirect(redirectPath ?? instructorHomePage);
     }
@@ -23,10 +26,9 @@ export default async function InstructorLoginPage({
 }: {
     searchParams: Promise<{ redirect?: string }>;
 }) {
-    const params = await searchParams;
     return (
         <Suspense fallback={<Loading />}>
-            <Login redirectPath={params.redirect} />
+            <Login params={searchParams} />
         </Suspense>
     );
 }
