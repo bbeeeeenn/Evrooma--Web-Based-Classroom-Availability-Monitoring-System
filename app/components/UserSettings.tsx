@@ -10,11 +10,11 @@ export async function UserSettings({
 }: {
     userType: "instructor" | "student";
 }) {
-    const instructor =
+    const user =
         userType === "instructor"
             ? await GetInstructorAuthInfo()
             : await GetStudentAuthInfo();
-    if (!instructor) return <ErrorFallback error={null} />;
+    if (!user) return <ErrorFallback error={null} />;
 
     return (
         <>
@@ -29,20 +29,20 @@ export async function UserSettings({
                 <span>
                     <Mail />
                 </span>
-                <p className="truncate">{instructor.email}</p>
+                <p className="truncate">{user.email}</p>
             </div>
             <ChangeName
-                userType={instructor.type}
-                oldName={instructor.firstName}
+                userType={user.type}
+                oldName={user.firstName}
                 type="fname"
             />
             <ChangeName
-                userType={instructor.type}
-                oldName={instructor.lastName}
+                userType={user.type}
+                oldName={user.lastName}
                 type="lname"
             />
             <Divider text="Password" />
-            <ChangePassword userType={instructor.type} />
+            <ChangePassword userType={user.type} />
         </>
     );
 }
